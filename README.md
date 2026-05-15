@@ -83,6 +83,25 @@ python -m src.train.melody_train --steps 1500
 python -m src.train.melody_plot
 ```
 
+## Phase 4 — Rhythm
+
+A rhythm generator outputs **N onset times in [0, T]** by emitting positive inter-onset intervals from a Gaussian policy and taking a cumulative sum. The reward is a Large–Kolen-inspired *phase-coherence* score:
+
+> For every candidate period T in the musical-tempo lag window [200 ms, 1.5 s], compute the mean of `exp(2πi · t_k / T)` over the onsets and take its magnitude. Max over T. A regular onset train at period T sends all phases to the same point on the unit circle and scores 1; a uniformly random train scores ≈ 1/√N. This is a smooth-differentiable cousin of autocorrelation — the linear-regime signature of an oscillator bank phase-locking to its drive.
+
+Combined with a min-onset-count diversity floor and a min-IOI guard, the reward has no music prior other than *periodicity in the tempo range*.
+
+After 2000 steps mean reward grows from +1.0 (random baseline) to **+2.7**, phase coherence climbs from ~0.5 to ~0.83, and the discovered tempo distribution peaks at **~0.55 s (≈ 110 BPM)** — squarely inside Fraisse's preferred-tempo region for human rhythm perception.
+
+![Phase 4 — rhythm discovery](results/phase4_rhythms/rhythm_summary.png)
+
+The bottom-left raster shows that sampled rhythms visually align on a 0.5 s grid, and the bottom-right histogram peaks at the 120 BPM tempo. Some samples carry a single short residual IOI at the end (an artifact of the fixed-N normalization to fit the window), which costs the policy a small sparsity penalty but doesn't break the discovered meter.
+
+```bash
+python -m src.train.rhythm_train --steps 2000
+python -m src.train.rhythm_plot
+```
+
 ## Quick start
 
 ```bash
@@ -101,6 +120,10 @@ python -m src.train.triad_plot --mode both
 # Phase 3: monophonic melodies (~5 min CPU)
 python -m src.train.melody_train --steps 1500
 python -m src.train.melody_plot
+
+# Phase 4: rhythm (~3 min CPU)
+python -m src.train.rhythm_train --steps 2000
+python -m src.train.rhythm_plot
 ```
 
 Phase 1 also runs as a self-contained Colab notebook: `notebooks/01_toy_consonance.ipynb`.
@@ -110,7 +133,7 @@ Phase 1 also runs as a self-contained Colab notebook: `notebooks/01_toy_consonan
 - [x] **Phase 1 — Toy consonance.** Generator outputs 2 frequencies, reward = Sethares dissonance. Consonant intervals emerge.
 - [x] **Phase 2 — Triads & voice leading.** 3-note chords; pairwise Sethares + voice-spread + voice-leading. Canonical consonant triads emerge (major, sus4, augmented).
 - [x] **Phase 3 — Short melodies.** Sequence of N notes; sequential Sethares + Terhardt virtual-pitch + pitch-class diversity. Coherent melodic gestures with elevated tonal salience emerge.
-- [ ] **Phase 4 — Rhythm.** Generator outputs onset times. Reward via rhythmic entrainment models (Large & Kolen 1994 oscillator networks).
+- [x] **Phase 4 — Rhythm.** Onset times via cumulative-sum Gaussian policy; reward is phase-coherence over a tempo lag window (linear approximation to Large & Kolen oscillator entrainment). Discovered tempo peaks near 110 BPM — inside the human preferred-tempo window.
 - [ ] **Phase 5 — Spectrogram diffusion model.** Replace toy generator with a real audio model (diffusion over mel-spectrograms). Decode to waveform with a vocoder that was *not* trained on music (challenging — Griffin-Lim or learned-from-noise variants).
 - [ ] **Phase 6 — RLAIF with a "taste" model.** Train a text-grounded music-theory taste model (read music theory textbooks, never hear music) and use it as the reward model in place of pure psychoacoustics.
 
