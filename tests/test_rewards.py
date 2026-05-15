@@ -35,6 +35,7 @@ from src.reward.counterpoint import (
     voice_crossings,
     voice_register_gap,
 )
+from src.reward.cadence import cadence_arc, expectation_arc
 
 
 # ----- Phase 1: interval consonance -----------------------------------
@@ -364,3 +365,39 @@ def test_alpha_interpolation_monotonic():
     # The trend can be non-monotonic globally but at the endpoints
     # alpha=0 (odd-only) should be no worse than alpha=1.
     assert diss_m6[0] <= diss_m6[-1] + 0.001
+
+
+# ----- Phase 12: cadence arc ----------------------------------------
+
+def test_cadence_arc_zero_for_static_progression():
+    """Same chord repeated 4 times has zero cadence arc (no tension
+    differential between middle and endpoints)."""
+    c = [261.6, 329.6, 392.0]
+    arc = cadence_arc([c, c, c, c])
+    assert abs(arc) < 0.01
+
+
+def test_cadence_arc_positive_for_dim_in_middle():
+    """A I—dim—dim—I progression has the canonical tension shape:
+    middle dissonance > endpoint dissonance."""
+    maj = [261.6, 329.6, 392.0]      # C major
+    dim = [261.6, 311.1, 370.0]      # C diminished
+    arc = cadence_arc([maj, dim, dim, maj])
+    assert arc > 0.05
+
+
+def test_cadence_arc_negative_for_dim_at_endpoints():
+    """Sanity: the arc is negative when dissonance lives at the
+    endpoints instead of the middle."""
+    maj = [261.6, 329.6, 392.0]
+    dim = [261.6, 311.1, 370.0]
+    arc = cadence_arc([dim, maj, maj, dim])
+    assert arc < -0.05
+
+
+def test_expectation_arc_unit_bounded():
+    """expectation_arc compares two implied-fundamental saliences, each
+    in (0, 1]; the difference is in [-1, 1]."""
+    c = [261.6, 329.6, 392.0]
+    arc = expectation_arc([c, c, c])
+    assert -1.0 <= arc <= 1.0

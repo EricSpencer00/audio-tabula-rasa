@@ -260,6 +260,27 @@ def phase8c_intervals_inharmonic(results_root="results/phase8c_inharmonic"):
     print()
 
 
+def phase13_n_voice(results_root: str, n_voices_label: str):
+    from src.reward.counterpoint import (shared_tonal_salience,
+                                          vertical_dissonance,
+                                          voice_crossings)
+    print("=" * 60)
+    print(f"Phase 13 — {n_voices_label}-voice counterpoint")
+    print("=" * 60)
+    voices = _maybe_load_npy(Path(results_root) / "final_voices.npy")
+    if voices is None:
+        print("  (no final_voices.npy)")
+        return
+    vd = np.array([vertical_dissonance(v) for v in voices])
+    vc = np.array([voice_crossings(v) for v in voices])
+    st = np.array([shared_tonal_salience(v) for v in voices])
+    print(f"  N samples: {len(voices)}")
+    print(f"  mean vertical dissonance: {vd.mean():.3f}")
+    print(f"  mean voice crossings: {vc.mean():.2f}")
+    print(f"  mean shared tonal salience: {st.mean():.3f}")
+    print()
+
+
 def run_all():
     print()
     phase1_intervals()
@@ -270,6 +291,8 @@ def run_all():
     phase8_intervals_odd()
     phase8b_triads_odd()
     phase8c_intervals_inharmonic()
+    phase13_n_voice("results/phase13_3voice_counterpoint", "3")
+    phase13_n_voice("results/phase13_4voice_counterpoint", "4")
 
 
 if __name__ == "__main__":
