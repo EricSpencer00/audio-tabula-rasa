@@ -177,19 +177,23 @@ python -m src.train.bp_triads_plot
 
 ## Phase 13 — 3- and 4-voice counterpoint
 
-Extends Phase 7 from a duo to a trio and a quartet. Same architecture (banded per-voice log-frequency ranges, same reward) — only `n_voices` changes. With V=3 the vertical reward sums roughness over C(3,2)=3 voice pairs per time step; with V=4 it sums over 6 pairs. Voice-crossing and register-gap constraints scale up automatically.
+Extends Phase 7 from a duo to a trio and a quartet. Same architecture (banded per-voice log-frequency ranges, same reward) — only `n_voices` changes. With V=3 the vertical reward sums roughness over C(3,2)=3 voice pairs per time step; with V=4 it sums over 6 pairs.
+
+### V = 3 (chorale-style trio)
+
+Best-checkpoint eval reward **+5.33** (vs the 2-voice baseline's +4.10). Voice crossings stay at **0.00** per excerpt — the three voices maintain stable rank ordering. Mean shared implied-fundamental salience climbs to 0.49, meaning the three voices collectively anchor a common tonal center.
+
+![Phase 13 — 3-voice counterpoint](results/phase13_3voice_counterpoint/counterpoint_summary.png)
+
+The bottom-left and bottom-middle plots show three stratified voice lines; the vertical-interval histogram peaks around 15–22 semitones (wide voicing, consistent with the upper-register preference Phase 2 already revealed).
 
 ```bash
-# 3-voice chorale-style
-python -m src.train.counterpoint_train --steps 2000 --n-voices 3 \
+python -m src.train.counterpoint_train --steps 1500 --n-voices 3 \
     --out-dir results/phase13_3voice_counterpoint
-
-# 4-voice (Bach-chorale-shaped, but without the chorale prior)
-python -m src.train.counterpoint_train --steps 2000 --n-voices 4 \
-    --out-dir results/phase13_4voice_counterpoint
+python -c "from src.train.counterpoint_plot import plot_counterpoint; plot_counterpoint('results/phase13_3voice_counterpoint')"
 ```
 
-Each phase yields a `counterpoint_summary.png` showing convergence, voice-crossing counts, and the vertical-interval histogram. With V=3 the histogram concentrates at minor- and major-third stackings (triadic harmony emerging); V=4 produces denser stackings that include sevenths.
+(The 4-voice variant follows the same recipe with `--n-voices 4`.)
 
 ## Listening
 
