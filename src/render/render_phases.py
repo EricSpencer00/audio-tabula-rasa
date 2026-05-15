@@ -15,6 +15,7 @@ from src.generator.chord_generator import (
     ChordProgressionGenerator,
     TriadGenerator,
 )
+from src.generator.melodic_rhythm_generator import MelodicRhythmGenerator
 from src.generator.melody_generator import MelodyGenerator
 from src.generator.rhythm_generator import RhythmGenerator
 from src.render.synth import (
@@ -154,6 +155,27 @@ def render_phase34_combined(out_dir: Path, seed: int = 0):
     print(f"  saved {out_dir/'phase34_melodic_rhythm.wav'}")
 
 
+def render_phase45_melodic_rhythm(out_dir: Path, seed: int = 0):
+    """Joint-trained generator: pitch and onset come from one network."""
+    print("Phase 4.5: joint melodic rhythm")
+    gen = MelodicRhythmGenerator()
+    if not _safe_load(
+        gen, "results/phase4_5_melodic_rhythm/melodic_rhythm_generator.pt"
+    ):
+        return
+    gen.eval()
+    torch.manual_seed(seed)
+    with torch.no_grad():
+        f, o, _ = gen.sample(4)
+    chunks = []
+    for mel, ons in zip(f.cpu().numpy(), o.cpu().numpy()):
+        chunks.append(render_melodic_rhythm(mel, ons, duration=4.0))
+        chunks.append(np.zeros(int(0.5 * SAMPLE_RATE)))
+    audio = np.concatenate(chunks)
+    write_wav(out_dir / "phase45_melodic_rhythm.wav", audio)
+    print(f"  saved {out_dir/'phase45_melodic_rhythm.wav'}")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--out-dir", type=str, default="results/audio")
@@ -167,3 +189,4 @@ if __name__ == "__main__":
     render_phase3_melodies(out_dir, args.seed)
     render_phase4_rhythms(out_dir, args.seed)
     render_phase34_combined(out_dir, args.seed)
+    render_phase45_melodic_rhythm(out_dir, args.seed)

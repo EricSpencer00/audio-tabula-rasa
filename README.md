@@ -102,6 +102,29 @@ python -m src.train.rhythm_train --steps 2000
 python -m src.train.rhythm_plot
 ```
 
+## Phase 4.5 — Joint melodic rhythm
+
+A single generator emits N (pitch, IOI) pairs from one shared MLP. The reward sums the Phase-3 melody reward (on the pitches) and the Phase-4 rhythm reward (on the cumulative-sum onsets) — both terms operate on outputs of the same network, so pitch and timing can co-vary.
+
+After ~1200 steps the joint generator hits **tonal salience ≈ 0.73** (highest of any phase), **phase coherence ≈ 0.69**, and a discovered period **≈ 0.5 s (120 BPM)** — i.e. it carries both Phase-3 pitch structure and Phase-4 temporal structure simultaneously. The reward peaks earlier (~step 800) and then trades a few percent of headline reward for a tighter tonal commitment as the entropy term goes negative.
+
+![Phase 4.5 — joint melodic rhythm](results/phase4_5_melodic_rhythm/melodic_rhythm_summary.png)
+
+```bash
+python -m src.train.melodic_rhythm_train --steps 1200
+python -m src.train.melodic_rhythm_plot
+```
+
+## Listening
+
+Sample WAVs for each phase are committed under `results/audio/` and regenerable with:
+
+```bash
+python -m src.render.render_phases
+```
+
+The renderer is a minimal additive sine-bank — no music samples, no learned vocoder. Listening is one-way: the audio is the discovery rendered into air, not a training signal.
+
 ## Quick start
 
 ```bash
@@ -124,6 +147,13 @@ python -m src.train.melody_plot
 # Phase 4: rhythm (~3 min CPU)
 python -m src.train.rhythm_train --steps 2000
 python -m src.train.rhythm_plot
+
+# Phase 4.5: joint melodic rhythm (~8 min CPU)
+python -m src.train.melodic_rhythm_train --steps 1200
+python -m src.train.melodic_rhythm_plot
+
+# Render audio
+python -m src.render.render_phases
 ```
 
 Phase 1 also runs as a self-contained Colab notebook: `notebooks/01_toy_consonance.ipynb`.
@@ -134,6 +164,7 @@ Phase 1 also runs as a self-contained Colab notebook: `notebooks/01_toy_consonan
 - [x] **Phase 2 — Triads & voice leading.** 3-note chords; pairwise Sethares + voice-spread + voice-leading. Canonical consonant triads emerge (major, sus4, augmented).
 - [x] **Phase 3 — Short melodies.** Sequence of N notes; sequential Sethares + Terhardt virtual-pitch + pitch-class diversity. Coherent melodic gestures with elevated tonal salience emerge.
 - [x] **Phase 4 — Rhythm.** Onset times via cumulative-sum Gaussian policy; reward is phase-coherence over a tempo lag window (linear approximation to Large & Kolen oscillator entrainment). Discovered tempo peaks near 110 BPM — inside the human preferred-tempo window.
+- [x] **Phase 4.5 — Joint melodic rhythm.** Single generator outputs (pitch, IOI) pairs. Reward = Phase-3 melody reward + Phase-4 rhythm reward, jointly optimized. Pitches and onsets both pick up structure from the shared network.
 - [ ] **Phase 5 — Spectrogram diffusion model.** Replace toy generator with a real audio model (diffusion over mel-spectrograms). Decode to waveform with a vocoder that was *not* trained on music (challenging — Griffin-Lim or learned-from-noise variants).
 - [ ] **Phase 6 — RLAIF with a "taste" model.** Train a text-grounded music-theory taste model (read music theory textbooks, never hear music) and use it as the reward model in place of pure psychoacoustics.
 

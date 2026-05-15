@@ -1,0 +1,227 @@
+[
+  {
+    "step": 0,
+    "mean_reward": 0.17693422734737396,
+    "mean_tonal": 0.540856271652866,
+    "mean_seq_diss": 0.6245360843200078,
+    "mean_pitch_classes": 5.3125,
+    "mean_phase_coherence": 0.6402141460865749,
+    "mean_period": 0.36005025125628143
+  },
+  {
+    "step": 50,
+    "mean_reward": 3.460103988647461,
+    "mean_tonal": 0.5463091069031618,
+    "mean_seq_diss": 0.7716080896748623,
+    "mean_pitch_classes": 5.921875,
+    "mean_phase_coherence": 0.6295474470479174,
+    "mean_period": 0.3649497487437186
+  },
+  {
+    "step": 100,
+    "mean_reward": 4.46891975402832,
+    "mean_tonal": 0.594405398897268,
+    "mean_seq_diss": 0.9381672025017891,
+    "mean_pitch_classes": 5.96875,
+    "mean_phase_coherence": 0.6472580722104015,
+    "mean_period": 0.3334092336683417
+  },
+  {
+    "step": 150,
+    "mean_reward": 4.555898666381836,
+    "mean_tonal": 0.6029491887582261,
+    "mean_seq_diss": 0.9900574122562995,
+    "mean_pitch_classes": 5.75,
+    "mean_phase_coherence": 0.6683905891401891,
+    "mean_period": 0.364592493718593
+  },
+  {
+    "step": 200,
+    "mean_reward": 4.693708419799805,
+    "mean_tonal": 0.612653652546654,
+    "mean_seq_diss": 0.9990375830114313,
+    "mean_pitch_classes": 5.7578125,
+    "mean_phase_coherence": 0.681279209824888,
+    "mean_period": 0.3961840452261307
+  },
+  {
+    "step": 250,
+    "mean_reward": 4.433351039886475,
+    "mean_tonal": 0.5971666113171192,
+    "mean_seq_diss": 0.953761774249275,
+    "mean_pitch_classes": 5.84375,
+    "mean_phase_coherence": 0.695486325692626,
+    "mean_period": 0.4559477072864322
+  },
+  {
+    "step": 300,
+    "mean_reward": 3.466385841369629,
+    "mean_tonal": 0.6295795404275157,
+    "mean_seq_diss": 0.8012857316021478,
+    "mean_pitch_classes": 5.328125,
+    "mean_phase_coherence": 0.7218636073418552,
+    "mean_period": 0.44150439698492466
+  },
+  {
+    "step": 350,
+    "mean_reward": 3.6418466567993164,
+    "mean_tonal": 0.6206817110425383,
+    "mean_seq_diss": 0.7766680727510578,
+    "mean_pitch_classes": 5.671875,
+    "mean_phase_coherence": 0.7214284683340968,
+    "mean_period": 0.47059516331658297
+  },
+  {
+    "step": 400,
+    "mean_reward": 3.787760019302368,
+    "mean_tonal": 0.6235287485329564,
+    "mean_seq_diss": 0.841771006228244,
+    "mean_pitch_classes": 5.640625,
+    "mean_phase_coherence": 0.7351603616044751,
+    "mean_period": 0.4645218278894473
+  },
+  {
+    "step": 450,
+    "mean_reward": 2.9332098960876465,
+    "mean_tonal": 0.6449913422014644,
+    "mean_seq_diss": 0.728607923003912,
+    "mean_pitch_classes": 5.4375,
+    "mean_phase_coherence": 0.724522343436937,
+    "mean_period": 0.4811086683417086
+  },
+  {
+    "step": 500,
+    "mean_reward": 3.465278148651123,
+    "mean_tonal": 0.632431954377223,
+    "mean_seq_diss": 0.8516756717169764,
+    "mean_pitch_classes": 5.4140625,
+    "mean_phase_coherence": 0.7292443474597501,
+    "mean_period": 0.47294283919597996
+  },
+  {
+    "step": 550,
+    "mean_reward": 3.6307973861694336,
+    "mean_tonal": 0.6437817217181212,
+    "mean_seq_diss": 0.8051907195625927,
+    "mean_pitch_classes": 5.4375,
+    "mean_phase_coherence": 0.7264370834645335,
+    "mean_period": 0.47273869346733677
+  },
+  {
+    "step": 600,
+    "mean_reward": 3.3912434577941895,
+    "mean_tonal": 0.6564927586587188,
+    "mean_seq_diss": 0.7433091956904543,
+    "mean_pitch_classes": 5.4375,
+    "mean_phase_coherence": 0.7286056015359783,
+    "mean_period": 0.4772298994974875
+  },
+  {
+    "step": 650,
+    "mean_reward": 3.990079641342163,
+    "mean_tonal": 0.651042174731404,
+    "mean_seq_diss": 0.7314201472451941,
+    "mean_pitch_classes": 5.6484375,
+    "mean_phase_coherence": 0.7270574866456987,
+    "mean_period": 0.4548759422110553
+  },
+  {
+    "step": 700,
+    "mean_reward": 3.845747470855713,
+    "mean_tonal": 0.6700762566011412,
+    "mean_seq_diss": 0.6826376233997307,
+    "mean_pitch_classes": 5.5390625,
+    "mean_phase_coherence": 0.7194143745892807,
+    "mean_period": 0.4852936557788945
+  },
+  {
+    "step": 750,
+    "mean_reward": 4.1739606857299805,
+    "mean_tonal": 0.6474266433760862,
+    "mean_seq_diss": 0.6527313030753175,
+    "mean_pitch_classes": 5.734375,
+    "mean_phase_coherence": 0.7186306527591685,
+    "mean_period": 0.4809555590452262
+  },
+  {
+    "step": 800,
+    "mean_reward": 3.922974109649658,
+    "mean_tonal": 0.6532247074010746,
+    "mean_seq_diss": 0.6793010638434402,
+    "mean_pitch_classes": 5.6796875,
+    "mean_phase_coherence": 0.7067087076562806,
+    "mean_period": 0.48876413316582923
+  },
+  {
+    "step": 850,
+    "mean_reward": 4.261252403259277,
+    "mean_tonal": 0.639528345086164,
+    "mean_seq_diss": 0.6446862139827643,
+    "mean_pitch_classes": 5.8984375,
+    "mean_phase_coherence": 0.7158953637961897,
+    "mean_period": 0.4855488379396985
+  },
+  {
+    "step": 900,
+    "mean_reward": 3.0417068004608154,
+    "mean_tonal": 0.6245193602207478,
+    "mean_seq_diss": 0.7068556268314413,
+    "mean_pitch_classes": 5.015625,
+    "mean_phase_coherence": 0.7116516453472779,
+    "mean_period": 0.46441975502512567
+  },
+  {
+    "step": 950,
+    "mean_reward": 2.8389992713928223,
+    "mean_tonal": 0.6615171040171122,
+    "mean_seq_diss": 0.6312764560075034,
+    "mean_pitch_classes": 4.7421875,
+    "mean_phase_coherence": 0.7131523507630511,
+    "mean_period": 0.49340844849246235
+  },
+  {
+    "step": 1000,
+    "mean_reward": 2.1122472286224365,
+    "mean_tonal": 0.6684994362347841,
+    "mean_seq_diss": 0.6092002758944018,
+    "mean_pitch_classes": 4.75,
+    "mean_phase_coherence": 0.7083327483778988,
+    "mean_period": 0.5131085113065328
+  },
+  {
+    "step": 1050,
+    "mean_reward": 2.267383337020874,
+    "mean_tonal": 0.6935610776493055,
+    "mean_seq_diss": 0.4789121714352784,
+    "mean_pitch_classes": 4.640625,
+    "mean_phase_coherence": 0.7122166905098557,
+    "mean_period": 0.5150478957286433
+  },
+  {
+    "step": 1100,
+    "mean_reward": 1.282411813735962,
+    "mean_tonal": 0.7135855543547737,
+    "mean_seq_diss": 0.44517113409303355,
+    "mean_pitch_classes": 4.5078125,
+    "mean_phase_coherence": 0.7145527041375871,
+    "mean_period": 0.4920304648241207
+  },
+  {
+    "step": 1150,
+    "mean_reward": 1.59246826171875,
+    "mean_tonal": 0.7393702583137891,
+    "mean_seq_diss": 0.4631651955880173,
+    "mean_pitch_classes": 4.0234375,
+    "mean_phase_coherence": 0.6971325878319736,
+    "mean_period": 0.5059123743718594
+  },
+  {
+    "step": 1199,
+    "mean_reward": 1.9419167041778564,
+    "mean_tonal": 0.7332980851255777,
+    "mean_seq_diss": 0.550354685707721,
+    "mean_pitch_classes": 3.890625,
+    "mean_phase_coherence": 0.6905453321747945,
+    "mean_period": 0.5105056532663317
+  }
+]
