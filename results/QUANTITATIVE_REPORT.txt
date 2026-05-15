@@ -1,0 +1,127 @@
+
+============================================================
+Phase 1 — intervals (harmonic timbre)
+============================================================
+  median ratio: 1.835
+  top labels:
+      44  minor_seventh
+      40  major_seventh
+      34  major_sixth
+      31  perfect_fifth
+      29  minor_sixth
+
+============================================================
+Phase 2 — triads (harmonic timbre)
+============================================================
+  N samples: 512
+  mean dissonance: 0.195
+  pct samples with spread penalty > 0.01: 2.0%
+  top triad labels:
+      40  sus4_6_8_9
+      28  major_4_5_6
+      18  augmented
+      10  diminished
+       2  non-musical (r=[1.461,1.814])
+       1  non-musical (r=[1.398,1.625])
+       1  non-musical (r=[1.391,1.790])
+       1  non-musical (r=[1.395,1.771])
+
+============================================================
+Phase 3 — melodies
+============================================================
+  N samples: 512
+  mean tonal salience: 0.646
+  PC count distribution: {5: 186, 4: 177, 3: 80, 6: 52, 2: 9, 7: 5, 8: 3}
+  closest Western scale matches:
+     115  blues              root=3
+      64  blues              root=9
+      50  blues              root=6
+      32  blues              root=4
+      26  major              root=4
+
+============================================================
+Phase 4 — rhythms
+============================================================
+  N samples: 256
+  mean phase coherence: 0.828
+  median best period: 0.553s (108.5 BPM)
+  IQR period: 0.473–0.567s
+
+============================================================
+Phase 7 — counterpoint
+============================================================
+  N samples: 256
+  mean vertical dissonance: 0.241
+  mean voice crossings (out of 8): 0.00
+  mean shared tonal salience: 0.419
+  vertical-interval percentiles: 25%=22.0st, 50%=26.8st, 75%=33.4st
+
+============================================================
+Phase 8 — intervals (ODD-partial timbre)
+============================================================
+  median ratio: 1.425
+  top BP-style labels:
+     214  7:5
+     177  3:2
+      72  9:7
+      16  25:21
+       5  other (r=1.339)
+
+============================================================
+Phase 8b — triads (ODD-partial timbre)
+============================================================
+  N samples: 512
+  mean dissonance (under odd partials): 0.092
+  mean dissonance (under harmonic timbre, for comparison): 0.194
+  median r1: 1.389,  median r2: 1.683
+
+============================================================
+Phase 8c — intervals (INHARMONIC partials, negative control)
+============================================================
+  median ratio: 1.225
+  top labels (under Western tuning):
+     101  minor_third
+      84  major_third
+      63  perfect_fourth
+      58  major_second
+      26  tritone
+
+============================================================
+Phase 11 — autoregressive melody (with motif autocorrelation)
+============================================================
+  N samples: 256, length per melody: 16
+  mean tonal salience: 0.536
+  PC count distribution: {8: 70, 9: 57, 7: 50, 6: 24, 10: 23, 5: 17, 11: 12, 12: 1, 13: 1, 4: 1}
+  mean motif autocorrelation: 0.342
+  closest Western scale matches:
+     103  chromatic          root=0
+      18  harmonic minor     root=2
+      10  major              root=2
+
+============================================================
+Phase 12 — cadence-aware chord progressions
+============================================================
+  N samples: 256, chord positions: 4
+  mean cadence_arc (middle − endpoint dissonance): -0.135
+  mean dissonance per position:
+    pos 0: 0.353
+    pos 1: 0.168
+    pos 2: 0.162
+    pos 3: 0.247
+
+============================================================
+Phase 13 — 3-voice counterpoint
+============================================================
+  N samples: 256
+  mean vertical dissonance: 0.824
+  mean voice crossings: 0.02
+  mean shared tonal salience: 0.424
+
+============================================================
+Phase 13 — 4-voice counterpoint
+============================================================
+  N samples: 256
+  mean vertical dissonance: 1.998
+  mean voice crossings: 0.65
+  mean shared tonal salience: 0.416
+
