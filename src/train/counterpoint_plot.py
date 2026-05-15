@@ -50,9 +50,9 @@ def plot_counterpoint(results_dir="results/phase7_counterpoint"):
     # Per-sample voice trajectories
     rng = np.random.default_rng(0)
     idx = rng.choice(len(voices), size=4, replace=False)
-    colors_per_voice = ["C0", "C3", "C2"]
-    for k, i in enumerate(idx):
-        ax = axes[1, k // 2 + k % 2 - (k // 2)]  # janky; let's flatten
+    n_voices = voices.shape[1]
+    colors_per_voice = [plt.cm.tab10(i / max(1, n_voices - 1))
+                        for i in range(n_voices)]
     flat_axes = [axes[1, 0], axes[1, 1]]
     for k, i in enumerate(idx[:2]):
         ax = flat_axes[k]

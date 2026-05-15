@@ -1,0 +1,219 @@
+[
+  {
+    "step": 0,
+    "mean_reward": -16.614349365234375,
+    "mean_vert_diss": 2.5091140233486513,
+    "mean_voice_crossings": 4.828125,
+    "mean_shared_tonal": 0.5087517112409847
+  },
+  {
+    "step": 50,
+    "mean_reward": -16.34430694580078,
+    "mean_vert_diss": 2.5599253325959865,
+    "mean_voice_crossings": 4.796875,
+    "mean_shared_tonal": 0.48400431981218756
+  },
+  {
+    "step": 100,
+    "mean_reward": -11.502060890197754,
+    "mean_vert_diss": 2.6583784529387438,
+    "mean_voice_crossings": 4.171875,
+    "mean_shared_tonal": 0.41343131244287246
+  },
+  {
+    "step": 150,
+    "mean_reward": -2.8951468467712402,
+    "mean_vert_diss": 2.2950294677636824,
+    "mean_voice_crossings": 1.75,
+    "mean_shared_tonal": 0.3518649260737876
+  },
+  {
+    "step": 200,
+    "mean_reward": -4.97332763671875,
+    "mean_vert_diss": 1.8809682113972745,
+    "mean_voice_crossings": 0.1953125,
+    "mean_shared_tonal": 0.3454826152056175
+  },
+  {
+    "step": 250,
+    "mean_reward": -3.7514116764068604,
+    "mean_vert_diss": 1.945732352790611,
+    "mean_voice_crossings": 1.125,
+    "mean_shared_tonal": 0.3233049977933002
+  },
+  {
+    "step": 300,
+    "mean_reward": -2.484727382659912,
+    "mean_vert_diss": 2.004098288103191,
+    "mean_voice_crossings": 0.7265625,
+    "mean_shared_tonal": 0.31876784768644095
+  },
+  {
+    "step": 350,
+    "mean_reward": -1.8593342304229736,
+    "mean_vert_diss": 1.9371769582365084,
+    "mean_voice_crossings": 0.359375,
+    "mean_shared_tonal": 0.3282816483652283
+  },
+  {
+    "step": 400,
+    "mean_reward": -1.4992461204528809,
+    "mean_vert_diss": 1.875895706329676,
+    "mean_voice_crossings": 0.140625,
+    "mean_shared_tonal": 0.32888159847060316
+  },
+  {
+    "step": 450,
+    "mean_reward": -1.9400362968444824,
+    "mean_vert_diss": 1.926322201983853,
+    "mean_voice_crossings": 0.265625,
+    "mean_shared_tonal": 0.3247908193258875
+  },
+  {
+    "step": 500,
+    "mean_reward": -3.086354970932007,
+    "mean_vert_diss": 1.9205507527699701,
+    "mean_voice_crossings": 0.7578125,
+    "mean_shared_tonal": 0.33432096674409384
+  },
+  {
+    "step": 550,
+    "mean_reward": -1.8889766931533813,
+    "mean_vert_diss": 1.9870947724531345,
+    "mean_voice_crossings": 0.8984375,
+    "mean_shared_tonal": 0.3401310122863912
+  },
+  {
+    "step": 600,
+    "mean_reward": -2.8849844932556152,
+    "mean_vert_diss": 2.1946417745340705,
+    "mean_voice_crossings": 1.4296875,
+    "mean_shared_tonal": 0.354985817501434
+  },
+  {
+    "step": 650,
+    "mean_reward": -3.416142463684082,
+    "mean_vert_diss": 2.00005483921554,
+    "mean_voice_crossings": 1.125,
+    "mean_shared_tonal": 0.3923386027339218
+  },
+  {
+    "step": 700,
+    "mean_reward": -3.358473777770996,
+    "mean_vert_diss": 1.929900103943993,
+    "mean_voice_crossings": 0.671875,
+    "mean_shared_tonal": 0.4129125527989986
+  },
+  {
+    "step": 750,
+    "mean_reward": -1.0579655170440674,
+    "mean_vert_diss": 1.9959086739467606,
+    "mean_voice_crossings": 0.34375,
+    "mean_shared_tonal": 0.40003029050028394
+  },
+  {
+    "step": 800,
+    "mean_reward": -3.457995653152466,
+    "mean_vert_diss": 1.9688633825352508,
+    "mean_voice_crossings": 0.4921875,
+    "mean_shared_tonal": 0.41517492469278094
+  },
+  {
+    "step": 850,
+    "mean_reward": -2.4169163703918457,
+    "mean_vert_diss": 1.9964106522476897,
+    "mean_voice_crossings": 0.3984375,
+    "mean_shared_tonal": 0.4209662363915145
+  },
+  {
+    "step": 900,
+    "mean_reward": -3.3293542861938477,
+    "mean_vert_diss": 2.0022892174298472,
+    "mean_voice_crossings": 0.671875,
+    "mean_shared_tonal": 0.42870183414341456
+  },
+  {
+    "step": 950,
+    "mean_reward": -4.766130447387695,
+    "mean_vert_diss": 2.0524975917242507,
+    "mean_voice_crossings": 0.6328125,
+    "mean_shared_tonal": 0.42204726454827846
+  },
+  {
+    "step": 1000,
+    "mean_reward": -7.332219123840332,
+    "mean_vert_diss": 2.0938413062541996,
+    "mean_voice_crossings": 1.078125,
+    "mean_shared_tonal": 0.4425367935583119
+  },
+  {
+    "step": 1050,
+    "mean_reward": -9.15661907196045,
+    "mean_vert_diss": 2.095488292621027,
+    "mean_voice_crossings": 1.453125,
+    "mean_shared_tonal": 0.4476758792815527
+  },
+  {
+    "step": 1100,
+    "mean_reward": -8.44442367553711,
+    "mean_vert_diss": 2.1343088151562695,
+    "mean_voice_crossings": 1.8515625,
+    "mean_shared_tonal": 0.4447712940804578
+  },
+  {
+    "step": 1150,
+    "mean_reward": -9.760083198547363,
+    "mean_vert_diss": 2.1317720065709906,
+    "mean_voice_crossings": 1.6796875,
+    "mean_shared_tonal": 0.44536168255833525
+  },
+  {
+    "step": 1200,
+    "mean_reward": -12.020854949951172,
+    "mean_vert_diss": 2.1960441146372824,
+    "mean_voice_crossings": 1.484375,
+    "mean_shared_tonal": 0.43198688592823875
+  },
+  {
+    "step": 1250,
+    "mean_reward": -12.618274688720703,
+    "mean_vert_diss": 2.216837098806501,
+    "mean_voice_crossings": 1.484375,
+    "mean_shared_tonal": 0.42626688757327735
+  },
+  {
+    "step": 1300,
+    "mean_reward": -11.564359664916992,
+    "mean_vert_diss": 2.247021186404864,
+    "mean_voice_crossings": 1.515625,
+    "mean_shared_tonal": 0.44218312575548513
+  },
+  {
+    "step": 1350,
+    "mean_reward": -9.909355163574219,
+    "mean_vert_diss": 2.1806949727616702,
+    "mean_voice_crossings": 1.6953125,
+    "mean_shared_tonal": 0.44141262322229463
+  },
+  {
+    "step": 1400,
+    "mean_reward": -10.080135345458984,
+    "mean_vert_diss": 2.1391567376793033,
+    "mean_voice_crossings": 1.53125,
+    "mean_shared_tonal": 0.44729313696194234
+  },
+  {
+    "step": 1450,
+    "mean_reward": -9.80768871307373,
+    "mean_vert_diss": 2.1610036135043353,
+    "mean_voice_crossings": 1.5,
+    "mean_shared_tonal": 0.4452323740647324
+  },
+  {
+    "step": 1499,
+    "mean_reward": -8.85161018371582,
+    "mean_vert_diss": 2.267574843708916,
+    "mean_voice_crossings": 1.40625,
+    "mean_shared_tonal": 0.4275914967449521
+  }
+]
