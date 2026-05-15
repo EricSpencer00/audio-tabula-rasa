@@ -82,24 +82,25 @@ def consonance_reward(f1: float, f2: float, n_harmonics: int = 6,
     return -total_dissonance(f1, f2, n_harmonics, partials=partials)
 
 
-def chord_dissonance(freqs, n_harmonics: int = 6) -> float:
+def chord_dissonance(freqs, n_harmonics: int = 6,
+                     partials: str = "harmonic") -> float:
     """
     Total Sethares dissonance over all pairs of voices in a chord.
     `freqs` is a 1D iterable of fundamental frequencies in Hz.
 
-    A 3-note chord has 3 pairs (C(3,2)). For 4 voices, 6 pairs. Each
-    pair contributes its own n_harmonics x n_harmonics partial roughness.
-
     By summing pairwise roughness we keep the model purely additive in
     the physical sense: each pair of voices excites the basilar membrane
-    independently. There is no chord-level prior.
+    independently. There is no chord-level prior. `partials` selects
+    the timbre — switching it to "odd" changes which chord ratios are
+    consonant (see Phase 8 — Bohlen-Pierce).
     """
     freqs = np.asarray(freqs, dtype=np.float64)
     n = len(freqs)
     diss = 0.0
     for i in range(n):
         for j in range(i + 1, n):
-            diss += total_dissonance(float(freqs[i]), float(freqs[j]), n_harmonics)
+            diss += total_dissonance(float(freqs[i]), float(freqs[j]),
+                                     n_harmonics, partials=partials)
     return diss
 
 
@@ -150,13 +151,14 @@ def voice_leading_cost(chord_a, chord_b) -> float:
 
 
 def chord_reward(freqs, n_harmonics: int = 6, spread_weight: float = 1.0,
-                 min_semitones: float = 1.5) -> float:
+                 min_semitones: float = 1.5,
+                 partials: str = "harmonic") -> float:
     """
     Reward for a single chord: negative dissonance minus a soft spread
     penalty. The spread penalty is a *task constraint* (we want a chord,
     not a unison) and is the only non-Sethares ingredient.
     """
-    diss = chord_dissonance(freqs, n_harmonics=n_harmonics)
+    diss = chord_dissonance(freqs, n_harmonics=n_harmonics, partials=partials)
     spread = voice_spread_penalty(freqs, min_semitones=min_semitones)
     return -diss - spread_weight * spread
 

@@ -39,17 +39,27 @@ def _final_ratios(results_dir: Path):
 
 def plot_comparison(harmonic_dir="results",
                     odd_dir="results/phase8_bohlen_pierce",
+                    inharmonic_dir="results/phase8c_inharmonic",
                     out_dir="results/phase8_bohlen_pierce"):
-    harmonic_dir = Path(harmonic_dir)
-    odd_dir = Path(odd_dir)
+    sources = [
+        ("harmonic", Path(harmonic_dir),
+         [(1.0, "1:1"), (1.25, "5:4"), (1.333, "4:3"), (1.5, "3:2"),
+          (1.667, "5:3"), (2.0, "2:1"), (2.5, "5:2"), (3.0, "3:1")]),
+        ("odd", Path(odd_dir),
+         [(1.0, "1:1"), (1.286, "9:7"), (1.4, "7:5"), (1.5, "3:2"),
+          (1.667, "5:3"), (1.857, "13:7"), (2.333, "7:3"), (3.0, "3:1")]),
+        ("inharmonic", Path(inharmonic_dir),
+         [(1.0, "1:1"), (1.189, "m3"), (1.260, "M3"), (1.414, "TT"),
+          (1.682, "9:5"), (2.0, "2:1"), (2.828, "2√2:1")]),
+    ]
     out_path = Path(out_dir)
+    out_path.mkdir(parents=True, exist_ok=True)
 
-    fig, axes = plt.subplots(2, 2, figsize=(15, 9))
+    fig, axes = plt.subplots(2, 3, figsize=(20, 9))
 
-    # Top: dissonance curves
     F0 = 220.0
     ratios_grid = np.linspace(1.0, 3.1, 600)
-    for col, partials in enumerate(["harmonic", "odd"]):
+    for col, (partials, src, marks) in enumerate(sources):
         diss = np.array([total_dissonance(F0, F0 * r, partials=partials)
                          for r in ratios_grid])
         axes[0, col].plot(ratios_grid, diss, color="C3", lw=2)
@@ -57,31 +67,14 @@ def plot_comparison(harmonic_dir="results",
         axes[0, col].set_ylabel("Sethares dissonance")
         axes[0, col].set_title(f"Reward landscape — {partials} partials")
         axes[0, col].grid(alpha=0.3)
-        # Mark canonical intervals
-        if partials == "harmonic":
-            marks = [(1.0, "1:1"), (1.25, "5:4"), (1.333, "4:3"),
-                     (1.5, "3:2"), (1.667, "5:3"), (2.0, "2:1"),
-                     (2.5, "5:2"), (3.0, "3:1")]
-        else:
-            # Odd-partial / Bohlen-Pierce relevant ratios
-            marks = [(1.0, "1:1"), (1.286, "9:7"), (1.4, "7:5"),
-                     (1.5, "3:2"), (1.667, "5:3"), (1.857, "13:7"),
-                     (2.143, "15:7"), (2.333, "7:3"), (3.0, "3:1")]
         for r, name in marks:
             axes[0, col].axvline(r, color="gray", ls=":", alpha=0.5)
             axes[0, col].text(r, diss.max() * 1.02, name,
-                              fontsize=7, ha="center", rotation=0,
-                              color="gray")
+                              fontsize=7, ha="center", color="gray")
 
-    # Bottom: discovered ratio distributions
-    for col, (label, src) in enumerate([
-        ("harmonic timbre", harmonic_dir),
-        ("odd-partial timbre", odd_dir),
-    ]):
         rs = _final_ratios(src)
         if rs is None:
-            axes[1, col].text(0.5, 0.5,
-                              f"missing {src/'toy_generator.pt'}",
+            axes[1, col].text(0.5, 0.5, f"missing {src}",
                               ha="center", va="center",
                               transform=axes[1, col].transAxes)
             continue
@@ -90,7 +83,7 @@ def plot_comparison(harmonic_dir="results",
         axes[1, col].set_xlim(1.0, 3.1)
         axes[1, col].set_xlabel("Discovered frequency ratio")
         axes[1, col].set_ylabel("Sample count (of 512)")
-        axes[1, col].set_title(f"Discovered intervals — {label}")
+        axes[1, col].set_title(f"Discovered intervals — {partials}")
         axes[1, col].grid(alpha=0.3, axis="y")
 
     plt.tight_layout()
