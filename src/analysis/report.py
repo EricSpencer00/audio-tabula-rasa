@@ -281,6 +281,69 @@ def phase13_n_voice(results_root: str, n_voices_label: str):
     print()
 
 
+def phase11_autoregressive_melody(results_root="results/phase11_autoregressive_melody"):
+    from src.analysis.scale_identify import melody_scale_distribution
+    from src.reward.psychoacoustic import (implied_fundamental_salience,
+                                            pitch_class_diversity)
+    print("=" * 60)
+    print("Phase 11 — autoregressive melody (with motif autocorrelation)")
+    print("=" * 60)
+    melodies = _maybe_load_npy(Path(results_root) / "final_melodies.npy")
+    if melodies is None:
+        print("  (no final_melodies.npy)")
+        return
+    tonal = np.array([implied_fundamental_salience(m) for m in melodies])
+    pcs = np.array([pitch_class_diversity(m) for m in melodies])
+    # autocorrelation
+    def _ac(log_freqs, min_lag=2):
+        lf = np.asarray(log_freqs, dtype=np.float64)
+        lf = lf - lf.mean()
+        if lf.std() < 1e-6:
+            return 0.0
+        n = len(lf)
+        best = 0.0
+        for lag in range(min_lag, n // 2 + 1):
+            ac = float(np.mean(lf[:-lag] * lf[lag:]) / (lf.var() + 1e-8))
+            if ac > best:
+                best = ac
+        return best
+    motifs = np.array([_ac(np.log2(m)) for m in melodies])
+    print(f"  N samples: {len(melodies)}, length per melody: {melodies.shape[1]}")
+    print(f"  mean tonal salience: {tonal.mean():.3f}")
+    print(f"  PC count distribution: "
+          f"{dict(Counter(pcs.tolist()).most_common())}")
+    print(f"  mean motif autocorrelation: {motifs.mean():.3f}")
+    counter = melody_scale_distribution(melodies)
+    print("  closest Western scale matches:")
+    for (name, root), n in counter.most_common(3):
+        print(f"    {n:4d}  {name:18s} root={root}")
+    print()
+
+
+def phase12_cadence(results_root="results/phase12_cadence_progressions"):
+    from src.reward.cadence import cadence_arc
+    from src.reward.psychoacoustic import chord_dissonance
+    print("=" * 60)
+    print("Phase 12 — cadence-aware chord progressions")
+    print("=" * 60)
+    seqs = _maybe_load_npy(Path(results_root) / "final_progressions.npy")
+    if seqs is None:
+        print("  (no final_progressions.npy)")
+        return
+    arcs = np.array([cadence_arc(s) for s in seqs])
+    diss = np.array([
+        [chord_dissonance(c) for c in s] for s in seqs
+    ])
+    n_pos = seqs.shape[1]
+    print(f"  N samples: {len(seqs)}, chord positions: {n_pos}")
+    print(f"  mean cadence_arc (middle − endpoint dissonance): "
+          f"{arcs.mean():+.3f}")
+    print("  mean dissonance per position:")
+    for k in range(n_pos):
+        print(f"    pos {k}: {diss[:, k].mean():.3f}")
+    print()
+
+
 def run_all():
     print()
     phase1_intervals()
@@ -291,6 +354,8 @@ def run_all():
     phase8_intervals_odd()
     phase8b_triads_odd()
     phase8c_intervals_inharmonic()
+    phase11_autoregressive_melody()
+    phase12_cadence()
     phase13_n_voice("results/phase13_3voice_counterpoint", "3")
     phase13_n_voice("results/phase13_4voice_counterpoint", "4")
 
