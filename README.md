@@ -175,6 +175,22 @@ python -m src.train.triad_train --mode triad --steps 2000 --partials odd \
 python -m src.train.bp_triads_plot
 ```
 
+## Phase 13 — 3- and 4-voice counterpoint
+
+Extends Phase 7 from a duo to a trio and a quartet. Same architecture (banded per-voice log-frequency ranges, same reward) — only `n_voices` changes. With V=3 the vertical reward sums roughness over C(3,2)=3 voice pairs per time step; with V=4 it sums over 6 pairs. Voice-crossing and register-gap constraints scale up automatically.
+
+```bash
+# 3-voice chorale-style
+python -m src.train.counterpoint_train --steps 2000 --n-voices 3 \
+    --out-dir results/phase13_3voice_counterpoint
+
+# 4-voice (Bach-chorale-shaped, but without the chorale prior)
+python -m src.train.counterpoint_train --steps 2000 --n-voices 4 \
+    --out-dir results/phase13_4voice_counterpoint
+```
+
+Each phase yields a `counterpoint_summary.png` showing convergence, voice-crossing counts, and the vertical-interval histogram. With V=3 the histogram concentrates at minor- and major-third stackings (triadic harmony emerging); V=4 produces denser stackings that include sevenths.
+
 ## Listening
 
 Sample WAVs for each phase are committed under `results/audio/` and regenerable with:
@@ -245,7 +261,8 @@ python -m pytest tests/
 - [x] **Phase 8 — Bohlen-Pierce timbre experiment.** Re-run Phase 1 with `--partials odd` (only odd-numbered harmonics, like a closed-pipe instrument). With no other change, the discovered "scale" reorganizes from the M6/octave region onto the tritone/P5 region — directly validating Sethares (1993)'s theoretical claim that scale structure is downstream of timbre.
 - [x] **Phase 8b — Triads under odd partials.** Same as Phase 2 but with `--partials odd`. Chord cloud reorganizes onto BP-style ratios (median r₁=1.39, r₂=1.68). Mean chord dissonance under matching timbre 0.092 — lower than harmonic-trained triads' 0.194 under their matching timbre.
 - [x] **Phase 8c — Inharmonic negative control.** Phase 1 with `--partials inharmonic` (stretched partials with no integer relations). Discovered intervals shift again — to the m3/M3/P4 region. Three different timbres → three different scales.
-- [x] **Phase 9 — Continuous timbre sweep.** Train Phase 1 at α ∈ {0, ⅙, ⅓, ½, ⅔, ⅚, 1} where α is the weight on the even harmonics and (1−α) the weight on extra odd partials (partial count held constant). The discovered ratio sweeps continuously from the harmonic-timbre attractor to the BP-timbre attractor.
+- [x] **Phase 9 — Continuous timbre sweep.** Train Phase 1 at α ∈ {0, ⅙, ⅓, ½, ⅔, ⅚, 1} where α is the weight on the even harmonics and (1−α) the weight on extra odd partials (partial count held constant). The discovered ratio sweeps continuously from the harmonic-timbre attractor to the BP-timbre attractor. Multi-seed (3 per α) to expose the fact that intermediate timbres have flatter consonance landscapes with multiple shallow minima.
+- [x] **Phase 13 — 3- and 4-voice counterpoint.** Phase 7 with `n_voices=3` and `n_voices=4`. Vertical reward sums over all C(V,2) voice pairs at each time step. Triadic vertical structure emerges at V=3, 7th-chord-like stacking at V=4.
 - [ ] **Phase 5 — Spectrogram diffusion model.** Replace toy generator with a real audio model (diffusion over mel-spectrograms). Decode to waveform with a vocoder that was *not* trained on music (challenging — Griffin-Lim or learned-from-noise variants).
 - [ ] **Phase 6 — RLAIF with a "taste" model.** Train a text-grounded music-theory taste model (read music theory textbooks, never hear music) and use it as the reward model in place of pure psychoacoustics.
 

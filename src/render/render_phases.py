@@ -177,6 +177,50 @@ def render_phase45_melodic_rhythm(out_dir: Path, seed: int = 0):
     print(f"  saved {out_dir/'phase45_melodic_rhythm.wav'}")
 
 
+def _render_n_voice_counterpoint(weights_path: str, out_file: Path,
+                                  n_voices: int, seed: int):
+    gen = CounterpointGenerator(n_voices=n_voices)
+    if not _safe_load(gen, weights_path):
+        return
+    gen.eval()
+    torch.manual_seed(seed)
+    with torch.no_grad():
+        v, _ = gen.sample(4)
+    chunks = []
+    for cp in v.cpu().numpy():
+        voice_audios = []
+        for voice in cp:
+            voice_audios.append(render_melody(voice, note_duration=0.45,
+                                              gap=0.0))
+        max_len = max(len(a) for a in voice_audios)
+        mixed = np.zeros(max_len)
+        for a in voice_audios:
+            mixed[: len(a)] += a / len(voice_audios)
+        chunks.append(mixed)
+        chunks.append(np.zeros(int(0.4 * SAMPLE_RATE)))
+    audio = np.concatenate(chunks)
+    write_wav(out_file, audio)
+    print(f"  saved {out_file}")
+
+
+def render_phase13_3voice(out_dir: Path, seed: int = 0):
+    print("Phase 13: 3-voice counterpoint")
+    _render_n_voice_counterpoint(
+        "results/phase13_3voice_counterpoint/counterpoint_generator.pt",
+        out_dir / "phase13_3voice_counterpoint.wav",
+        n_voices=3, seed=seed,
+    )
+
+
+def render_phase13_4voice(out_dir: Path, seed: int = 0):
+    print("Phase 13: 4-voice counterpoint")
+    _render_n_voice_counterpoint(
+        "results/phase13_4voice_counterpoint/counterpoint_generator.pt",
+        out_dir / "phase13_4voice_counterpoint.wav",
+        n_voices=4, seed=seed,
+    )
+
+
 def render_phase8b_bp_triads(out_dir: Path, seed: int = 0):
     """BP triads rendered with odd-only partials so the listener actually
     hears the Bohlen-Pierce-like consonance the model was trained on."""
@@ -257,3 +301,5 @@ if __name__ == "__main__":
     render_phase45_melodic_rhythm(out_dir, args.seed)
     render_phase7_counterpoint(out_dir, args.seed)
     render_phase8b_bp_triads(out_dir, args.seed)
+    render_phase13_3voice(out_dir, args.seed)
+    render_phase13_4voice(out_dir, args.seed)
