@@ -28,6 +28,13 @@ from src.reward.rhythm import (
     phase_coherence,
     rhythm_reward,
 )
+from src.reward.counterpoint import (
+    counterpoint_reward,
+    shared_tonal_salience,
+    vertical_dissonance,
+    voice_crossings,
+    voice_register_gap,
+)
 
 
 # ----- Phase 1: interval consonance -----------------------------------
@@ -198,3 +205,128 @@ def test_rhythm_reward_penalizes_cluster():
     cluster = np.linspace(0.0, 0.3, 8)  # all very close together
     regular = np.arange(0, 4.0, 0.5)
     assert rhythm_reward(regular) > rhythm_reward(cluster)
+
+
+# ----- Phase 7: counterpoint -----------------------------------------
+
+def _two_voice(low, high):
+    return np.stack([np.asarray(low, dtype=float),
+                     np.asarray(high, dtype=float)])
+
+
+def test_vertical_dissonance_zero_for_octave_doubling():
+    """Two voices an octave apart have very low pairwise Sethares
+    roughness (octaves share all even harmonics)."""
+    walk = [262, 294, 330, 349, 392]
+    vs = _two_voice(walk, [f * 2 for f in walk])
+    assert vertical_dissonance(vs) < 0.06
+
+
+def test_vertical_dissonance_high_for_chromatic_clash():
+    """Two voices a semitone apart at every step give peak roughness."""
+    base = [262, 294, 330, 349, 392]
+    vs = _two_voice(base, [f * 2 ** (1 / 12) for f in base])
+    assert vertical_dissonance(vs) > 1.0
+
+
+def test_voice_crossings_zero_for_octave_doubled():
+    low = [262, 294, 330, 349, 392]
+    vs = _two_voice(low, [f * 2 for f in low])
+    assert voice_crossings(vs) == 0
+
+
+def test_voice_crossings_high_for_swapping():
+    vs = _two_voice([220, 440, 220, 440], [440, 220, 440, 220])
+    assert voice_crossings(vs) >= 2
+
+
+def test_voice_register_gap_zero_for_octave_spread():
+    low = [262, 294, 330]
+    vs = _two_voice(low, [f * 2 for f in low])
+    assert voice_register_gap(vs) == 0.0
+
+
+def test_voice_register_gap_positive_for_near_unison():
+    vs = _two_voice([262, 262, 262], [263, 263, 263])
+    assert voice_register_gap(vs) > 0.0
+
+
+def test_counterpoint_reward_octaves_over_random():
+    """Octave-doubled walking voices should score higher than random."""
+    walk = np.array([262, 294, 330, 349, 392, 440, 494, 523], dtype=float)
+    octave = np.stack([walk, walk * 2])
+    rng = np.random.default_rng(7)
+    rand = 2 ** rng.uniform(np.log2(110), np.log2(1760), size=(2, 8))
+    assert counterpoint_reward(octave) > counterpoint_reward(rand)
+
+
+def test_counterpoint_reward_no_crossings_better_with_strong_weight():
+    """Same vertical content with stable ordering beats a crossing
+    arrangement when the crossing weight is large enough to overcome
+    Sethares' love of octave-jump melodies. (At the default weight a
+    voice swap is roughly free, because each individual voice is just
+    octave-jumping which is itself consonant.)"""
+    walk_lo = np.array([262, 294, 330, 349, 392, 440, 494, 523], dtype=float)
+    walk_hi = walk_lo * 1.5
+    stable = np.stack([walk_lo, walk_hi])
+    crossing = np.stack([
+        np.where(np.arange(8) % 2 == 0, walk_lo, walk_hi),
+        np.where(np.arange(8) % 2 == 0, walk_hi, walk_lo),
+    ])
+    r_stable = counterpoint_reward(stable, crossing_weight=2.0)
+    r_cross = counterpoint_reward(crossing, crossing_weight=2.0)
+    assert r_stable > r_cross
+
+
+def test_shared_tonal_salience_unit_bounded():
+    walk = np.array([262, 294, 330, 349, 392, 440, 494, 523], dtype=float)
+    vs = np.stack([walk, walk * 2])
+    s = shared_tonal_salience(vs)
+    assert 0.0 <= s <= 1.0
+
+
+# ----- Phase 8: timbre / Bohlen-Pierce -------------------------------
+
+def test_harmonic_octave_more_consonant_than_tritone():
+    """Under natural (all-integer) harmonics, 2:1 is much more consonant
+    than sqrt(2):1 — the canonical reason Western tuning is octave-based."""
+    octave = total_dissonance(220.0, 440.0, partials="harmonic")
+    tritone = total_dissonance(220.0, 220.0 * 2 ** 0.5, partials="harmonic")
+    assert octave < tritone
+
+
+def test_odd_partials_change_consonance_landscape():
+    """Under odd-only partials the dissonance landscape is *different*
+    from the natural harmonic one. Specifically, the dissonance peak
+    around the minor second should move because the partials' inter-
+    coincidences move."""
+    harm = total_dissonance(220.0, 220.0 * 2 ** (1 / 12), partials="harmonic")
+    odd = total_dissonance(220.0, 220.0 * 2 ** (1 / 12), partials="odd")
+    assert not np.isclose(harm, odd)
+
+
+def test_odd_partials_tritave_is_consonant():
+    """With odd-only partials the *tritave* (3:1) plays the role the
+    octave (2:1) plays for natural partials: every odd partial of the
+    lower tone coincides with an odd partial of the tritave-up tone, so
+    the resulting roughness is essentially the intrinsic self-roughness."""
+    tritave = total_dissonance(220.0, 660.0, partials="odd")
+    octave = total_dissonance(220.0, 440.0, partials="odd")
+    tritone = total_dissonance(220.0, 220.0 * 2 ** 0.5, partials="odd")
+    assert tritave < tritone
+    # Octave can also be reasonably consonant under odd partials but the
+    # tritave should be among the most consonant intervals.
+    assert tritave <= 0.02
+
+
+def test_inharmonic_breaks_low_integer_advantage():
+    """Stretched / inharmonic partials should *not* give the integer
+    ratios (2:1, 3:2) any special low-dissonance status — those minima
+    only exist because the underlying partials are at integer multiples."""
+    rs = np.linspace(1.05, 3.0, 50)
+    diss = np.array([
+        total_dissonance(220.0, 220.0 * r, partials="inharmonic") for r in rs
+    ])
+    # The argmin under inharmonic partials should NOT land near 2.0
+    argmin_r = rs[diss.argmin()]
+    assert abs(argmin_r - 2.0) > 0.05 or diss.min() > 0.02

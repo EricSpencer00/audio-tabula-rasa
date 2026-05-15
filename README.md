@@ -115,6 +115,41 @@ python -m src.train.melodic_rhythm_train --steps 1200
 python -m src.train.melodic_rhythm_plot
 ```
 
+## Phase 7 — Counterpoint (2-voice polyphony)
+
+A single MLP emits V voices × N notes, with each voice's outputs band-limited to its own log-frequency range (a *task* constraint to break voice symmetry — not a music prior). The reward combines:
+
+- Per-voice melody reward (Phase 3, applied to each voice).
+- Pairwise Sethares roughness between *simultaneous* notes across voices, summed over time — punishes vertical clashes the same way Phase 2 does.
+- Voice-crossing penalty: rank-flip away from each voice's median-pitch role.
+- Soft register-gap penalty so simultaneous voices stay ≥ 3 semitones apart.
+- Shared implied-fundamental salience across the concatenated voice set — both voices should fit one tonal center.
+
+The model has to find horizontal melodies and vertical harmony simultaneously. After ~1500 steps it produces 2-voice excerpts with consonant vertical intervals (P5 / octave clustering in the histogram) and bounded voice crossings.
+
+![Phase 7 — counterpoint](results/phase7_counterpoint/counterpoint_summary.png)
+
+```bash
+python -m src.train.counterpoint_train --steps 1500
+python -m src.train.counterpoint_plot
+```
+
+## Phase 8 — Bohlen-Pierce: when the timbre changes, the scale changes
+
+The strongest version of the *physics → music* claim is that **the choice of scale is downstream of the timbre.** Sethares (1993) showed analytically that if you replace the natural harmonic series (partials at 1, 2, 3, 4, ...) with a different partial layout, the consonance minima move. The most famous case is the **Bohlen-Pierce scale**: with *odd-only* partials (1, 3, 5, 7, 9, ...) — the spectrum of a closed pipe or a square wave — the 2:1 octave loses its special status, and consonance reorganizes around the 3:1 *tritave* and tritone-like intermediate ratios.
+
+This phase re-runs the Phase-1 toy interval generator with `--partials odd`. The reward function is identical *except* for the partial layout. With no other change, the model converges on **tritone / perfect-fifth** ratios instead of the **major-sixth / octave** region it found with the natural harmonic series:
+
+![Phase 8 — timbre dictates scale](results/phase8_bohlen_pierce/bohlen_pierce_summary.png)
+
+The top panels are the reward landscapes (two different curves for the same generator); the bottom panels are the histograms of intervals the trained generator actually emits. Same reward family, same generator, same training procedure — only the partial layout changes, and the discovered "scale" changes accordingly. That is exactly the prediction of the physics-grounded thesis.
+
+```bash
+python -m src.train.reinforce --steps 1500 --partials harmonic --out-dir results
+python -m src.train.reinforce --steps 1500 --partials odd      --out-dir results/phase8_bohlen_pierce
+python -m src.train.bohlen_pierce_plot
+```
+
 ## Listening
 
 Sample WAVs for each phase are committed under `results/audio/` and regenerable with:
@@ -152,6 +187,15 @@ python -m src.train.rhythm_plot
 python -m src.train.melodic_rhythm_train --steps 1200
 python -m src.train.melodic_rhythm_plot
 
+# Phase 7: 2-voice counterpoint (~3 min CPU)
+python -m src.train.counterpoint_train --steps 1500
+python -m src.train.counterpoint_plot
+
+# Phase 8: Bohlen-Pierce timbre experiment (~2 min CPU)
+python -m src.train.reinforce --steps 1500 --partials odd \
+    --out-dir results/phase8_bohlen_pierce
+python -m src.train.bohlen_pierce_plot
+
 # Render audio
 python -m src.render.render_phases
 ```
@@ -172,6 +216,8 @@ python -m pytest tests/
 - [x] **Phase 3 — Short melodies.** Sequence of N notes; sequential Sethares + Terhardt virtual-pitch + pitch-class diversity. Coherent melodic gestures with elevated tonal salience emerge.
 - [x] **Phase 4 — Rhythm.** Onset times via cumulative-sum Gaussian policy; reward is phase-coherence over a tempo lag window (linear approximation to Large & Kolen oscillator entrainment). Discovered tempo peaks near 110 BPM — inside the human preferred-tempo window.
 - [x] **Phase 4.5 — Joint melodic rhythm.** Single generator outputs (pitch, IOI) pairs. Reward = Phase-3 melody reward + Phase-4 rhythm reward, jointly optimized. Pitches and onsets both pick up structure from the shared network.
+- [x] **Phase 7 — Counterpoint (2-voice polyphony).** Generator emits V voices × N notes with banded log-frequency ranges. Reward = horizontal melody per voice + vertical Sethares + voice-crossing penalty + shared implied root. Produces 2-voice excerpts with consonant vertical intervals and bounded voice crossings.
+- [x] **Phase 8 — Bohlen-Pierce timbre experiment.** Re-run Phase 1 with `--partials odd` (only odd-numbered harmonics, like a closed-pipe instrument). With no other change, the discovered "scale" reorganizes from the M6/octave region onto the tritone/P5 region — directly validating Sethares (1993)'s theoretical claim that scale structure is downstream of timbre.
 - [ ] **Phase 5 — Spectrogram diffusion model.** Replace toy generator with a real audio model (diffusion over mel-spectrograms). Decode to waveform with a vocoder that was *not* trained on music (challenging — Griffin-Lim or learned-from-noise variants).
 - [ ] **Phase 6 — RLAIF with a "taste" model.** Train a text-grounded music-theory taste model (read music theory textbooks, never hear music) and use it as the reward model in place of pure psychoacoustics.
 

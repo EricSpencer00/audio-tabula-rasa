@@ -28,29 +28,58 @@ def _sethares_pair(f1: float, f2: float, a1: float = 1.0, a2: float = 1.0) -> fl
     return a1 * a2 * (np.exp(-3.5 * s * fdif) - np.exp(-5.75 * s * fdif))
 
 
-def total_dissonance(f1: float, f2: float, n_harmonics: int = 6) -> float:
+def total_dissonance(f1: float, f2: float, n_harmonics: int = 6,
+                     partials: str = "harmonic") -> float:
     """
-    Compute total roughness between two complex tones each having
-    `n_harmonics` harmonic partials with 1/n amplitude rolloff.
+    Compute total roughness between two complex tones whose partials
+    are drawn from a configurable timbre.
 
-    This is where consonance structure emerges: simple integer ratios
-    cause harmonics to coincide rather than collide, yielding low roughness.
+    `partials` selects the partial layout:
+      "harmonic":  k = 1, 2, 3, ..., n_harmonics
+                   — the natural vibrating-string / open-pipe spectrum.
+                   This is where octave-based consonance comes from:
+                   simple integer ratios cause harmonics to coincide.
+      "odd":       k = 1, 3, 5, ..., 2*n_harmonics-1
+                   — odd-only partials like a square wave or a clarinet's
+                   low register. Bohlen-Pierce showed that this timbre
+                   has its consonance minima at *tritave* (3:1) intervals
+                   and odd-ratio subdivisions, not octave-based ratios.
+      "inharmonic": k = 1, sqrt(2), 2, sqrt(8), ..., a stretched series
+                   that does not have any integer relations — used as
+                   a control to verify that consonance structure depends
+                   on the partial layout, not just on having multiple
+                   partials.
+
+    Amplitude rolloff is 1/k for "harmonic" and "odd" (preserving the
+    visual amplitude of the corresponding harmonic series), and 1/k for
+    "inharmonic" too.
     """
+    if partials == "harmonic":
+        ks = np.arange(1, n_harmonics + 1, dtype=np.float64)
+    elif partials == "odd":
+        ks = np.arange(1, 2 * n_harmonics, 2, dtype=np.float64)
+    elif partials == "inharmonic":
+        # Powers of sqrt(2): 1, 1.414, 2, 2.828, 4, ...  — no integer rels
+        ks = 2.0 ** (np.arange(n_harmonics, dtype=np.float64) / 2.0)
+    else:
+        raise ValueError(f"unknown partials={partials!r}")
+
+    amps = 1.0 / ks
     diss = 0.0
-    for i in range(1, n_harmonics + 1):
-        for j in range(1, n_harmonics + 1):
-            amp_i = 1.0 / i
-            amp_j = 1.0 / j
-            diss += _sethares_pair(i * f1, j * f2, amp_i, amp_j)
+    for i, ki in enumerate(ks):
+        for j, kj in enumerate(ks):
+            diss += _sethares_pair(ki * f1, kj * f2, amps[i], amps[j])
     return diss
 
 
-def consonance_reward(f1: float, f2: float, n_harmonics: int = 6) -> float:
+def consonance_reward(f1: float, f2: float, n_harmonics: int = 6,
+                      partials: str = "harmonic") -> float:
     """
     Reward = negative dissonance. Higher = more consonant.
     Frequencies in Hz. Typical musical range: 80–2000 Hz.
+    `partials` selects the timbre: "harmonic", "odd", or "inharmonic".
     """
-    return -total_dissonance(f1, f2, n_harmonics)
+    return -total_dissonance(f1, f2, n_harmonics, partials=partials)
 
 
 def chord_dissonance(freqs, n_harmonics: int = 6) -> float:

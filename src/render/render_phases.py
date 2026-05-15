@@ -15,6 +15,7 @@ from src.generator.chord_generator import (
     ChordProgressionGenerator,
     TriadGenerator,
 )
+from src.generator.counterpoint_generator import CounterpointGenerator
 from src.generator.melodic_rhythm_generator import MelodicRhythmGenerator
 from src.generator.melody_generator import MelodyGenerator
 from src.generator.rhythm_generator import RhythmGenerator
@@ -176,6 +177,36 @@ def render_phase45_melodic_rhythm(out_dir: Path, seed: int = 0):
     print(f"  saved {out_dir/'phase45_melodic_rhythm.wav'}")
 
 
+def render_phase7_counterpoint(out_dir: Path, seed: int = 0):
+    """V-voice counterpoint: render all voices simultaneously."""
+    print("Phase 7: counterpoint")
+    gen = CounterpointGenerator()
+    if not _safe_load(
+        gen, "results/phase7_counterpoint/counterpoint_generator.pt"
+    ):
+        return
+    gen.eval()
+    torch.manual_seed(seed)
+    with torch.no_grad():
+        v, _ = gen.sample(4)
+    chunks = []
+    for cp in v.cpu().numpy():     # shape (V, N)
+        # Render each voice as a sequence and mix
+        voice_audios = []
+        for voice in cp:
+            voice_audios.append(render_melody(voice, note_duration=0.45,
+                                              gap=0.0))
+        max_len = max(len(a) for a in voice_audios)
+        mixed = np.zeros(max_len)
+        for a in voice_audios:
+            mixed[: len(a)] += a / len(voice_audios)
+        chunks.append(mixed)
+        chunks.append(np.zeros(int(0.4 * SAMPLE_RATE)))
+    audio = np.concatenate(chunks)
+    write_wav(out_dir / "phase7_counterpoint.wav", audio)
+    print(f"  saved {out_dir/'phase7_counterpoint.wav'}")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--out-dir", type=str, default="results/audio")
@@ -190,3 +221,4 @@ if __name__ == "__main__":
     render_phase4_rhythms(out_dir, args.seed)
     render_phase34_combined(out_dir, args.seed)
     render_phase45_melodic_rhythm(out_dir, args.seed)
+    render_phase7_counterpoint(out_dir, args.seed)
