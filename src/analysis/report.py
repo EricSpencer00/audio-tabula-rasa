@@ -157,6 +157,7 @@ def phase8b_triads_odd(results_root="results/phase8b_bp_triads"):
 
 
 def phase3_melodies(results_root="results/phase3_melodies"):
+    from src.analysis.scale_identify import melody_scale_distribution
     from src.reward.psychoacoustic import (implied_fundamental_salience,
                                             pitch_class_diversity)
     print("=" * 60)
@@ -171,6 +172,12 @@ def phase3_melodies(results_root="results/phase3_melodies"):
     print(f"  mean tonal salience: {tonal.mean():.3f}")
     print(f"  PC count distribution: "
           f"{dict(Counter(pcs.tolist()).most_common())}")
+    # Scale identification (Western tuning baseline)
+    counter = melody_scale_distribution(melodies)
+    top = counter.most_common(5)
+    print("  closest Western scale matches:")
+    for (name, root), n in top:
+        print(f"    {n:4d}  {name:18s} root={root}")
     print()
 
 

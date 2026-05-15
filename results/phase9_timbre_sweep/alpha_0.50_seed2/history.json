@@ -1,0 +1,591 @@
+[
+  {
+    "step": 0,
+    "mean_reward": -0.1713436245918274,
+    "median_ratio": 1.0332483053207397,
+    "top_intervals": [
+      [
+        "unison",
+        80
+      ],
+      [
+        "minor_second",
+        73
+      ],
+      [
+        "non-musical (ratio=1.037)",
+        7
+      ]
+    ]
+  },
+  {
+    "step": 50,
+    "mean_reward": -0.16519993543624878,
+    "median_ratio": 1.0335056781768799,
+    "top_intervals": [
+      [
+        "unison",
+        88
+      ],
+      [
+        "minor_second",
+        71
+      ],
+      [
+        "non-musical (ratio=1.039)",
+        9
+      ]
+    ]
+  },
+  {
+    "step": 100,
+    "mean_reward": -0.1706458330154419,
+    "median_ratio": 1.046431064605713,
+    "top_intervals": [
+      [
+        "minor_second",
+        88
+      ],
+      [
+        "unison",
+        50
+      ],
+      [
+        "major_second",
+        19
+      ]
+    ]
+  },
+  {
+    "step": 150,
+    "mean_reward": -0.16585516929626465,
+    "median_ratio": 1.040090799331665,
+    "top_intervals": [
+      [
+        "minor_second",
+        73
+      ],
+      [
+        "unison",
+        73
+      ],
+      [
+        "major_second",
+        21
+      ]
+    ]
+  },
+  {
+    "step": 200,
+    "mean_reward": -0.16219478845596313,
+    "median_ratio": 1.0506079196929932,
+    "top_intervals": [
+      [
+        "minor_second",
+        84
+      ],
+      [
+        "unison",
+        55
+      ],
+      [
+        "major_second",
+        33
+      ]
+    ]
+  },
+  {
+    "step": 250,
+    "mean_reward": -0.1526275873184204,
+    "median_ratio": 1.0991573333740234,
+    "top_intervals": [
+      [
+        "major_second",
+        80
+      ],
+      [
+        "minor_second",
+        68
+      ],
+      [
+        "unison",
+        16
+      ]
+    ]
+  },
+  {
+    "step": 300,
+    "mean_reward": -0.15028929710388184,
+    "median_ratio": 1.1032848358154297,
+    "top_intervals": [
+      [
+        "major_second",
+        86
+      ],
+      [
+        "minor_second",
+        64
+      ],
+      [
+        "unison",
+        14
+      ]
+    ]
+  },
+  {
+    "step": 350,
+    "mean_reward": -0.12278050929307938,
+    "median_ratio": 1.135923147201538,
+    "top_intervals": [
+      [
+        "major_second",
+        117
+      ],
+      [
+        "minor_third",
+        39
+      ],
+      [
+        "minor_second",
+        20
+      ]
+    ]
+  },
+  {
+    "step": 400,
+    "mean_reward": -0.06829749792814255,
+    "median_ratio": 1.3291230201721191,
+    "top_intervals": [
+      [
+        "minor_third",
+        22
+      ],
+      [
+        "perfect_fourth",
+        21
+      ],
+      [
+        "perfect_fifth",
+        18
+      ]
+    ]
+  },
+  {
+    "step": 450,
+    "mean_reward": -0.06111454591155052,
+    "median_ratio": 1.4637870788574219,
+    "top_intervals": [
+      [
+        "major_third",
+        15
+      ],
+      [
+        "perfect_fourth",
+        15
+      ],
+      [
+        "minor_seventh",
+        13
+      ]
+    ]
+  },
+  {
+    "step": 500,
+    "mean_reward": -0.07960744947195053,
+    "median_ratio": 1.426547884941101,
+    "top_intervals": [
+      [
+        "minor_second",
+        21
+      ],
+      [
+        "unison",
+        19
+      ],
+      [
+        "major_third",
+        12
+      ]
+    ]
+  },
+  {
+    "step": 550,
+    "mean_reward": -0.07761409133672714,
+    "median_ratio": 1.44700026512146,
+    "top_intervals": [
+      [
+        "minor_second",
+        21
+      ],
+      [
+        "unison",
+        15
+      ],
+      [
+        "major_second",
+        13
+      ]
+    ]
+  },
+  {
+    "step": 600,
+    "mean_reward": -0.08226773142814636,
+    "median_ratio": 1.37066650390625,
+    "top_intervals": [
+      [
+        "unison",
+        22
+      ],
+      [
+        "minor_second",
+        22
+      ],
+      [
+        "major_second",
+        20
+      ]
+    ]
+  },
+  {
+    "step": 650,
+    "mean_reward": -0.09309500455856323,
+    "median_ratio": 1.2422131299972534,
+    "top_intervals": [
+      [
+        "unison",
+        34
+      ],
+      [
+        "minor_second",
+        27
+      ],
+      [
+        "major_second",
+        15
+      ]
+    ]
+  },
+  {
+    "step": 700,
+    "mean_reward": -0.08223636448383331,
+    "median_ratio": 1.3650965690612793,
+    "top_intervals": [
+      [
+        "unison",
+        25
+      ],
+      [
+        "minor_second",
+        22
+      ],
+      [
+        "major_third",
+        12
+      ]
+    ]
+  },
+  {
+    "step": 750,
+    "mean_reward": -0.09472115337848663,
+    "median_ratio": 1.355696439743042,
+    "top_intervals": [
+      [
+        "minor_second",
+        30
+      ],
+      [
+        "unison",
+        19
+      ],
+      [
+        "minor_third",
+        9
+      ]
+    ]
+  },
+  {
+    "step": 800,
+    "mean_reward": -0.08776988089084625,
+    "median_ratio": 1.3896026611328125,
+    "top_intervals": [
+      [
+        "unison",
+        26
+      ],
+      [
+        "minor_second",
+        24
+      ],
+      [
+        "major_second",
+        15
+      ]
+    ]
+  },
+  {
+    "step": 850,
+    "mean_reward": -0.0885421484708786,
+    "median_ratio": 1.377766728401184,
+    "top_intervals": [
+      [
+        "unison",
+        31
+      ],
+      [
+        "minor_second",
+        28
+      ],
+      [
+        "major_second",
+        15
+      ]
+    ]
+  },
+  {
+    "step": 900,
+    "mean_reward": -0.09135943651199341,
+    "median_ratio": 1.3055565357208252,
+    "top_intervals": [
+      [
+        "unison",
+        27
+      ],
+      [
+        "minor_second",
+        25
+      ],
+      [
+        "major_second",
+        12
+      ]
+    ]
+  },
+  {
+    "step": 950,
+    "mean_reward": -0.08484586328268051,
+    "median_ratio": 1.4057860374450684,
+    "top_intervals": [
+      [
+        "unison",
+        29
+      ],
+      [
+        "minor_second",
+        18
+      ],
+      [
+        "minor_third",
+        9
+      ]
+    ]
+  },
+  {
+    "step": 1000,
+    "mean_reward": -0.08660860359668732,
+    "median_ratio": 1.35379958152771,
+    "top_intervals": [
+      [
+        "minor_second",
+        24
+      ],
+      [
+        "unison",
+        23
+      ],
+      [
+        "perfect_fourth",
+        11
+      ]
+    ]
+  },
+  {
+    "step": 1050,
+    "mean_reward": -0.0968112051486969,
+    "median_ratio": 1.2675780057907104,
+    "top_intervals": [
+      [
+        "minor_second",
+        37
+      ],
+      [
+        "unison",
+        21
+      ],
+      [
+        "major_second",
+        15
+      ]
+    ]
+  },
+  {
+    "step": 1100,
+    "mean_reward": -0.09430690854787827,
+    "median_ratio": 1.2371160984039307,
+    "top_intervals": [
+      [
+        "minor_second",
+        32
+      ],
+      [
+        "unison",
+        30
+      ],
+      [
+        "major_second",
+        14
+      ]
+    ]
+  },
+  {
+    "step": 1150,
+    "mean_reward": -0.09442546963691711,
+    "median_ratio": 1.2857263088226318,
+    "top_intervals": [
+      [
+        "minor_second",
+        35
+      ],
+      [
+        "unison",
+        28
+      ],
+      [
+        "major_second",
+        13
+      ]
+    ]
+  },
+  {
+    "step": 1200,
+    "mean_reward": -0.09438441693782806,
+    "median_ratio": 1.210787057876587,
+    "top_intervals": [
+      [
+        "unison",
+        32
+      ],
+      [
+        "minor_second",
+        27
+      ],
+      [
+        "major_second",
+        13
+      ]
+    ]
+  },
+  {
+    "step": 1250,
+    "mean_reward": -0.09205129742622375,
+    "median_ratio": 1.3156495094299316,
+    "top_intervals": [
+      [
+        "unison",
+        35
+      ],
+      [
+        "minor_second",
+        33
+      ],
+      [
+        "major_third",
+        8
+      ]
+    ]
+  },
+  {
+    "step": 1300,
+    "mean_reward": -0.0903453677892685,
+    "median_ratio": 1.342974066734314,
+    "top_intervals": [
+      [
+        "unison",
+        28
+      ],
+      [
+        "minor_second",
+        27
+      ],
+      [
+        "major_second",
+        16
+      ]
+    ]
+  },
+  {
+    "step": 1350,
+    "mean_reward": -0.09258952736854553,
+    "median_ratio": 1.257289171218872,
+    "top_intervals": [
+      [
+        "unison",
+        35
+      ],
+      [
+        "minor_second",
+        33
+      ],
+      [
+        "major_second",
+        14
+      ]
+    ]
+  },
+  {
+    "step": 1400,
+    "mean_reward": -0.1018475890159607,
+    "median_ratio": 1.166550636291504,
+    "top_intervals": [
+      [
+        "minor_second",
+        37
+      ],
+      [
+        "unison",
+        30
+      ],
+      [
+        "major_second",
+        14
+      ]
+    ]
+  },
+  {
+    "step": 1450,
+    "mean_reward": -0.08766171336174011,
+    "median_ratio": 1.3698757886886597,
+    "top_intervals": [
+      [
+        "minor_second",
+        28
+      ],
+      [
+        "unison",
+        26
+      ],
+      [
+        "major_second",
+        14
+      ]
+    ]
+  },
+  {
+    "step": 1499,
+    "mean_reward": -0.09456077963113785,
+    "median_ratio": 1.3736963272094727,
+    "top_intervals": [
+      [
+        "unison",
+        30
+      ],
+      [
+        "minor_second",
+        26
+      ],
+      [
+        "major_second",
+        8
+      ]
+    ]
+  }
+]

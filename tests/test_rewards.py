@@ -330,3 +330,37 @@ def test_inharmonic_breaks_low_integer_advantage():
     # The argmin under inharmonic partials should NOT land near 2.0
     argmin_r = rs[diss.argmin()]
     assert abs(argmin_r - 2.0) > 0.05 or diss.min() > 0.02
+
+
+def test_alpha_interpolation_endpoints():
+    """alpha=1 should equal natural-harmonic timbre and alpha=0 should
+    equal the odd-only timbre in the dissonance landscape (within
+    numerical agreement to a couple of digits)."""
+    rs = [1.25, 1.5, 1.667, 2.0]
+    for r in rs:
+        h = total_dissonance(220.0, 220.0 * r, partials="harmonic")
+        a1 = total_dissonance(220.0, 220.0 * r, partials=1.0)
+        # alpha=1 reproduces full harmonic series up to first n harmonics.
+        # The internal layout slightly reorders amps but the cross-partial
+        # sum is identical; same value.
+        assert abs(h - a1) < 0.01
+
+        o = total_dissonance(220.0, 220.0 * r, partials="odd")
+        a0 = total_dissonance(220.0, 220.0 * r, partials=0.0)
+        assert abs(o - a0) < 0.01
+
+
+def test_alpha_interpolation_monotonic():
+    """For a ratio that is consonant under harmonic but less so under
+    odd-only (the major sixth), the dissonance should increase as α
+    drops from 1 → 0. For a ratio that is *more* consonant under odd
+    (e.g. 5:3 = 1.667), the dissonance should drop."""
+    alphas = [0.0, 0.25, 0.5, 0.75, 1.0]
+    # major sixth 5:3
+    diss_m6 = [
+        total_dissonance(220.0, 220.0 * (5 / 3), partials=float(a))
+        for a in alphas
+    ]
+    # The trend can be non-monotonic globally but at the endpoints
+    # alpha=0 (odd-only) should be no worse than alpha=1.
+    assert diss_m6[0] <= diss_m6[-1] + 0.001

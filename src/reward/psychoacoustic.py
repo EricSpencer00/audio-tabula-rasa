@@ -29,7 +29,7 @@ def _sethares_pair(f1: float, f2: float, a1: float = 1.0, a2: float = 1.0) -> fl
 
 
 def total_dissonance(f1: float, f2: float, n_harmonics: int = 6,
-                     partials: str = "harmonic") -> float:
+                     partials="harmonic") -> float:
     """
     Compute total roughness between two complex tones whose partials
     are drawn from a configurable timbre.
@@ -49,25 +49,59 @@ def total_dissonance(f1: float, f2: float, n_harmonics: int = 6,
                    a control to verify that consonance structure depends
                    on the partial layout, not just on having multiple
                    partials.
-
-    Amplitude rolloff is 1/k for "harmonic" and "odd" (preserving the
-    visual amplitude of the corresponding harmonic series), and 1/k for
-    "inharmonic" too.
+      float in [0, 1]: continuous interpolation between harmonic (1.0)
+                   and odd-only (0.0). Treat as the *weight* on the
+                   even harmonics; the odd harmonics are always at
+                   weight 1. So alpha=1.0 → full harmonic series,
+                   alpha=0.0 → odd partials only, alpha=0.5 → even
+                   harmonics are half-amplitude.
+      iterable:    a custom partial layout — pass (ks, amps) where ks
+                   is the array of partial frequency multipliers and
+                   amps the corresponding amplitudes.
     """
-    if partials == "harmonic":
-        ks = np.arange(1, n_harmonics + 1, dtype=np.float64)
-    elif partials == "odd":
-        ks = np.arange(1, 2 * n_harmonics, 2, dtype=np.float64)
-    elif partials == "inharmonic":
-        # Powers of sqrt(2): 1, 1.414, 2, 2.828, 4, ...  — no integer rels
-        ks = 2.0 ** (np.arange(n_harmonics, dtype=np.float64) / 2.0)
+    if isinstance(partials, str):
+        if partials == "harmonic":
+            ks = np.arange(1, n_harmonics + 1, dtype=np.float64)
+            amps = 1.0 / ks
+        elif partials == "odd":
+            ks = np.arange(1, 2 * n_harmonics, 2, dtype=np.float64)
+            amps = 1.0 / ks
+        elif partials == "inharmonic":
+            ks = 2.0 ** (np.arange(n_harmonics, dtype=np.float64) / 2.0)
+            amps = 1.0 / ks
+        else:
+            raise ValueError(f"unknown partials={partials!r}")
+    elif isinstance(partials, (int, float)):
+        alpha = float(partials)
+        if not (0.0 <= alpha <= 1.0):
+            raise ValueError(f"alpha mix must be in [0, 1], got {alpha}")
+        # Keep the total partial *count* constant as α slides. The
+        # natural-harmonic side carries the even harmonics k=2,4,6 at
+        # weight α; the odd-only side substitutes additional odd
+        # partials k = 7,9,11 at weight (1-α). At α=1 we recover the
+        # harmonic series 1..n; at α=0 we recover the first 2n−1 odd
+        # partials. Amplitude rolloff is 1/k as usual.
+        nh = n_harmonics
+        even_ks = np.arange(2, 2 * nh, 2, dtype=np.float64)[: nh - (nh // 2)]
+        odd_low_ks = np.arange(1, 2 * nh, 2, dtype=np.float64)[: (nh + 1) // 2]
+        odd_high_ks = np.arange(2 * (nh // 2) + 1, 4 * nh,
+                                 2, dtype=np.float64)[: nh - (nh // 2)]
+        ks = np.concatenate([odd_low_ks, even_ks, odd_high_ks])
+        # amplitudes
+        amps_odd_low = 1.0 / odd_low_ks
+        amps_even = alpha / even_ks
+        amps_odd_high = (1.0 - alpha) / odd_high_ks
+        amps = np.concatenate([amps_odd_low, amps_even, amps_odd_high])
     else:
-        raise ValueError(f"unknown partials={partials!r}")
+        ks, amps = partials
+        ks = np.asarray(ks, dtype=np.float64)
+        amps = np.asarray(amps, dtype=np.float64)
 
-    amps = 1.0 / ks
     diss = 0.0
     for i, ki in enumerate(ks):
         for j, kj in enumerate(ks):
+            if amps[i] == 0 or amps[j] == 0:
+                continue
             diss += _sethares_pair(ki * f1, kj * f2, amps[i], amps[j])
     return diss
 

@@ -150,6 +150,31 @@ python -m src.train.reinforce --steps 1500 --partials odd      --out-dir results
 python -m src.train.bohlen_pierce_plot
 ```
 
+## Phase 9 — Continuous timbre sweep
+
+Phase 8 ran a discrete experiment (`harmonic` vs `odd` partials vs `inharmonic`). The continuous version sweeps a mix parameter α ∈ [0, 1] that interpolates between the two named timbres, holding the *partial count* constant: at α=1 the partials are k = 1..6 (full harmonic series), at α=0 they are k = 1, 3, 5, 7, 9, 11 (odd-only), and at α=0.5 the timbre has half-weighted even harmonics plus half-weighted extra odd partials.
+
+Train one Phase-1 toy generator per α value (1500 steps each). The discovered ratio sweeps continuously from the harmonic-timbre attractor down toward the BP-timbre attractor — a smooth knob between two musical worlds.
+
+![Phase 9 — continuous timbre sweep](results/phase9_timbre_sweep/timbre_sweep_summary.png)
+
+```bash
+python -m src.train.timbre_sweep --n-steps 1500 --n-alphas 7
+python -m src.train.timbre_sweep_plot
+```
+
+## Phase 8b — Triads under odd partials
+
+Same Phase-2 triad generator and reward, but with `--partials odd`. The chord cloud reorganizes onto Bohlen-Pierce-style ratios; mean chord dissonance under the matching odd-partial timbre drops to 0.092 — even lower than the harmonic-trained triads' 0.194 under their matching timbre (because the odd-partial landscape has deeper valleys for some triad ratios). Median r₁ = 1.39, r₂ = 1.68 — close to the 5:7:9 / 3:5:7 BP triad region.
+
+![Phase 8b — BP triads](results/phase8b_bp_triads/bp_triads_summary.png)
+
+```bash
+python -m src.train.triad_train --mode triad --steps 2000 --partials odd \
+    --out-dir results/phase8b_bp_triads
+python -m src.train.bp_triads_plot
+```
+
 ## Listening
 
 Sample WAVs for each phase are committed under `results/audio/` and regenerable with:
@@ -218,6 +243,9 @@ python -m pytest tests/
 - [x] **Phase 4.5 — Joint melodic rhythm.** Single generator outputs (pitch, IOI) pairs. Reward = Phase-3 melody reward + Phase-4 rhythm reward, jointly optimized. Pitches and onsets both pick up structure from the shared network.
 - [x] **Phase 7 — Counterpoint (2-voice polyphony).** Generator emits V voices × N notes with banded log-frequency ranges. Reward = horizontal melody per voice + vertical Sethares + voice-crossing penalty + shared implied root. Produces 2-voice excerpts with consonant vertical intervals and bounded voice crossings.
 - [x] **Phase 8 — Bohlen-Pierce timbre experiment.** Re-run Phase 1 with `--partials odd` (only odd-numbered harmonics, like a closed-pipe instrument). With no other change, the discovered "scale" reorganizes from the M6/octave region onto the tritone/P5 region — directly validating Sethares (1993)'s theoretical claim that scale structure is downstream of timbre.
+- [x] **Phase 8b — Triads under odd partials.** Same as Phase 2 but with `--partials odd`. Chord cloud reorganizes onto BP-style ratios (median r₁=1.39, r₂=1.68). Mean chord dissonance under matching timbre 0.092 — lower than harmonic-trained triads' 0.194 under their matching timbre.
+- [x] **Phase 8c — Inharmonic negative control.** Phase 1 with `--partials inharmonic` (stretched partials with no integer relations). Discovered intervals shift again — to the m3/M3/P4 region. Three different timbres → three different scales.
+- [x] **Phase 9 — Continuous timbre sweep.** Train Phase 1 at α ∈ {0, ⅙, ⅓, ½, ⅔, ⅚, 1} where α is the weight on the even harmonics and (1−α) the weight on extra odd partials (partial count held constant). The discovered ratio sweeps continuously from the harmonic-timbre attractor to the BP-timbre attractor.
 - [ ] **Phase 5 — Spectrogram diffusion model.** Replace toy generator with a real audio model (diffusion over mel-spectrograms). Decode to waveform with a vocoder that was *not* trained on music (challenging — Griffin-Lim or learned-from-noise variants).
 - [ ] **Phase 6 — RLAIF with a "taste" model.** Train a text-grounded music-theory taste model (read music theory textbooks, never hear music) and use it as the reward model in place of pure psychoacoustics.
 

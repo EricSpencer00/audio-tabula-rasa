@@ -177,6 +177,40 @@ def render_phase45_melodic_rhythm(out_dir: Path, seed: int = 0):
     print(f"  saved {out_dir/'phase45_melodic_rhythm.wav'}")
 
 
+def render_phase8b_bp_triads(out_dir: Path, seed: int = 0):
+    """BP triads rendered with odd-only partials so the listener actually
+    hears the Bohlen-Pierce-like consonance the model was trained on."""
+    print("Phase 8b: BP triads (odd partials)")
+    gen = TriadGenerator()
+    if not _safe_load(gen,
+                       "results/phase8b_bp_triads/triad_generator.pt"):
+        return
+    gen.eval()
+    torch.manual_seed(seed)
+    with torch.no_grad():
+        f, _ = gen.sample(8)
+
+    def render_odd_chord(freqs, duration=1.4, n_partials=6):
+        """Mix sines at odd-multiple partials of each chord pitch."""
+        n = int(duration * SAMPLE_RATE)
+        t = np.arange(n) / SAMPLE_RATE
+        out = np.zeros(n)
+        for f0 in freqs:
+            for k in range(1, 2 * n_partials, 2):
+                out += (1.0 / k) * np.sin(2 * np.pi * k * float(f0) * t)
+        # Envelope
+        from src.render.synth import _envelope
+        return out * _envelope(n)
+
+    chunks = []
+    for tri in f.cpu().numpy():
+        chunks.append(render_odd_chord(tri))
+        chunks.append(np.zeros(int(0.3 * SAMPLE_RATE)))
+    audio = np.concatenate(chunks)
+    write_wav(out_dir / "phase8b_bp_triads_odd_timbre.wav", audio)
+    print(f"  saved {out_dir/'phase8b_bp_triads_odd_timbre.wav'}")
+
+
 def render_phase7_counterpoint(out_dir: Path, seed: int = 0):
     """V-voice counterpoint: render all voices simultaneously."""
     print("Phase 7: counterpoint")
@@ -222,3 +256,4 @@ if __name__ == "__main__":
     render_phase34_combined(out_dir, args.seed)
     render_phase45_melodic_rhythm(out_dir, args.seed)
     render_phase7_counterpoint(out_dir, args.seed)
+    render_phase8b_bp_triads(out_dir, args.seed)
