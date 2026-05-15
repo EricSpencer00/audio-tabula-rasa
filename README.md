@@ -106,7 +106,7 @@ python -m src.train.rhythm_plot
 
 A single generator emits N (pitch, IOI) pairs from one shared MLP. The reward sums the Phase-3 melody reward (on the pitches) and the Phase-4 rhythm reward (on the cumulative-sum onsets) — both terms operate on outputs of the same network, so pitch and timing can co-vary.
 
-After ~1200 steps the joint generator hits **tonal salience ≈ 0.73** (highest of any phase), **phase coherence ≈ 0.69**, and a discovered period **≈ 0.5 s (120 BPM)** — i.e. it carries both Phase-3 pitch structure and Phase-4 temporal structure simultaneously. The reward peaks earlier (~step 800) and then trades a few percent of headline reward for a tighter tonal commitment as the entropy term goes negative.
+In ~1200 steps the joint generator hits a peak reward of **+4.69** (random ≈ +0.2), with **tonal salience ≈ 0.65**, **phase coherence ≈ 0.71**, and a discovered period at **120 BPM** — i.e. it carries both Phase-3 pitch structure and Phase-4 temporal structure simultaneously. The training loop saves the best checkpoint by eval reward to avoid REINFORCE's late-training drift, so the deployed model is the peak.
 
 ![Phase 4.5 — joint melodic rhythm](results/phase4_5_melodic_rhythm/melodic_rhythm_summary.png)
 
@@ -156,7 +156,14 @@ python -m src.train.melodic_rhythm_plot
 python -m src.render.render_phases
 ```
 
-Phase 1 also runs as a self-contained Colab notebook: `notebooks/01_toy_consonance.ipynb`.
+Phases 1 and 2-4.5 also run as self-contained Colab notebooks: `notebooks/01_toy_consonance.ipynb` and `notebooks/02_triads_and_melodies.ipynb`.
+
+The reward functions are covered by property tests:
+
+```bash
+pip install pytest
+python -m pytest tests/
+```
 
 ## Roadmap
 

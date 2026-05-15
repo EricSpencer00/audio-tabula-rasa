@@ -73,6 +73,8 @@ def train_triads(n_steps=2000, batch_size=64, lr=1e-3, log_every=50,
     out_path = Path(out_dir)
     out_path.mkdir(parents=True, exist_ok=True)
     history = []
+    best_eval_reward = -float("inf")
+    best_state = None
 
     for step in range(n_steps):
         # We need the distribution for entropy as well as log_prob,
@@ -117,7 +119,14 @@ def train_triads(n_steps=2000, batch_size=64, lr=1e-3, log_every=50,
             print(f"[{step:5d}] reward={entry['mean_reward']:+.3f}  "
                   f"diss={entry['mean_dissonance']:.3f}  "
                   f"top={top}")
+            if entry["mean_reward"] > best_eval_reward:
+                best_eval_reward = entry["mean_reward"]
+                best_state = {k: v.clone() for k, v in gen.state_dict().items()}
 
+    if best_state is not None:
+        print(f"Best eval reward: {best_eval_reward:+.3f}; "
+              "saving best checkpoint")
+        gen.load_state_dict(best_state)
     torch.save(gen.state_dict(), out_path / "triad_generator.pt")
     with open(out_path / "history.json", "w") as f:
         json.dump(history, f, indent=2)
@@ -145,6 +154,8 @@ def train_progressions(n_steps=2500, batch_size=64, lr=1e-3, log_every=50,
     out_path = Path(out_dir)
     out_path.mkdir(parents=True, exist_ok=True)
     history = []
+    best_eval_reward = -float("inf")
+    best_state = None
 
     for step in range(n_steps):
         z = torch.randn(batch_size, gen.latent_dim)
@@ -196,7 +207,14 @@ def train_progressions(n_steps=2500, batch_size=64, lr=1e-3, log_every=50,
                   f"diss={entry['mean_dissonance']:.3f}  "
                   f"vl={entry['mean_voice_leading']:.4f}  "
                   f"top={top}")
+            if entry["mean_reward"] > best_eval_reward:
+                best_eval_reward = entry["mean_reward"]
+                best_state = {k: v.clone() for k, v in gen.state_dict().items()}
 
+    if best_state is not None:
+        print(f"Best eval reward: {best_eval_reward:+.3f}; "
+              "saving best checkpoint")
+        gen.load_state_dict(best_state)
     torch.save(gen.state_dict(), out_path / "progression_generator.pt")
     with open(out_path / "history.json", "w") as f:
         json.dump(history, f, indent=2)

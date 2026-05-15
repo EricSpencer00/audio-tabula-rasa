@@ -63,6 +63,8 @@ def train_melodies(n_steps=3000, batch_size=64, lr=3e-4, log_every=50,
     out_path = Path(out_dir)
     out_path.mkdir(parents=True, exist_ok=True)
     history = []
+    best_eval_reward = -float("inf")
+    best_state = None
     kw = dict(tonal_weight=tonal_weight,
               contour_weight=contour_weight,
               diversity_weight=diversity_weight,
@@ -116,7 +118,14 @@ def train_melodies(n_steps=3000, batch_size=64, lr=3e-4, log_every=50,
                   f"diss={entry['mean_dissonance']:.3f}  "
                   f"contour={entry['mean_contour']:.2f}  "
                   f"#pc={entry['mean_pitch_classes']:.1f}")
+            if entry["mean_reward"] > best_eval_reward:
+                best_eval_reward = entry["mean_reward"]
+                best_state = {k: v.clone() for k, v in gen.state_dict().items()}
 
+    if best_state is not None:
+        print(f"Best eval reward: {best_eval_reward:+.3f}; "
+              "saving best checkpoint")
+        gen.load_state_dict(best_state)
     torch.save(gen.state_dict(), out_path / "melody_generator.pt")
     with open(out_path / "history.json", "w") as f:
         json.dump(history, f, indent=2)

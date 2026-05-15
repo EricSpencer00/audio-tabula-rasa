@@ -61,6 +61,8 @@ def train_melodic_rhythm(n_steps=2500, batch_size=64, lr=3e-4, log_every=50,
     out_path = Path(out_dir)
     out_path.mkdir(parents=True, exist_ok=True)
     history = []
+    best_eval_reward = -float("inf")
+    best_state = None
 
     for step in range(n_steps):
         freqs, onsets, log_prob = gen.sample(batch_size)
@@ -105,7 +107,14 @@ def train_melodic_rhythm(n_steps=2500, batch_size=64, lr=3e-4, log_every=50,
                   f"#pc={entry['mean_pitch_classes']:.1f}  "
                   f"phase_coh={entry['mean_phase_coherence']:.3f}  "
                   f"period={entry['mean_period']:.3f}s")
+            if entry["mean_reward"] > best_eval_reward:
+                best_eval_reward = entry["mean_reward"]
+                best_state = {k: v.clone() for k, v in gen.state_dict().items()}
 
+    if best_state is not None:
+        print(f"Best eval reward: {best_eval_reward:+.3f}; "
+              "saving best checkpoint")
+        gen.load_state_dict(best_state)
     torch.save(gen.state_dict(), out_path / "melodic_rhythm_generator.pt")
     with open(out_path / "history.json", "w") as f:
         json.dump(history, f, indent=2)
