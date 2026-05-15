@@ -193,7 +193,26 @@ python -m src.train.counterpoint_train --steps 1500 --n-voices 3 \
 python -c "from src.train.counterpoint_plot import plot_counterpoint; plot_counterpoint('results/phase13_3voice_counterpoint')"
 ```
 
-(The 4-voice variant follows the same recipe with `--n-voices 4`.)
+### V = 4 (quartet)
+
+Same recipe with `--n-voices 4`. The problem is meaningfully harder because the vertical reward now sums over C(4,2) = 6 voice pairs per time step (vs 3 for V=3, 1 for V=2). At 1500 steps the best-checkpoint reward only reaches -1.06; voices still mostly stratify but some crossings persist and vertical clashes are stubborn.
+
+![V = 2 vs 3 vs 4 — side by side](results/phase13_voice_count_comparison.png)
+
+The cross-V comparison plot above shows:
+
+| V | mean V-diss | crossings/excerpt | shared-tonal |
+|---|---|---|---|
+| 2 | 0.241 | 0.00 | 0.419 |
+| 3 | 0.824 | 0.02 | 0.424 |
+| 4 | 1.996 | 1.83 | 0.416 |
+
+V=4 is at the limit of what banded-MLP + REINFORCE can clean up at this training budget. Real polyphony will need a richer architecture and the addition of an extra rhythmic dimension.
+
+```bash
+python -m src.train.counterpoint_train --steps 1500 --n-voices 4 \
+    --out-dir results/phase13_4voice_counterpoint
+```
 
 ## Listening
 
