@@ -33,7 +33,16 @@ from typing import Callable
 import numpy as np
 import torch
 
+from src.analysis.mock_audio_judge import MockAudioJudge
 from src.analysis.qwen_judge import QwenAudioJudge
+
+
+JUDGE_FACTORIES = {
+    "qwen": lambda model, device: QwenAudioJudge(
+        model_name=model or QwenAudioJudge.DEFAULT_MODEL, device=device
+    ),
+    "mock": lambda model, device: MockAudioJudge(),
+}
 
 
 # -- generator factories --------------------------------------------
@@ -133,6 +142,7 @@ def train_rlaif(
     log_every: int = 5,
     qwen_model: str = QwenAudioJudge.DEFAULT_MODEL,
     qwen_device: str = "auto",
+    judge: str = "qwen",
     out_dir: str = None,
 ):
     if generator_name not in GENERATOR_FACTORIES:
@@ -147,7 +157,11 @@ def train_rlaif(
 
     gen = GENERATOR_FACTORIES[generator_name]()
     opt = torch.optim.Adam(gen.parameters(), lr=lr)
-    judge = QwenAudioJudge(model_name=qwen_model, device=qwen_device)
+    if judge not in JUDGE_FACTORIES:
+        raise ValueError(f"judge must be one of {list(JUDGE_FACTORIES)}")
+    judge_obj = JUDGE_FACTORIES[judge](qwen_model, qwen_device)
+    print(f"[rlaif] judge: {judge}  generator: {generator_name}  "
+          f"steps: {n_steps}  batch: {batch_size}")
     physics_fn = PHYSICS_REWARDS[generator_name]
     render_fn = RENDERERS[generator_name]
 
@@ -172,10 +186,10 @@ def train_rlaif(
         for sample in np_outputs:
             try:
                 audio, sr = render_fn(sample)
-                r = judge.score(audio, sr)
+                r = judge_obj.score(audio, sr)
                 qwen_scores.append(float(r.score) if r.score else 5.0)
             except Exception as e:    # noqa: BLE001
-                print(f"[rlaif] qwen scoring failed: {e}")
+                print(f"[rlaif] judge scoring failed: {e}")
                 qwen_scores.append(5.0)
         qwen_scores = np.array(qwen_scores)
 
@@ -227,6 +241,8 @@ if __name__ == "__main__":
     parser.add_argument("--qwen-model",
                         default=QwenAudioJudge.DEFAULT_MODEL)
     parser.add_argument("--qwen-device", default="auto")
+    parser.add_argument("--judge", default="qwen",
+                        choices=list(JUDGE_FACTORIES))
     parser.add_argument("--out-dir", default=None)
     args = parser.parse_args()
     train_rlaif(
@@ -239,5 +255,6 @@ if __name__ == "__main__":
         seed=args.seed,
         qwen_model=args.qwen_model,
         qwen_device=args.qwen_device,
+        judge=args.judge,
         out_dir=args.out_dir,
     )
