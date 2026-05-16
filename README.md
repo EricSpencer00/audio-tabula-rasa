@@ -227,20 +227,49 @@ python -m src.render.render_song    # 16-bar composed piece (Phase 14)
 
 The default renderer is a minimal additive sine-bank — no music samples, no learned vocoder. The Phase-14 song renderer adds a small instrument library (`src/render/instruments.py`) with FM bells, Karplus-Strong plucked bass, kick / snare / hihat percussion, and ADSR-shaped reed/pad/lead voices, then arranges trained-generator outputs into a multi-track 16-bar piece.
 
-## Local judging — Ollama "music critic"
+## Local judging — two flavors
 
-To get a critique of every rendered audio without an API key, run the local LLM judge on your own machine. It extracts music-theory features (tempo, key, chroma, onset density, dynamics) and asks an Ollama model to score and describe the piece:
+Two local judges, both meant to be run on a 64 GB Apple-Silicon laptop (CI cannot run them — too much memory and no audio-aware models on the runner).
+
+### Cheap text-feature judge (Ollama)
+
+Extracts music-theory features (tempo, key, chroma, onset density, dynamics) in pure NumPy and asks any Ollama-served LLM to critique them:
 
 ```bash
 ollama serve
-ollama pull llama3.1:8b      # or qwen2.5:14b, mistral-nemo, etc
+ollama pull llama3.1:8b
 python scripts/judge_with_ollama.py \
     --audio-dir results/audio \
     --model llama3.1:8b \
     --out results/OLLAMA_REVIEW.md
 ```
 
-Output is a single Markdown file with a 1–10 score and bullet-point critiques per file, plus concrete suggestions for making each piece sound less synthetic. The critique drives the next round of synthesizer/composition tuning; in a future phase we'll wire the score back into training as a reward.
+The model never hears the audio — it only sees the feature paragraph — but the features cover what makes a tabula-rasa piece feel robotic (low dynamic range, narrow chroma, regular IOIs, narrow spectral bandwidth) so the critique is useful for the next iteration.
+
+### Audio-aware judge (Qwen2.5-Omni-7B)
+
+Actually plays the audio through a multimodal model that listens. ~14 GB in bf16, fits comfortably in 64 GB unified memory; ~5–15 s per clip on M-series MPS:
+
+```bash
+pip install transformers accelerate librosa soundfile
+python -m src.analysis.qwen_judge \
+    --audio-dir results/audio \
+    --out results/QWEN_REVIEW.json
+```
+
+The first call downloads `Qwen/Qwen2.5-Omni-7B` (~14 GB), then scores every WAV with a 1–10 rating + structured critique.
+
+### RLAIF — train a generator against the Qwen score
+
+`src/train/rlaif_train.py` wraps any of the trained generators in a REINFORCE loop where the reward is the Qwen score plus a small physics-reward weight (so it doesn't lose the consonance prior). Each step renders a batch of audio, scores it with Qwen, and back-props.
+
+```bash
+# ~1 minute per step on M-series with batch 4
+python -m src.train.rlaif_train --generator melody --steps 200
+python -m src.train.rlaif_train --generator chord_progression --steps 100
+```
+
+Saved checkpoint goes to `results/rlaif/<generator>/rlaif_generator.pt`. The default reward is `1.0 * (qwen_score - 5)/5 + 0.3 * physics_reward` so a Qwen score of 10 gives +1.0 reward, a 0 gives -1.0, and the physics term keeps the policy honest about consonance even when the Qwen oracle is sparse / noisy.
 
 ## Quick start
 
