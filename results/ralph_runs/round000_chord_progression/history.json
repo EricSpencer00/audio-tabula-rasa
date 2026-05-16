@@ -1,0 +1,122 @@
+[
+  {
+    "step": 0,
+    "mean_qwen_score": 7.0,
+    "mean_physics_reward": -4.0878894684803715,
+    "mean_combined_reward": -0.8263668405441114
+  },
+  {
+    "step": 1,
+    "mean_qwen_score": 6.75,
+    "mean_physics_reward": -4.064363287675828,
+    "mean_combined_reward": -0.8693089863027484
+  },
+  {
+    "step": 2,
+    "mean_qwen_score": 7.0,
+    "mean_physics_reward": -5.148428324080713,
+    "mean_combined_reward": -1.1445284972242142
+  },
+  {
+    "step": 3,
+    "mean_qwen_score": 6.5,
+    "mean_physics_reward": -4.678837410793989,
+    "mean_combined_reward": -1.1036512232381965
+  },
+  {
+    "step": 4,
+    "mean_qwen_score": 6.75,
+    "mean_physics_reward": -4.194169650358006,
+    "mean_combined_reward": -0.9082508951074018
+  },
+  {
+    "step": 5,
+    "mean_qwen_score": 6.75,
+    "mean_physics_reward": -4.308013184491992,
+    "mean_combined_reward": -0.9424039553475976
+  },
+  {
+    "step": 6,
+    "mean_qwen_score": 6.75,
+    "mean_physics_reward": -4.292459186512499,
+    "mean_combined_reward": -0.9377377559537496
+  },
+  {
+    "step": 7,
+    "mean_qwen_score": 6.75,
+    "mean_physics_reward": -3.2309799416681337,
+    "mean_combined_reward": -0.6192939825004401
+  },
+  {
+    "step": 8,
+    "mean_qwen_score": 7.0,
+    "mean_physics_reward": -4.5183356809295105,
+    "mean_combined_reward": -0.9555007042788531
+  },
+  {
+    "step": 9,
+    "mean_qwen_score": 6.75,
+    "mean_physics_reward": -3.760473550590708,
+    "mean_combined_reward": -0.7781420651772123
+  },
+  {
+    "step": 10,
+    "mean_qwen_score": 6.75,
+    "mean_physics_reward": -4.307287742636306,
+    "mean_combined_reward": -0.9421863227908915
+  },
+  {
+    "step": 11,
+    "mean_qwen_score": 7.0,
+    "mean_physics_reward": -3.6013810310664955,
+    "mean_combined_reward": -0.6804143093199486
+  },
+  {
+    "step": 12,
+    "mean_qwen_score": 6.75,
+    "mean_physics_reward": -3.9869004837653392,
+    "mean_combined_reward": -0.8460701451296017
+  },
+  {
+    "step": 13,
+    "mean_qwen_score": 7.0,
+    "mean_physics_reward": -3.595746763795911,
+    "mean_combined_reward": -0.6787240291387733
+  },
+  {
+    "step": 14,
+    "mean_qwen_score": 7.0,
+    "mean_physics_reward": -2.633007506228897,
+    "mean_combined_reward": -0.389902251868669
+  },
+  {
+    "step": 15,
+    "mean_qwen_score": 6.5,
+    "mean_physics_reward": -5.176333305015831,
+    "mean_combined_reward": -1.2528999915047492
+  },
+  {
+    "step": 16,
+    "mean_qwen_score": 6.75,
+    "mean_physics_reward": -3.3128786225839644,
+    "mean_combined_reward": -0.6438635867751892
+  },
+  {
+    "step": 17,
+    "mean_qwen_score": 7.0,
+    "mean_physics_reward": -3.0139067352618634,
+    "mean_combined_reward": -0.5041720205785589
+  },
+  {
+    "step": 18,
+    "mean_qwen_score": 7.0,
+    "mean_physics_reward": -3.749133015161284,
+    "mean_combined_reward": -0.724739904548385
+  },
+  {
+    "step": 19,
+    "mean_qwen_score": 6.75,
+    "mean_physics_reward": -5.1678605622791665,
+    "mean_combined_reward": -1.2003581686837497
+  }
+]

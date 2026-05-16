@@ -1,0 +1,18 @@
+[
+  {
+    "round": 0,
+    "generator": "melody",
+    "old_score": 6.75,
+    "new_score": 6.75,
+    "replaced": false,
+    "duration_s": 13.4
+  },
+  {
+    "round": 0,
+    "generator": "chord_progression",
+    "old_score": 6.875,
+    "new_score": 6.9375,
+    "replaced": true,
+    "duration_s": 26.4
+  }
+]
