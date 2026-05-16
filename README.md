@@ -1,5 +1,7 @@
 # audio-tabula-rasa
 
+> 🔊 **Listen to the latest commit** at the [audio preview page](https://ericspencer00.github.io/audio-tabula-rasa/) — rebuilt by CI on every push to `main`.
+
 **Can a generative model discover music from physics alone, with zero training on existing music?**
 
 A research project exploring whether musical structure (consonance, intervals, eventually melody and rhythm) can emerge in a generator trained purely against a psychoacoustically-grounded reward model — no music corpus, no MIDI, no audio data of any kind.
