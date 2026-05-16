@@ -1,13 +1,22 @@
 """
-Qwen2.5-Omni judge: scores an audio file on a 0-10 musicality scale.
+Qwen2.5-Omni judge: scores an audio file on musicality.
 
-The model is given the raw waveform (16 kHz mono) plus a short prompt
-that asks for an integer rating. We parse the first 0-10 number that
-appears in the reply and treat that as the reward signal.
+Two modes:
 
-Loaded once per process via `get_judge(...)`. The same instance is
-reused across the RLAIF training loop so the model is not reloaded for
-every sample.
+  * `score_audio(...)`  — generation-based: the model writes "<int>\\n
+    <justification>" and we parse the first 0-10 integer. Easy to read
+    but the 3B model collapses to a constant rating for short
+    synthesized clips (see notes in `score_audio_logprob`).
+
+  * `score_audio_logprob(...)` — single-forward, no generation: we ask
+    a YES/NO question and read the softmax mass on the YES token at
+    the answer position, normalized against NO. This is the RLAIF
+    reward signal: the discrete answer can be constant while the
+    underlying logprob varies continuously and discriminates between
+    tonal and noisy inputs.
+
+Loaded once per process. The same instance is reused across the RLAIF
+training loop so the model is not reloaded for every sample.
 """
 from __future__ import annotations
 
@@ -35,6 +44,13 @@ USER_PROMPT = (
     "Rate this audio clip from 0 to 10 on musicality. "
     "Output the integer on the first line."
 )
+
+LOGPROB_SYSTEM_PROMPT = (
+    "You are a psychoacoustic rater. Listen to the audio and decide "
+    "whether it sounds like a coherent tonal melody or like noise."
+)
+
+LOGPROB_USER_PROMPT = "Does this sound musical? Answer YES or NO."
 
 _SCORE_RE = re.compile(r"\b(10|[0-9])\b")
 
@@ -79,6 +95,12 @@ class QwenJudge:
         # Cache the audio sample rate the Whisper feature extractor expects
         self.audio_sr = getattr(self.processor.feature_extractor,
                                 "sampling_rate", 16000)
+        # Pre-tokenize the YES / NO logprob targets. We use the
+        # all-caps variants because the model strongly prefers those
+        # token forms in this prompt template.
+        tok = self.processor.tokenizer
+        self._yes_token_id = tok("YES", add_special_tokens=False).input_ids[0]
+        self._no_token_id = tok("NO", add_special_tokens=False).input_ids[0]
 
     @torch.no_grad()
     def score_audio(self, audio_path: str | Path,
@@ -123,6 +145,53 @@ class QwenJudge:
         return JudgeResult(path=str(audio_path), score=score, raw_text=raw)
 
 
+    @torch.no_grad()
+    def score_audio_logprob(self, audio_path: str | Path,
+                            waveform: Optional[np.ndarray] = None
+                            ) -> JudgeResult:
+        """Continuous musicality score in [0, 1] via YES/NO logprobs.
+
+        Greedy generation on 3-second synthesized clips collapses to a
+        constant rating; the logprob distribution underneath does not.
+        We measure p(YES) / (p(YES) + p(NO)) at the first answer-token
+        position, which discriminates tonal melodies (~0.7) from white
+        noise (~0.25). One forward pass — no generation — so this is
+        roughly 2-3x faster than `score_audio`.
+        """
+        if waveform is None:
+            waveform = _load_audio(audio_path, target_sr=self.audio_sr)
+        messages = [
+            {"role": "system", "content": [
+                {"type": "text", "text": LOGPROB_SYSTEM_PROMPT},
+            ]},
+            {"role": "user", "content": [
+                {"type": "audio", "audio": waveform},
+                {"type": "text", "text": LOGPROB_USER_PROMPT},
+            ]},
+        ]
+        text = self.processor.apply_chat_template(
+            messages, add_generation_prompt=True, tokenize=False,
+        )
+        inputs = self.processor(
+            text=text, audio=[waveform],
+            return_tensors="pt", padding=True,
+            sampling_rate=self.audio_sr,
+        )
+        if self.device != "cpu":
+            inputs = {k: v.to(self.device) if hasattr(v, "to") else v
+                      for k, v in inputs.items()}
+        out = self.model(**inputs)
+        logits = out.logits[0, -1, :].float()
+        logp = torch.log_softmax(logits, dim=-1)
+        p_yes = float(torch.exp(logp[self._yes_token_id]))
+        p_no = float(torch.exp(logp[self._no_token_id]))
+        score = p_yes / (p_yes + p_no + 1e-12)
+        return JudgeResult(
+            path=str(audio_path), score=float(score),
+            raw_text=f"p(YES)={p_yes:.4f}  p(NO)={p_no:.4f}",
+        )
+
+
 def _parse_score(text: str) -> Optional[float]:
     """Pull the first 0-10 integer out of the reply."""
     for line in text.splitlines():
@@ -140,13 +209,16 @@ def get_judge(model_id: str = "Qwen/Qwen2.5-Omni-3B",
 
 
 def score_directory(audio_dir: str | Path, judge: QwenJudge,
-                    limit: Optional[int] = None) -> List[JudgeResult]:
+                    limit: Optional[int] = None,
+                    mode: str = "logprob") -> List[JudgeResult]:
     files = sorted(Path(audio_dir).glob("*.wav"))
     if limit is not None:
         files = files[:limit]
+    score_fn = (judge.score_audio_logprob if mode == "logprob"
+                else judge.score_audio)
     out: List[JudgeResult] = []
     for p in files:
-        r = judge.score_audio(p)
+        r = score_fn(p)
         print(f"  {p.name}: score={r.score}  raw={r.raw_text!r}", flush=True)
         out.append(r)
     return out
@@ -161,14 +233,17 @@ def main() -> None:
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--out", type=str, required=True)
     parser.add_argument("--max-new-tokens", type=int, default=48)
+    parser.add_argument("--mode", type=str, default="logprob",
+                        choices=["logprob", "generate"])
     args = parser.parse_args()
 
     print(f"Loading judge from {args.model} on {args.device}...", flush=True)
     judge = QwenJudge(model_id=args.model, device=args.device,
                       dtype=args.dtype, max_new_tokens=args.max_new_tokens)
-    print("Judge ready.", flush=True)
+    print(f"Judge ready (mode={args.mode}).", flush=True)
 
-    results = score_directory(args.audio_dir, judge, limit=args.limit)
+    results = score_directory(args.audio_dir, judge, limit=args.limit,
+                              mode=args.mode)
 
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)

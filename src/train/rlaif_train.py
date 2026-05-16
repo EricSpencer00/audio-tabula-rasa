@@ -3,15 +3,20 @@ RLAIF training loop: REINFORCE with a Qwen2.5-Omni audio judge.
 
 The generator (currently only the Phase-3 monophonic melody generator)
 samples a batch of N notes. We render each sample as audio at 44.1 kHz,
-hand it to the Qwen-Omni judge for a 0-10 musicality score, and use
-that score as the REINFORCE reward.
+hand it to the Qwen-Omni judge, and use its score as the REINFORCE
+reward.
+
+Reward signal: the judge runs in logprob mode — it asks Qwen "does this
+sound musical, YES or NO?" and returns p(YES) / (p(YES) + p(NO)) from
+the answer-token logits, a continuous value in [0, 1]. Greedy
+generation collapses to a constant rating on short synthesized clips;
+the underlying logprob distribution does not, so logprob-mode is the
+only useful reward for this setup.
 
 The generator is *initialized* from the existing Phase-3 baseline
 (`results/phase3_melodies/melody_generator.pt`) so the 80-step budget
-is spent fine-tuning, not bootstrapping from random. Score 0-10 is
-treated as the raw reward; we subtract a running batch mean as the
-baseline (no std normalization — same convention as the Phase-3
-psychoacoustic training).
+is spent fine-tuning, not bootstrapping from random. We subtract an
+EMA baseline (same variance-reduction trick the earlier phases use).
 """
 from __future__ import annotations
 
@@ -58,7 +63,8 @@ def train_melody_rlaif(
     gap: float = 0.03,
     log_every: int = 1,
     checkpoint_every: int = 20,
-    score_fallback: float = 0.0,
+    score_fallback: float = 0.5,
+    judge_mode: str = "logprob",
 ):
     from src.analysis.qwen_judge import QwenJudge
 
@@ -102,6 +108,8 @@ def train_melody_rlaif(
         log_prob = dist.log_prob(log_freqs).sum(dim=-1)
 
         freqs_np = freqs.detach().cpu().numpy()
+        score_fn = (judge.score_audio_logprob if judge_mode == "logprob"
+                    else judge.score_audio)
         rewards: List[float] = []
         raws: List[str] = []
         for i in range(batch_size):
@@ -109,7 +117,7 @@ def train_melody_rlaif(
                 freqs_np[i], judge_sr=judge.audio_sr,
                 note_duration=note_duration, gap=gap,
             )
-            res = judge.score_audio("<rendered>", waveform=wav)
+            res = score_fn("<rendered>", waveform=wav)
             score = res.score if res.score is not None else score_fallback
             rewards.append(score)
             raws.append(res.raw_text)
@@ -200,6 +208,8 @@ def main() -> None:
     parser.add_argument("--checkpoint-every", type=int, default=20)
     parser.add_argument("--out-dir", type=str,
                         default="results/rlaif/melody_qwen3b")
+    parser.add_argument("--judge-mode", type=str, default="logprob",
+                        choices=["logprob", "generate"])
     args = parser.parse_args()
 
     if args.generator != "melody":
@@ -224,6 +234,7 @@ def main() -> None:
         gap=args.gap,
         log_every=args.log_every,
         checkpoint_every=args.checkpoint_every,
+        judge_mode=args.judge_mode,
     )
 
 
