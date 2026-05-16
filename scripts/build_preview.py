@@ -25,6 +25,18 @@ AUDIO_DIR = ROOT / "results" / "audio"
 # One entry per playable phase. order is the page layout.
 PHASES = [
     {
+        "id": "rlaif_melody_mock",
+        "name": "RLAIF demo — melody trained vs mock judge",
+        "wav": "rlaif_melody_mock.wav",
+        "blurb": (
+            "8 sample melodies from the Phase-3 generator after a "
+            "REINFORCE pass that uses a feature-based mock judge as "
+            "reward. Same loop accepts Qwen2.5-Omni-7B as the judge "
+            "instead — see scripts/judge_with_ollama.py and "
+            "src/train/rlaif_train.py --judge qwen."
+        ),
+    },
+    {
         "id": "song",
         "name": "Phase 14 — First composed song (16 bars)",
         "wav": "song_first.wav",
