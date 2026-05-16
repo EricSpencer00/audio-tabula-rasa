@@ -25,6 +25,18 @@ AUDIO_DIR = ROOT / "results" / "audio"
 # One entry per playable phase. order is the page layout.
 PHASES = [
     {
+        "id": "song",
+        "name": "Phase 14 — First composed song (16 bars)",
+        "wav": "song_first.wav",
+        "blurb": (
+            "Multi-track arrangement of trained generators: Phase-2 "
+            "progressions on a pad, plucked bass on the chord roots, "
+            "Phase-3 melodies quantized to a major pentatonic on the "
+            "lead, and a 4/4 backbeat. Closer to listenable music than "
+            "the per-phase demos but still robotic — work in progress."
+        ),
+    },
+    {
         "id": "phase1",
         "name": "Phase 1 — Interval discovery",
         "wav": "phase1_intervals.wav",

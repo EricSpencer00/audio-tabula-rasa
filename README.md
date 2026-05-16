@@ -222,9 +222,25 @@ Sample WAVs for each phase are committed under `results/audio/` and regenerable 
 
 ```bash
 python -m src.render.render_phases
+python -m src.render.render_song    # 16-bar composed piece (Phase 14)
 ```
 
-The renderer is a minimal additive sine-bank — no music samples, no learned vocoder. Listening is one-way: the audio is the discovery rendered into air, not a training signal.
+The default renderer is a minimal additive sine-bank — no music samples, no learned vocoder. The Phase-14 song renderer adds a small instrument library (`src/render/instruments.py`) with FM bells, Karplus-Strong plucked bass, kick / snare / hihat percussion, and ADSR-shaped reed/pad/lead voices, then arranges trained-generator outputs into a multi-track 16-bar piece.
+
+## Local judging — Ollama "music critic"
+
+To get a critique of every rendered audio without an API key, run the local LLM judge on your own machine. It extracts music-theory features (tempo, key, chroma, onset density, dynamics) and asks an Ollama model to score and describe the piece:
+
+```bash
+ollama serve
+ollama pull llama3.1:8b      # or qwen2.5:14b, mistral-nemo, etc
+python scripts/judge_with_ollama.py \
+    --audio-dir results/audio \
+    --model llama3.1:8b \
+    --out results/OLLAMA_REVIEW.md
+```
+
+Output is a single Markdown file with a 1–10 score and bullet-point critiques per file, plus concrete suggestions for making each piece sound less synthetic. The critique drives the next round of synthesizer/composition tuning; in a future phase we'll wire the score back into training as a reward.
 
 ## Quick start
 
