@@ -50,9 +50,27 @@ jobs:
         run: |
           python -m src.render.render_phases
 
+      - name: Render the composed song (Phase 14)
+        run: |
+          python -m src.render.render_song
+
       - name: Print quantitative report
         run: |
           python -m src.analysis.report | tee results/QUANTITATIVE_REPORT.txt
+
+      - name: Extract feature summary for each WAV
+        run: |
+          python -c "
+          from pathlib import Path
+          from src.analysis.audio_features import extract_directory
+          out = Path('results/AUDIO_FEATURES.txt')
+          lines = []
+          for f in extract_directory('results/audio'):
+              lines.append(f.text())
+              lines.append('')
+          out.write_text('\n'.join(lines))
+          print('wrote', out)
+          "
 
       - name: Build preview site
         run: |
