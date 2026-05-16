@@ -12,5 +12,12 @@ results/phase9_timbre_sweep/**/*.pt
 
 # CI-built preview site
 preview/
+
+# Per-round ralph loop artifacts (the only thing that survives is the
+# in-tree replacement of results/phase*/<...>.pt when a candidate beats
+# the baseline). The rolling per-round candidates would otherwise dirty
+# the working tree continuously and trip the stop-hook.
+results/ralph_runs/
+results/ralph_loop.log
 *.egg-info/
 .vscode/
