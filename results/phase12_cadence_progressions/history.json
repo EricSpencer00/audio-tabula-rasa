@@ -1,0 +1,359 @@
+[
+  {
+    "step": 0,
+    "mean_reward": -16.66790008544922,
+    "mean_cadence_arc": -0.0009057505994081267,
+    "mean_expectation_arc": -0.05761873464860262,
+    "mean_dissonance": 0.6062587353121822
+  },
+  {
+    "step": 50,
+    "mean_reward": -8.540929794311523,
+    "mean_cadence_arc": -0.006947130362298825,
+    "mean_expectation_arc": -0.0846284366296508,
+    "mean_dissonance": 0.3918883624139398
+  },
+  {
+    "step": 100,
+    "mean_reward": -8.39113712310791,
+    "mean_cadence_arc": -0.03451315890188747,
+    "mean_expectation_arc": -0.10398291506797151,
+    "mean_dissonance": 0.3804442535557905
+  },
+  {
+    "step": 150,
+    "mean_reward": -8.439691543579102,
+    "mean_cadence_arc": -0.04842276174579008,
+    "mean_expectation_arc": -0.08267141645778196,
+    "mean_dissonance": 0.36304785005062346
+  },
+  {
+    "step": 200,
+    "mean_reward": -8.023035049438477,
+    "mean_cadence_arc": -0.03767985958619277,
+    "mean_expectation_arc": -0.08287081852155603,
+    "mean_dissonance": 0.3661222176858435
+  },
+  {
+    "step": 250,
+    "mean_reward": -7.613838195800781,
+    "mean_cadence_arc": -0.08009624790485126,
+    "mean_expectation_arc": -0.10048511034036642,
+    "mean_dissonance": 0.3670288074972925
+  },
+  {
+    "step": 300,
+    "mean_reward": -8.022902488708496,
+    "mean_cadence_arc": -0.0743099485528243,
+    "mean_expectation_arc": -0.09607315084595607,
+    "mean_dissonance": 0.36639686998870713
+  },
+  {
+    "step": 350,
+    "mean_reward": -7.355749130249023,
+    "mean_cadence_arc": -0.09480180330406673,
+    "mean_expectation_arc": -0.08426914941724328,
+    "mean_dissonance": 0.3617892134779121
+  },
+  {
+    "step": 400,
+    "mean_reward": -6.671039581298828,
+    "mean_cadence_arc": -0.0940817736114122,
+    "mean_expectation_arc": -0.10071932324202967,
+    "mean_dissonance": 0.34009849573101364
+  },
+  {
+    "step": 450,
+    "mean_reward": -7.093138217926025,
+    "mean_cadence_arc": -0.09162562035717611,
+    "mean_expectation_arc": -0.09497356912936872,
+    "mean_dissonance": 0.3424673508292445
+  },
+  {
+    "step": 500,
+    "mean_reward": -6.572546482086182,
+    "mean_cadence_arc": -0.10417168392263323,
+    "mean_expectation_arc": -0.1050945256043581,
+    "mean_dissonance": 0.3386373047344485
+  },
+  {
+    "step": 550,
+    "mean_reward": -6.904264450073242,
+    "mean_cadence_arc": -0.10053136885159769,
+    "mean_expectation_arc": -0.10129961127814811,
+    "mean_dissonance": 0.3302846434131032
+  },
+  {
+    "step": 600,
+    "mean_reward": -6.79486083984375,
+    "mean_cadence_arc": -0.10243208949761361,
+    "mean_expectation_arc": -0.09080891036362362,
+    "mean_dissonance": 0.32368565025470913
+  },
+  {
+    "step": 650,
+    "mean_reward": -6.738292217254639,
+    "mean_cadence_arc": -0.10151846353202879,
+    "mean_expectation_arc": -0.10089371838954614,
+    "mean_dissonance": 0.32107874613279486
+  },
+  {
+    "step": 700,
+    "mean_reward": -6.832734107971191,
+    "mean_cadence_arc": -0.09833516636768777,
+    "mean_expectation_arc": -0.0890932866802071,
+    "mean_dissonance": 0.3272776405671156
+  },
+  {
+    "step": 750,
+    "mean_reward": -7.072900772094727,
+    "mean_cadence_arc": -0.10949717192874134,
+    "mean_expectation_arc": -0.09350979889051808,
+    "mean_dissonance": 0.33206439603210924
+  },
+  {
+    "step": 800,
+    "mean_reward": -6.929987907409668,
+    "mean_cadence_arc": -0.090053640789795,
+    "mean_expectation_arc": -0.0849181847626496,
+    "mean_dissonance": 0.32140556972235884
+  },
+  {
+    "step": 850,
+    "mean_reward": -6.601513385772705,
+    "mean_cadence_arc": -0.10461999004191096,
+    "mean_expectation_arc": -0.09117397331438351,
+    "mean_dissonance": 0.3232158196385389
+  },
+  {
+    "step": 900,
+    "mean_reward": -7.03728723526001,
+    "mean_cadence_arc": -0.10755186119096083,
+    "mean_expectation_arc": -0.09540463718574542,
+    "mean_dissonance": 0.3352759135831388
+  },
+  {
+    "step": 950,
+    "mean_reward": -6.515317440032959,
+    "mean_cadence_arc": -0.1053457514220218,
+    "mean_expectation_arc": -0.09098725619737705,
+    "mean_dissonance": 0.3358532165906953
+  },
+  {
+    "step": 1000,
+    "mean_reward": -7.239004611968994,
+    "mean_cadence_arc": -0.10454473035777022,
+    "mean_expectation_arc": -0.08022889524837287,
+    "mean_dissonance": 0.3320144450251539
+  },
+  {
+    "step": 1050,
+    "mean_reward": -7.13890266418457,
+    "mean_cadence_arc": -0.0873989230578816,
+    "mean_expectation_arc": -0.09347100379739585,
+    "mean_dissonance": 0.33040257564013925
+  },
+  {
+    "step": 1100,
+    "mean_reward": -7.349583148956299,
+    "mean_cadence_arc": -0.12219145606007736,
+    "mean_expectation_arc": -0.09375859335995043,
+    "mean_dissonance": 0.3164683005822089
+  },
+  {
+    "step": 1150,
+    "mean_reward": -5.9234209060668945,
+    "mean_cadence_arc": -0.2071600099117989,
+    "mean_expectation_arc": -0.09574754958354993,
+    "mean_dissonance": 0.2950279862185372
+  },
+  {
+    "step": 1200,
+    "mean_reward": -5.313864231109619,
+    "mean_cadence_arc": -0.20499141284150207,
+    "mean_expectation_arc": -0.09871836743569513,
+    "mean_dissonance": 0.2865335742334909
+  },
+  {
+    "step": 1250,
+    "mean_reward": -5.986003875732422,
+    "mean_cadence_arc": -0.20324769640033996,
+    "mean_expectation_arc": -0.09432523342647181,
+    "mean_dissonance": 0.2953858500249937
+  },
+  {
+    "step": 1300,
+    "mean_reward": -5.749800205230713,
+    "mean_cadence_arc": -0.2022488924978288,
+    "mean_expectation_arc": -0.08615676954874987,
+    "mean_dissonance": 0.29681242678482767
+  },
+  {
+    "step": 1350,
+    "mean_reward": -4.299823760986328,
+    "mean_cadence_arc": -0.186969167988485,
+    "mean_expectation_arc": -0.09724393592192199,
+    "mean_dissonance": 0.273602775606
+  },
+  {
+    "step": 1400,
+    "mean_reward": -3.750246047973633,
+    "mean_cadence_arc": -0.1694857557831015,
+    "mean_expectation_arc": -0.11416224660264873,
+    "mean_dissonance": 0.2467413170127986
+  },
+  {
+    "step": 1450,
+    "mean_reward": -3.022050380706787,
+    "mean_cadence_arc": -0.1401159089248279,
+    "mean_expectation_arc": -0.1251737131967252,
+    "mean_dissonance": 0.23666731187825174
+  },
+  {
+    "step": 1500,
+    "mean_reward": -3.0282020568847656,
+    "mean_cadence_arc": -0.13760495548623353,
+    "mean_expectation_arc": -0.11748015009139427,
+    "mean_dissonance": 0.2339110277392656
+  },
+  {
+    "step": 1550,
+    "mean_reward": -2.7311322689056396,
+    "mean_cadence_arc": -0.13948053909705194,
+    "mean_expectation_arc": -0.10486284451610849,
+    "mean_dissonance": 0.232542010057112
+  },
+  {
+    "step": 1600,
+    "mean_reward": -2.8762259483337402,
+    "mean_cadence_arc": -0.14059019295263855,
+    "mean_expectation_arc": -0.10179880853561686,
+    "mean_dissonance": 0.2333507416708329
+  },
+  {
+    "step": 1650,
+    "mean_reward": -3.0047545433044434,
+    "mean_cadence_arc": -0.14267527744840064,
+    "mean_expectation_arc": -0.10657054556431507,
+    "mean_dissonance": 0.23665583820297703
+  },
+  {
+    "step": 1700,
+    "mean_reward": -2.8517026901245117,
+    "mean_cadence_arc": -0.1332732685654018,
+    "mean_expectation_arc": -0.09514763611574618,
+    "mean_dissonance": 0.22727048952276646
+  },
+  {
+    "step": 1750,
+    "mean_reward": -2.9437649250030518,
+    "mean_cadence_arc": -0.14145241560055521,
+    "mean_expectation_arc": -0.107513492579289,
+    "mean_dissonance": 0.23517961432973117
+  },
+  {
+    "step": 1800,
+    "mean_reward": -2.995232105255127,
+    "mean_cadence_arc": -0.14259844138577743,
+    "mean_expectation_arc": -0.10996643002125968,
+    "mean_dissonance": 0.23381378064953184
+  },
+  {
+    "step": 1850,
+    "mean_reward": -2.9748010635375977,
+    "mean_cadence_arc": -0.1404005721128887,
+    "mean_expectation_arc": -0.11217390237943736,
+    "mean_dissonance": 0.2292911059300861
+  },
+  {
+    "step": 1900,
+    "mean_reward": -2.92618989944458,
+    "mean_cadence_arc": -0.13212746279352802,
+    "mean_expectation_arc": -0.08960250358114596,
+    "mean_dissonance": 0.23278193709449374
+  },
+  {
+    "step": 1950,
+    "mean_reward": -3.0646111965179443,
+    "mean_cadence_arc": -0.14496488582653672,
+    "mean_expectation_arc": -0.10433551424634982,
+    "mean_dissonance": 0.2358021735028516
+  },
+  {
+    "step": 2000,
+    "mean_reward": -3.0341501235961914,
+    "mean_cadence_arc": -0.14028984693530344,
+    "mean_expectation_arc": -0.10050784321346412,
+    "mean_dissonance": 0.2306097170908829
+  },
+  {
+    "step": 2050,
+    "mean_reward": -2.9328882694244385,
+    "mean_cadence_arc": -0.13973344487697187,
+    "mean_expectation_arc": -0.09855870320776397,
+    "mean_dissonance": 0.2338893908329576
+  },
+  {
+    "step": 2100,
+    "mean_reward": -3.1072943210601807,
+    "mean_cadence_arc": -0.14216766498071223,
+    "mean_expectation_arc": -0.09779697602280894,
+    "mean_dissonance": 0.23521120985985366
+  },
+  {
+    "step": 2150,
+    "mean_reward": -3.1242716312408447,
+    "mean_cadence_arc": -0.14234146964902883,
+    "mean_expectation_arc": -0.11158614331467559,
+    "mean_dissonance": 0.23361705198172258
+  },
+  {
+    "step": 2200,
+    "mean_reward": -3.9959158897399902,
+    "mean_cadence_arc": -0.009284737135363154,
+    "mean_expectation_arc": -0.11429449346325546,
+    "mean_dissonance": 0.2569249173313524
+  },
+  {
+    "step": 2250,
+    "mean_reward": -3.5090160369873047,
+    "mean_cadence_arc": 0.004787190324758177,
+    "mean_expectation_arc": -0.0931498389839353,
+    "mean_dissonance": 0.24283917513735748
+  },
+  {
+    "step": 2300,
+    "mean_reward": -3.5633482933044434,
+    "mean_cadence_arc": 0.015304524518861207,
+    "mean_expectation_arc": -0.09676465923977579,
+    "mean_dissonance": 0.24749538032011886
+  },
+  {
+    "step": 2350,
+    "mean_reward": -3.532841682434082,
+    "mean_cadence_arc": 0.032927517063399414,
+    "mean_expectation_arc": -0.09803911657321064,
+    "mean_dissonance": 0.24804698805796607
+  },
+  {
+    "step": 2400,
+    "mean_reward": -3.558724880218506,
+    "mean_cadence_arc": 0.027067126274927602,
+    "mean_expectation_arc": -0.09432139685500647,
+    "mean_dissonance": 0.25026947574769554
+  },
+  {
+    "step": 2450,
+    "mean_reward": -3.6799700260162354,
+    "mean_cadence_arc": 0.03869963669492105,
+    "mean_expectation_arc": -0.10563994418675812,
+    "mean_dissonance": 0.2502454088345896
+  },
+  {
+    "step": 2499,
+    "mean_reward": -3.7567977905273438,
+    "mean_cadence_arc": 0.03703398565272805,
+    "mean_expectation_arc": -0.09194557563644976,
+    "mean_dissonance": 0.2505270473498026
+  }
+]

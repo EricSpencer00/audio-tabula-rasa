@@ -28,49 +28,113 @@ def _sethares_pair(f1: float, f2: float, a1: float = 1.0, a2: float = 1.0) -> fl
     return a1 * a2 * (np.exp(-3.5 * s * fdif) - np.exp(-5.75 * s * fdif))
 
 
-def total_dissonance(f1: float, f2: float, n_harmonics: int = 6) -> float:
+def total_dissonance(f1: float, f2: float, n_harmonics: int = 6,
+                     partials="harmonic") -> float:
     """
-    Compute total roughness between two complex tones each having
-    `n_harmonics` harmonic partials with 1/n amplitude rolloff.
+    Compute total roughness between two complex tones whose partials
+    are drawn from a configurable timbre.
 
-    This is where consonance structure emerges: simple integer ratios
-    cause harmonics to coincide rather than collide, yielding low roughness.
+    `partials` selects the partial layout:
+      "harmonic":  k = 1, 2, 3, ..., n_harmonics
+                   — the natural vibrating-string / open-pipe spectrum.
+                   This is where octave-based consonance comes from:
+                   simple integer ratios cause harmonics to coincide.
+      "odd":       k = 1, 3, 5, ..., 2*n_harmonics-1
+                   — odd-only partials like a square wave or a clarinet's
+                   low register. Bohlen-Pierce showed that this timbre
+                   has its consonance minima at *tritave* (3:1) intervals
+                   and odd-ratio subdivisions, not octave-based ratios.
+      "inharmonic": k = 1, sqrt(2), 2, sqrt(8), ..., a stretched series
+                   that does not have any integer relations — used as
+                   a control to verify that consonance structure depends
+                   on the partial layout, not just on having multiple
+                   partials.
+      float in [0, 1]: continuous interpolation between harmonic (1.0)
+                   and odd-only (0.0). Treat as the *weight* on the
+                   even harmonics; the odd harmonics are always at
+                   weight 1. So alpha=1.0 → full harmonic series,
+                   alpha=0.0 → odd partials only, alpha=0.5 → even
+                   harmonics are half-amplitude.
+      iterable:    a custom partial layout — pass (ks, amps) where ks
+                   is the array of partial frequency multipliers and
+                   amps the corresponding amplitudes.
     """
+    if isinstance(partials, str):
+        if partials == "harmonic":
+            ks = np.arange(1, n_harmonics + 1, dtype=np.float64)
+            amps = 1.0 / ks
+        elif partials == "odd":
+            ks = np.arange(1, 2 * n_harmonics, 2, dtype=np.float64)
+            amps = 1.0 / ks
+        elif partials == "inharmonic":
+            ks = 2.0 ** (np.arange(n_harmonics, dtype=np.float64) / 2.0)
+            amps = 1.0 / ks
+        else:
+            raise ValueError(f"unknown partials={partials!r}")
+    elif isinstance(partials, (int, float)):
+        alpha = float(partials)
+        if not (0.0 <= alpha <= 1.0):
+            raise ValueError(f"alpha mix must be in [0, 1], got {alpha}")
+        # Keep the total partial *count* constant as α slides. The
+        # natural-harmonic side carries the even harmonics k=2,4,6 at
+        # weight α; the odd-only side substitutes additional odd
+        # partials k = 7,9,11 at weight (1-α). At α=1 we recover the
+        # harmonic series 1..n; at α=0 we recover the first 2n−1 odd
+        # partials. Amplitude rolloff is 1/k as usual.
+        nh = n_harmonics
+        even_ks = np.arange(2, 2 * nh, 2, dtype=np.float64)[: nh - (nh // 2)]
+        odd_low_ks = np.arange(1, 2 * nh, 2, dtype=np.float64)[: (nh + 1) // 2]
+        odd_high_ks = np.arange(2 * (nh // 2) + 1, 4 * nh,
+                                 2, dtype=np.float64)[: nh - (nh // 2)]
+        ks = np.concatenate([odd_low_ks, even_ks, odd_high_ks])
+        # amplitudes
+        amps_odd_low = 1.0 / odd_low_ks
+        amps_even = alpha / even_ks
+        amps_odd_high = (1.0 - alpha) / odd_high_ks
+        amps = np.concatenate([amps_odd_low, amps_even, amps_odd_high])
+    else:
+        ks, amps = partials
+        ks = np.asarray(ks, dtype=np.float64)
+        amps = np.asarray(amps, dtype=np.float64)
+
     diss = 0.0
-    for i in range(1, n_harmonics + 1):
-        for j in range(1, n_harmonics + 1):
-            amp_i = 1.0 / i
-            amp_j = 1.0 / j
-            diss += _sethares_pair(i * f1, j * f2, amp_i, amp_j)
+    for i, ki in enumerate(ks):
+        for j, kj in enumerate(ks):
+            if amps[i] == 0 or amps[j] == 0:
+                continue
+            diss += _sethares_pair(ki * f1, kj * f2, amps[i], amps[j])
     return diss
 
 
-def consonance_reward(f1: float, f2: float, n_harmonics: int = 6) -> float:
+def consonance_reward(f1: float, f2: float, n_harmonics: int = 6,
+                      partials: str = "harmonic") -> float:
     """
     Reward = negative dissonance. Higher = more consonant.
     Frequencies in Hz. Typical musical range: 80–2000 Hz.
+    `partials` selects the timbre: "harmonic", "odd", or "inharmonic".
     """
-    return -total_dissonance(f1, f2, n_harmonics)
+    return -total_dissonance(f1, f2, n_harmonics, partials=partials)
 
 
-def chord_dissonance(freqs, n_harmonics: int = 6) -> float:
+def chord_dissonance(freqs, n_harmonics: int = 6,
+                     partials: str = "harmonic") -> float:
     """
     Total Sethares dissonance over all pairs of voices in a chord.
     `freqs` is a 1D iterable of fundamental frequencies in Hz.
 
-    A 3-note chord has 3 pairs (C(3,2)). For 4 voices, 6 pairs. Each
-    pair contributes its own n_harmonics x n_harmonics partial roughness.
-
     By summing pairwise roughness we keep the model purely additive in
     the physical sense: each pair of voices excites the basilar membrane
-    independently. There is no chord-level prior.
+    independently. There is no chord-level prior. `partials` selects
+    the timbre — switching it to "odd" changes which chord ratios are
+    consonant (see Phase 8 — Bohlen-Pierce).
     """
     freqs = np.asarray(freqs, dtype=np.float64)
     n = len(freqs)
     diss = 0.0
     for i in range(n):
         for j in range(i + 1, n):
-            diss += total_dissonance(float(freqs[i]), float(freqs[j]), n_harmonics)
+            diss += total_dissonance(float(freqs[i]), float(freqs[j]),
+                                     n_harmonics, partials=partials)
     return diss
 
 
@@ -121,13 +185,14 @@ def voice_leading_cost(chord_a, chord_b) -> float:
 
 
 def chord_reward(freqs, n_harmonics: int = 6, spread_weight: float = 1.0,
-                 min_semitones: float = 1.5) -> float:
+                 min_semitones: float = 1.5,
+                 partials: str = "harmonic") -> float:
     """
     Reward for a single chord: negative dissonance minus a soft spread
     penalty. The spread penalty is a *task constraint* (we want a chord,
     not a unison) and is the only non-Sethares ingredient.
     """
-    diss = chord_dissonance(freqs, n_harmonics=n_harmonics)
+    diss = chord_dissonance(freqs, n_harmonics=n_harmonics, partials=partials)
     spread = voice_spread_penalty(freqs, min_semitones=min_semitones)
     return -diss - spread_weight * spread
 

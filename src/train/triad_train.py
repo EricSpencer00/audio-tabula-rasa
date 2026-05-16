@@ -27,12 +27,14 @@ from src.reward.psychoacoustic import (
 
 
 def _score_triads(freqs: torch.Tensor, spread_weight: float,
-                  min_semitones: float) -> np.ndarray:
+                  min_semitones: float,
+                  partials: str = "harmonic") -> np.ndarray:
     out = np.empty(freqs.shape[0], dtype=np.float32)
     np_freqs = freqs.detach().cpu().numpy()
     for i, f in enumerate(np_freqs):
         out[i] = chord_reward(f, spread_weight=spread_weight,
-                              min_semitones=min_semitones)
+                              min_semitones=min_semitones,
+                              partials=partials)
     return out
 
 
@@ -63,6 +65,7 @@ def _entropy_coef(step: int, n_steps: int,
 def train_triads(n_steps=2000, batch_size=64, lr=1e-3, log_every=50,
                  seed=0, spread_weight=2.0, min_semitones=1.5,
                  ent_start=0.01, ent_end=-0.02,
+                 partials="harmonic",
                  out_dir="results/phase2_triads"):
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -87,7 +90,8 @@ def train_triads(n_steps=2000, batch_size=64, lr=1e-3, log_every=50,
         log_prob = dist.log_prob(freqs).sum(dim=-1)
         entropy = dist.entropy().sum(dim=-1).mean()
 
-        rewards = torch.tensor(_score_triads(freqs, spread_weight, min_semitones))
+        rewards = torch.tensor(_score_triads(freqs, spread_weight, min_semitones,
+                                              partials=partials))
 
         adv = rewards - rewards.mean()
         adv = adv / (rewards.std() + 1e-8)
@@ -103,11 +107,13 @@ def train_triads(n_steps=2000, batch_size=64, lr=1e-3, log_every=50,
         if step % log_every == 0 or step == n_steps - 1:
             with torch.no_grad():
                 ef, _ = gen.sample(256)
-                er = _score_triads(ef, spread_weight, min_semitones)
+                er = _score_triads(ef, spread_weight, min_semitones,
+                                    partials=partials)
                 labels = [triad_label(f) for f in ef.cpu().numpy()]
                 top = Counter(labels).most_common(3)
                 diss = np.mean([
-                    chord_dissonance(f) for f in ef.cpu().numpy()
+                    chord_dissonance(f, partials=partials)
+                    for f in ef.cpu().numpy()
                 ])
             entry = {
                 "step": step,
@@ -238,6 +244,8 @@ if __name__ == "__main__":
     parser.add_argument("--spread-weight", type=float, default=2.0)
     parser.add_argument("--vl-weight", type=float, default=0.5)
     parser.add_argument("--min-semitones", type=float, default=1.5)
+    parser.add_argument("--partials", type=str, default="harmonic",
+                        choices=["harmonic", "odd", "inharmonic"])
     parser.add_argument("--out-dir", type=str, default=None)
     args = parser.parse_args()
 
@@ -249,6 +257,7 @@ if __name__ == "__main__":
             seed=args.seed,
             spread_weight=args.spread_weight,
             min_semitones=args.min_semitones,
+            partials=args.partials,
             out_dir=args.out_dir or "results/phase2_triads",
         )
     else:

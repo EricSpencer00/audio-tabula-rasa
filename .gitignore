@@ -5,6 +5,12 @@ __pycache__/
 venv/
 .ipynb_checkpoints/
 .DS_Store
-results/**/*.pt
+# Model weights are kept in-tree (small, ~1.5 MB total) so CI/CD can
+# regenerate the audio preview without having to retrain every phase.
+# Phase-9's per-(alpha,seed) sweep is the only one we still exclude.
+results/phase9_timbre_sweep/**/*.pt
+
+# CI-built preview site
+preview/
 *.egg-info/
 .vscode/

@@ -16,11 +16,12 @@ from src.generator.toy_generator import ToyIntervalGenerator
 from src.reward.psychoacoustic import consonance_reward, ratio_label
 
 
-def compute_rewards(freqs: torch.Tensor) -> torch.Tensor:
+def compute_rewards(freqs: torch.Tensor, partials: str = "harmonic") -> torch.Tensor:
     """Score each (f1, f2) pair using psychoacoustic reward model."""
     rewards = []
     for f in freqs.detach().cpu().numpy():
-        rewards.append(consonance_reward(float(f[0]), float(f[1])))
+        rewards.append(consonance_reward(float(f[0]), float(f[1]),
+                                          partials=partials))
     return torch.tensor(rewards, dtype=torch.float32)
 
 
@@ -31,6 +32,7 @@ def train(
     log_every: int = 50,
     seed: int = 0,
     out_dir: str = "results",
+    partials: str = "harmonic",
 ):
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -44,7 +46,7 @@ def train(
 
     for step in range(n_steps):
         freqs, log_prob = gen.sample(batch_size)
-        rewards = compute_rewards(freqs)
+        rewards = compute_rewards(freqs, partials=partials)
 
         # baseline = batch mean (variance reduction)
         advantage = rewards - rewards.mean()
@@ -60,7 +62,7 @@ def train(
         if step % log_every == 0 or step == n_steps - 1:
             with torch.no_grad():
                 eval_freqs, _ = gen.sample(256)
-                eval_rewards = compute_rewards(eval_freqs).numpy()
+                eval_rewards = compute_rewards(eval_freqs, partials=partials).numpy()
                 ratios = (eval_freqs.max(dim=1).values
                           / eval_freqs.min(dim=1).values).numpy()
                 labels = [ratio_label(float(f[0]), float(f[1]))
@@ -93,6 +95,8 @@ if __name__ == "__main__":
     parser.add_argument("--lr", type=float, default=1e-3)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--out-dir", type=str, default="results")
+    parser.add_argument("--partials", type=str, default="harmonic",
+                        choices=["harmonic", "odd", "inharmonic"])
     args = parser.parse_args()
     train(
         n_steps=args.steps,
@@ -100,4 +104,5 @@ if __name__ == "__main__":
         lr=args.lr,
         seed=args.seed,
         out_dir=args.out_dir,
+        partials=args.partials,
     )

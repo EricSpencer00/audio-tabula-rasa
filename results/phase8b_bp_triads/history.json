@@ -1,0 +1,781 @@
+[
+  {
+    "step": 0,
+    "mean_reward": -4.285961151123047,
+    "mean_dissonance": 0.4973613413114678,
+    "top_triads": [
+      [
+        "non-musical (r=[1.023,1.055])",
+        2
+      ],
+      [
+        "non-musical (r=[1.054,1.074])",
+        2
+      ],
+      [
+        "non-musical (r=[1.041,1.055])",
+        1
+      ]
+    ]
+  },
+  {
+    "step": 50,
+    "mean_reward": -3.0983920097351074,
+    "mean_dissonance": 0.38364536510806324,
+    "top_triads": [
+      [
+        "non-musical (r=[1.056,1.079])",
+        2
+      ],
+      [
+        "non-musical (r=[1.143,1.177])",
+        2
+      ],
+      [
+        "non-musical (r=[1.128,1.141])",
+        1
+      ]
+    ]
+  },
+  {
+    "step": 100,
+    "mean_reward": -2.678593397140503,
+    "mean_dissonance": 0.36554322904912107,
+    "top_triads": [
+      [
+        "non-musical (r=[1.004,1.134])",
+        1
+      ],
+      [
+        "non-musical (r=[1.213,1.220])",
+        1
+      ],
+      [
+        "non-musical (r=[1.043,1.143])",
+        1
+      ]
+    ]
+  },
+  {
+    "step": 150,
+    "mean_reward": -0.920988142490387,
+    "mean_dissonance": 0.2589508179468195,
+    "top_triads": [
+      [
+        "diminished",
+        10
+      ],
+      [
+        "sus4_6_8_9",
+        8
+      ],
+      [
+        "major_4_5_6",
+        8
+      ]
+    ]
+  },
+  {
+    "step": 200,
+    "mean_reward": -0.11310955882072449,
+    "mean_dissonance": 0.09440158191275147,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        19
+      ],
+      [
+        "sus4_6_8_9",
+        16
+      ],
+      [
+        "augmented",
+        11
+      ]
+    ]
+  },
+  {
+    "step": 250,
+    "mean_reward": -0.0993865355849266,
+    "mean_dissonance": 0.09460362060485966,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        19
+      ],
+      [
+        "sus4_6_8_9",
+        17
+      ],
+      [
+        "augmented",
+        11
+      ]
+    ]
+  },
+  {
+    "step": 300,
+    "mean_reward": -0.11324134469032288,
+    "mean_dissonance": 0.09624235263857098,
+    "top_triads": [
+      [
+        "sus4_6_8_9",
+        17
+      ],
+      [
+        "major_4_5_6",
+        12
+      ],
+      [
+        "diminished",
+        11
+      ]
+    ]
+  },
+  {
+    "step": 350,
+    "mean_reward": -0.11182689666748047,
+    "mean_dissonance": 0.09641843222784532,
+    "top_triads": [
+      [
+        "sus4_6_8_9",
+        18
+      ],
+      [
+        "major_4_5_6",
+        18
+      ],
+      [
+        "augmented",
+        14
+      ]
+    ]
+  },
+  {
+    "step": 400,
+    "mean_reward": -0.10501036047935486,
+    "mean_dissonance": 0.0919195981826394,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        20
+      ],
+      [
+        "sus4_6_8_9",
+        17
+      ],
+      [
+        "augmented",
+        7
+      ]
+    ]
+  },
+  {
+    "step": 450,
+    "mean_reward": -0.10203368961811066,
+    "mean_dissonance": 0.09296309194565255,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        14
+      ],
+      [
+        "sus4_6_8_9",
+        13
+      ],
+      [
+        "augmented",
+        8
+      ]
+    ]
+  },
+  {
+    "step": 500,
+    "mean_reward": -0.10785359144210815,
+    "mean_dissonance": 0.0955328321677398,
+    "top_triads": [
+      [
+        "sus4_6_8_9",
+        18
+      ],
+      [
+        "major_4_5_6",
+        16
+      ],
+      [
+        "augmented",
+        9
+      ]
+    ]
+  },
+  {
+    "step": 550,
+    "mean_reward": -0.12363796681165695,
+    "mean_dissonance": 0.08938269778541799,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        15
+      ],
+      [
+        "diminished",
+        12
+      ],
+      [
+        "sus4_6_8_9",
+        9
+      ]
+    ]
+  },
+  {
+    "step": 600,
+    "mean_reward": -0.1186353787779808,
+    "mean_dissonance": 0.10078559058447398,
+    "top_triads": [
+      [
+        "sus4_6_8_9",
+        25
+      ],
+      [
+        "major_4_5_6",
+        16
+      ],
+      [
+        "augmented",
+        10
+      ]
+    ]
+  },
+  {
+    "step": 650,
+    "mean_reward": -0.12459951639175415,
+    "mean_dissonance": 0.10077665324723074,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        18
+      ],
+      [
+        "sus4_6_8_9",
+        16
+      ],
+      [
+        "augmented",
+        12
+      ]
+    ]
+  },
+  {
+    "step": 700,
+    "mean_reward": -0.10004428029060364,
+    "mean_dissonance": 0.09754856156149852,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        21
+      ],
+      [
+        "sus4_6_8_9",
+        19
+      ],
+      [
+        "diminished",
+        8
+      ]
+    ]
+  },
+  {
+    "step": 750,
+    "mean_reward": -0.10961578786373138,
+    "mean_dissonance": 0.09643950981673322,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        15
+      ],
+      [
+        "sus4_6_8_9",
+        14
+      ],
+      [
+        "augmented",
+        12
+      ]
+    ]
+  },
+  {
+    "step": 800,
+    "mean_reward": -0.09824014455080032,
+    "mean_dissonance": 0.08930396256760365,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        25
+      ],
+      [
+        "sus4_6_8_9",
+        16
+      ],
+      [
+        "diminished",
+        5
+      ]
+    ]
+  },
+  {
+    "step": 850,
+    "mean_reward": -0.12858432531356812,
+    "mean_dissonance": 0.09520956297882782,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        13
+      ],
+      [
+        "sus4_6_8_9",
+        12
+      ],
+      [
+        "diminished",
+        12
+      ]
+    ]
+  },
+  {
+    "step": 900,
+    "mean_reward": -0.09189423173666,
+    "mean_dissonance": 0.09065468974789767,
+    "top_triads": [
+      [
+        "sus4_6_8_9",
+        17
+      ],
+      [
+        "major_4_5_6",
+        12
+      ],
+      [
+        "diminished",
+        10
+      ]
+    ]
+  },
+  {
+    "step": 950,
+    "mean_reward": -0.10229726135730743,
+    "mean_dissonance": 0.09128203605747284,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        18
+      ],
+      [
+        "sus4_6_8_9",
+        12
+      ],
+      [
+        "augmented",
+        11
+      ]
+    ]
+  },
+  {
+    "step": 1000,
+    "mean_reward": -0.10641029477119446,
+    "mean_dissonance": 0.09720533682954459,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        23
+      ],
+      [
+        "sus4_6_8_9",
+        14
+      ],
+      [
+        "augmented",
+        9
+      ]
+    ]
+  },
+  {
+    "step": 1050,
+    "mean_reward": -0.09478245675563812,
+    "mean_dissonance": 0.09103429975884472,
+    "top_triads": [
+      [
+        "sus4_6_8_9",
+        19
+      ],
+      [
+        "major_4_5_6",
+        17
+      ],
+      [
+        "augmented",
+        13
+      ]
+    ]
+  },
+  {
+    "step": 1100,
+    "mean_reward": -0.1119152307510376,
+    "mean_dissonance": 0.09346023673456805,
+    "top_triads": [
+      [
+        "sus4_6_8_9",
+        21
+      ],
+      [
+        "major_4_5_6",
+        16
+      ],
+      [
+        "augmented",
+        10
+      ]
+    ]
+  },
+  {
+    "step": 1150,
+    "mean_reward": -0.11061090975999832,
+    "mean_dissonance": 0.0892461478415951,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        18
+      ],
+      [
+        "sus4_6_8_9",
+        14
+      ],
+      [
+        "augmented",
+        11
+      ]
+    ]
+  },
+  {
+    "step": 1200,
+    "mean_reward": -0.10770878195762634,
+    "mean_dissonance": 0.09334805336692556,
+    "top_triads": [
+      [
+        "sus4_6_8_9",
+        17
+      ],
+      [
+        "diminished",
+        16
+      ],
+      [
+        "major_4_5_6",
+        14
+      ]
+    ]
+  },
+  {
+    "step": 1250,
+    "mean_reward": -0.1079711988568306,
+    "mean_dissonance": 0.09942058122194275,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        17
+      ],
+      [
+        "sus4_6_8_9",
+        16
+      ],
+      [
+        "diminished",
+        9
+      ]
+    ]
+  },
+  {
+    "step": 1300,
+    "mean_reward": -0.106930211186409,
+    "mean_dissonance": 0.09227983779779496,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        20
+      ],
+      [
+        "sus4_6_8_9",
+        17
+      ],
+      [
+        "augmented",
+        9
+      ]
+    ]
+  },
+  {
+    "step": 1350,
+    "mean_reward": -0.13157439231872559,
+    "mean_dissonance": 0.097561282198728,
+    "top_triads": [
+      [
+        "sus4_6_8_9",
+        19
+      ],
+      [
+        "major_4_5_6",
+        19
+      ],
+      [
+        "augmented",
+        8
+      ]
+    ]
+  },
+  {
+    "step": 1400,
+    "mean_reward": -0.11789362132549286,
+    "mean_dissonance": 0.08776292826097065,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        12
+      ],
+      [
+        "sus4_6_8_9",
+        10
+      ],
+      [
+        "diminished",
+        7
+      ]
+    ]
+  },
+  {
+    "step": 1450,
+    "mean_reward": -0.11592571437358856,
+    "mean_dissonance": 0.09480682769120827,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        22
+      ],
+      [
+        "sus4_6_8_9",
+        18
+      ],
+      [
+        "diminished",
+        11
+      ]
+    ]
+  },
+  {
+    "step": 1500,
+    "mean_reward": -0.0973285511136055,
+    "mean_dissonance": 0.09030972903931142,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        23
+      ],
+      [
+        "sus4_6_8_9",
+        10
+      ],
+      [
+        "diminished",
+        10
+      ]
+    ]
+  },
+  {
+    "step": 1550,
+    "mean_reward": -0.10926532000303268,
+    "mean_dissonance": 0.0944046336982528,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        17
+      ],
+      [
+        "sus4_6_8_9",
+        15
+      ],
+      [
+        "diminished",
+        13
+      ]
+    ]
+  },
+  {
+    "step": 1600,
+    "mean_reward": -0.09283055365085602,
+    "mean_dissonance": 0.09187183239231239,
+    "top_triads": [
+      [
+        "sus4_6_8_9",
+        19
+      ],
+      [
+        "major_4_5_6",
+        13
+      ],
+      [
+        "augmented",
+        12
+      ]
+    ]
+  },
+  {
+    "step": 1650,
+    "mean_reward": -0.13474828004837036,
+    "mean_dissonance": 0.09608167633189088,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        22
+      ],
+      [
+        "sus4_6_8_9",
+        11
+      ],
+      [
+        "augmented",
+        8
+      ]
+    ]
+  },
+  {
+    "step": 1700,
+    "mean_reward": -0.13619396090507507,
+    "mean_dissonance": 0.09081611198320677,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        15
+      ],
+      [
+        "sus4_6_8_9",
+        13
+      ],
+      [
+        "augmented",
+        10
+      ]
+    ]
+  },
+  {
+    "step": 1750,
+    "mean_reward": -0.15710234642028809,
+    "mean_dissonance": 0.09968224052142308,
+    "top_triads": [
+      [
+        "sus4_6_8_9",
+        16
+      ],
+      [
+        "diminished",
+        15
+      ],
+      [
+        "major_4_5_6",
+        13
+      ]
+    ]
+  },
+  {
+    "step": 1800,
+    "mean_reward": -0.11219526827335358,
+    "mean_dissonance": 0.09223850879086878,
+    "top_triads": [
+      [
+        "sus4_6_8_9",
+        19
+      ],
+      [
+        "diminished",
+        9
+      ],
+      [
+        "augmented",
+        6
+      ]
+    ]
+  },
+  {
+    "step": 1850,
+    "mean_reward": -0.12757351994514465,
+    "mean_dissonance": 0.09243257580628415,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        17
+      ],
+      [
+        "sus4_6_8_9",
+        15
+      ],
+      [
+        "diminished",
+        10
+      ]
+    ]
+  },
+  {
+    "step": 1900,
+    "mean_reward": -0.09365398436784744,
+    "mean_dissonance": 0.09184969671470858,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        21
+      ],
+      [
+        "sus4_6_8_9",
+        16
+      ],
+      [
+        "diminished",
+        10
+      ]
+    ]
+  },
+  {
+    "step": 1950,
+    "mean_reward": -0.11931142956018448,
+    "mean_dissonance": 0.09653056984284442,
+    "top_triads": [
+      [
+        "major_4_5_6",
+        15
+      ],
+      [
+        "augmented",
+        10
+      ],
+      [
+        "sus4_6_8_9",
+        6
+      ]
+    ]
+  },
+  {
+    "step": 1999,
+    "mean_reward": -0.12505073845386505,
+    "mean_dissonance": 0.09656509462568647,
+    "top_triads": [
+      [
+        "sus4_6_8_9",
+        20
+      ],
+      [
+        "major_4_5_6",
+        20
+      ],
+      [
+        "diminished",
+        13
+      ]
+    ]
+  }
+]
