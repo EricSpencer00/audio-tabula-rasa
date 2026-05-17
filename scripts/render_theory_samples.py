@@ -34,13 +34,31 @@ def main():
     p.add_argument("--n-samples", type=int, default=5)
     p.add_argument("--out-dir", default="results/audio/theory_samples")
     p.add_argument("--seed", type=int, default=0)
+    p.add_argument("--freq-std-clamp", type=float, default=None,
+                   help="max log-std for freq sampling (e.g. -2.0)")
+    p.add_argument("--scale-snap", type=float, default=0.0,
+                   help="scale snap strength 0-1")
+    p.add_argument("--scale-key", type=str, default=None,
+                   help="scale for snap, e.g. 'A_natural_minor'")
     args = p.parse_args()
 
-    # Lazy import to avoid loading rlaif_train's full dependency tree
     from src.train.rlaif_train import _ADAPTERS
 
     adapter = _ADAPTERS[args.generator]
     gen = adapter.build()
+
+    if args.freq_std_clamp is not None and hasattr(gen, "_freq_std_clamp"):
+        gen._freq_std_clamp = args.freq_std_clamp
+    if args.scale_snap > 0 and hasattr(gen, "scale_snap"):
+        gen.scale_snap = args.scale_snap
+    if args.scale_key and hasattr(gen, "_scale_table"):
+        from src.generator.melody_generator import _build_scale_table
+        from src.reward.theory_judge import SCALES
+        _ROOTS = {"C": -9, "D": -7, "E": -5, "F": -4, "G": -2, "A": 0, "B": 2}
+        parts = args.scale_key.split("_", 1)
+        root_name, scale_name = parts[0].upper(), parts[1] if len(parts) > 1 else "major"
+        if root_name in _ROOTS and scale_name in SCALES:
+            gen._scale_table = _build_scale_table(SCALES[scale_name], _ROOTS[root_name])
 
     state = torch.load(args.checkpoint, map_location="cpu")
     gen.load_state_dict(state)
