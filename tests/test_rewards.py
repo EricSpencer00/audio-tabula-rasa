@@ -12,11 +12,14 @@ from src.reward.psychoacoustic import (
     chord_dissonance,
     chord_reward,
     consonance_reward,
+    expressive_melody_reward,
     implied_fundamental_salience,
     melody_reward,
     pitch_class_diversity,
     progression_reward,
+    rhythm_variety_reward,
     sequential_consonance,
+    stepwise_motion_reward,
     total_dissonance,
     triad_label,
     voice_leading_cost,
@@ -401,3 +404,100 @@ def test_expectation_arc_unit_bounded():
     c = [261.6, 329.6, 392.0]
     arc = expectation_arc([c, c, c])
     assert -1.0 <= arc <= 1.0
+
+
+# ---- rhythm variety & expressive melody ----
+
+def test_stepwise_motion_small_intervals():
+    freqs = [220, 220 * 2**(2/12), 220 * 2**(4/12), 220 * 2**(5/12)]
+    r = stepwise_motion_reward(freqs)
+    assert r > 0.5
+
+
+def test_stepwise_motion_large_jumps():
+    freqs = [220, 440, 220, 660]
+    r = stepwise_motion_reward(freqs)
+    assert r < 0.3
+
+
+def test_stepwise_motion_prefers_small():
+    small = [220, 220 * 2**(2/12), 220 * 2**(4/12), 220 * 2**(7/12)]
+    large = [220, 440, 220, 660]
+    assert stepwise_motion_reward(small) > stepwise_motion_reward(large)
+
+
+def test_rhythm_variety_uniform():
+    assert rhythm_variety_reward([0.4, 0.4, 0.4, 0.4]) == 0.0
+
+
+def test_rhythm_variety_varied():
+    r = rhythm_variety_reward([0.2, 0.5, 0.3, 0.7])
+    assert r > 0.1
+
+
+def test_rhythm_variety_capped():
+    r = rhythm_variety_reward([0.1, 0.8, 0.1, 0.8])
+    assert r <= 0.6
+
+
+def test_expressive_melody_reward_shape():
+    n = 8
+    freqs = [220, 330, 440, 550, 330, 440, 330, 220]
+    durs = [0.3, 0.5, 0.2, 0.4, 0.6, 0.3, 0.2, 0.5]
+    vels = [0.8, 0.5, 1.0, 0.7, 0.6, 0.9, 0.4, 0.8]
+    combined = np.array(freqs + durs + vels, dtype=np.float64)
+    r = expressive_melody_reward(combined, n_notes=n)
+    assert isinstance(r, float)
+
+
+def test_snap_to_scale_c_pentatonic():
+    from src.render.synth import snap_to_scale
+    # C4 = 261.63 Hz — should snap to itself
+    assert abs(snap_to_scale(261.63) - 261.63) < 0.01
+    # C#4 ≈ 277 Hz — should snap to either C or D
+    snapped = snap_to_scale(277.0)
+    c4, d4 = 261.63, 261.63 * 2**(2/12)
+    assert abs(snapped - c4) < 0.1 or abs(snapped - d4) < 0.1
+
+
+def test_snap_to_scale_only_pentatonic_notes():
+    from src.render.synth import snap_to_scale
+    import numpy as np
+    rng = np.random.default_rng(0)
+    for _ in range(20):
+        f = 200 + rng.random() * 600
+        snapped = snap_to_scale(f)
+        midi = round(69 + 12 * np.log2(snapped / 440.0))
+        pc = midi % 12
+        assert pc in {0, 2, 4, 7, 9}, f"{f} snapped to pc={pc}"
+
+
+def test_simple_reverb_preserves_length():
+    from src.render.synth import simple_reverb
+    signal = np.sin(np.linspace(0, 10, 4410))
+    wet = simple_reverb(signal)
+    assert len(wet) == len(signal)
+    assert np.max(np.abs(wet)) > 0
+
+
+def test_simple_reverb_fills_silence():
+    from src.render.synth import simple_reverb
+    signal = np.zeros(44100)
+    signal[:4410] = np.sin(np.linspace(0, 20, 4410))
+    wet = simple_reverb(signal, decay=0.4, delay_ms=40, n_taps=4)
+    tail_energy = np.sum(wet[4410:]**2)
+    assert tail_energy > 0, "reverb should add energy after the original signal ends"
+
+
+def test_expressive_generator_sample():
+    from src.generator.melody_generator import ExpressiveMelodyGenerator
+    gen = ExpressiveMelodyGenerator(latent_dim=8, hidden=32, n_notes=4)
+    combined, log_prob = gen.sample(2)
+    assert combined.shape == (2, 12)  # 4 freqs + 4 durs + 4 vels
+    assert log_prob.shape == (2,)
+    freqs = combined[:, :4]
+    durs = combined[:, 4:8]
+    vels = combined[:, 8:]
+    assert (freqs >= 109).all() and (freqs <= 881).all()
+    assert (durs >= 0.09).all() and (durs <= 0.81).all()
+    assert (vels >= 0.29).all() and (vels <= 1.01).all()

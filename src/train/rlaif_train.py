@@ -42,9 +42,14 @@ import numpy as np
 import torch
 
 from src.generator.chord_generator import ChordProgressionGenerator
-from src.generator.melody_generator import MelodyGenerator
-from src.render.synth import render_chord, render_melody
-from src.reward.psychoacoustic import melody_reward, progression_reward
+from src.generator.melody_generator import ExpressiveMelodyGenerator, MelodyGenerator
+from src.render.instruments import PRESETS
+from src.render.synth import SAMPLE_RATE as _SR, render_chord, render_melody, simple_reverb, snap_to_scale
+from src.reward.psychoacoustic import (
+    expressive_melody_reward,
+    melody_reward,
+    progression_reward,
+)
 
 
 SAMPLE_RATE = 44_100   # synth.SAMPLE_RATE
@@ -64,6 +69,82 @@ class _Adapter:
 
 def _melody_to_audio(freqs: np.ndarray) -> np.ndarray:
     return render_melody(freqs, note_duration=0.35, gap=0.03)
+
+
+def _expressive_melody_to_audio(combined: np.ndarray) -> np.ndarray:
+    n = len(combined) // 3
+    freqs, durs, vels = combined[:n], combined[n:2*n], combined[2*n:]
+    return render_melody(freqs, gap=0.03, durations=durs, velocities=vels,
+                         use_fm=True)
+
+
+def _quantized_melody_to_audio(combined: np.ndarray) -> np.ndarray:
+    n = len(combined) // 3
+    freqs, durs, vels = combined[:n], combined[n:2*n], combined[2*n:]
+    freqs_q = np.array([snap_to_scale(f) for f in freqs])
+    return render_melody(freqs_q, gap=0.03, durations=durs, velocities=vels,
+                         use_fm=True)
+
+
+def _instrument_melody_to_audio(combined: np.ndarray) -> np.ndarray:
+    n = len(combined) // 3
+    freqs, durs, vels = combined[:n], combined[n:2*n], combined[2*n:]
+    freqs_q = np.array([snap_to_scale(f) for f in freqs])
+    inst = PRESETS["lead"]
+    chunks = []
+    for f, d, v in zip(freqs_q, durs, vels):
+        chunks.append(inst.render(float(f), float(d), velocity=float(v)))
+        chunks.append(np.zeros(int(0.03 * _SR)))
+    return np.concatenate(chunks)
+
+
+def _reverb_instrument_melody_to_audio(combined: np.ndarray) -> np.ndarray:
+    n = len(combined) // 3
+    freqs, durs, vels = combined[:n], combined[n:2*n], combined[2*n:]
+    freqs_q = np.array([snap_to_scale(f) for f in freqs])
+    inst = PRESETS["lead"]
+    chunks = []
+    for f, d, v in zip(freqs_q, durs, vels):
+        chunks.append(inst.render(float(f), float(d), velocity=float(v)))
+        chunks.append(np.zeros(int(0.01 * _SR)))
+    dry = np.concatenate(chunks)
+    return simple_reverb(dry, decay=0.35, delay_ms=45.0, n_taps=6)
+
+
+def _layered_melody_to_audio(combined: np.ndarray) -> np.ndarray:
+    """Melody + pad drone + phrase grouping + dynamic arc + reverb."""
+    n = len(combined) // 3
+    freqs, durs, vels = combined[:n], combined[n:2*n], combined[2*n:]
+    freqs_q = np.array([snap_to_scale(f) for f in freqs])
+
+    # Dynamic arc: bell-shaped velocity envelope for musical phrasing
+    arc = np.sin(np.linspace(0, np.pi, n)) * 0.4 + 0.6
+    vels_shaped = vels * arc
+
+    lead = PRESETS["lead"]
+    chunks = []
+    for i, (f, d, v) in enumerate(zip(freqs_q, durs, vels_shaped)):
+        chunks.append(lead.render(float(f), float(d), velocity=float(v)))
+        gap = 0.08 if (i + 1) % 4 == 0 else 0.01
+        chunks.append(np.zeros(int(gap * _SR)))
+    melody = np.concatenate(chunks)
+
+    # Pad drone on the median frequency (root) + fifth above
+    root_freq = float(snap_to_scale(np.median(freqs_q)))
+    fifth_freq = root_freq * 1.5
+    pad = PRESETS["pad"]
+    total_dur = len(melody) / _SR
+    drone = (0.15 * pad.render(root_freq, total_dur, velocity=0.3)
+             + 0.10 * pad.render(fifth_freq, total_dur, velocity=0.2))
+    min_len = min(len(melody), len(drone))
+    mixed = melody[:min_len] + drone[:min_len]
+
+    return simple_reverb(mixed, decay=0.35, delay_ms=45.0, n_taps=6)
+
+
+def _expressive_melody_reward(combined: np.ndarray) -> float:
+    n = len(combined) // 3
+    return expressive_melody_reward(combined, n_notes=n)
 
 
 def _progression_to_audio(seqs: np.ndarray) -> np.ndarray:
@@ -88,6 +169,46 @@ _ADAPTERS = {
         init_weights="results/rlaif/melody_v2/melody_generator.pt",
         sample_to_audio=_melody_to_audio,
         physics_reward=melody_reward,
+    ),
+    "melody_v3": _Adapter(
+        name="melody_v3",
+        build=lambda: ExpressiveMelodyGenerator(
+            latent_dim=32, hidden=256, n_notes=16),
+        init_weights="results/rlaif/melody_v3/melody_generator.pt",
+        sample_to_audio=_expressive_melody_to_audio,
+        physics_reward=_expressive_melody_reward,
+    ),
+    "melody_v4": _Adapter(
+        name="melody_v4",
+        build=lambda: ExpressiveMelodyGenerator(
+            latent_dim=32, hidden=256, n_notes=16),
+        init_weights="results/rlaif/melody_v3_stepwise3/rlaif_generator_best.pt",
+        sample_to_audio=_quantized_melody_to_audio,
+        physics_reward=_expressive_melody_reward,
+    ),
+    "melody_v5": _Adapter(
+        name="melody_v5",
+        build=lambda: ExpressiveMelodyGenerator(
+            latent_dim=32, hidden=256, n_notes=16),
+        init_weights="results/rlaif/melody_v3_stepwise3/rlaif_generator_best.pt",
+        sample_to_audio=_instrument_melody_to_audio,
+        physics_reward=_expressive_melody_reward,
+    ),
+    "melody_v6": _Adapter(
+        name="melody_v6",
+        build=lambda: ExpressiveMelodyGenerator(
+            latent_dim=32, hidden=256, n_notes=16),
+        init_weights="results/rlaif/melody_v5_qwen/rlaif_generator_best.pt",
+        sample_to_audio=_reverb_instrument_melody_to_audio,
+        physics_reward=_expressive_melody_reward,
+    ),
+    "melody_v7": _Adapter(
+        name="melody_v7",
+        build=lambda: ExpressiveMelodyGenerator(
+            latent_dim=32, hidden=256, n_notes=16),
+        init_weights="results/rlaif/melody_v5_qwen/rlaif_generator_best.pt",
+        sample_to_audio=_layered_melody_to_audio,
+        physics_reward=_expressive_melody_reward,
     ),
     "chord_progression": _Adapter(
         name="chord_progression",
