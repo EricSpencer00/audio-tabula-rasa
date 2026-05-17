@@ -80,21 +80,35 @@ v9 (neutral+retry, 40 steps) | 36/40 | 4.86 | 5.93 | 2.40 | 4.97    | 4.74    | 
     TEXTURE :  2.7/10 (range 2-4, n=9)
     OVERALL :  4.5/10 (range 4-5, n=4)
 
-  Comparison with ExpressiveMelody v9:
-    Autoregressive (random init, 30 steps): 4.78 mean, MELODY 6.7, RHYTHM 6.6
-    ExpressiveMelody (RLAIF'd, 40 steps):   4.86 mean, MELODY 6.7, RHYTHM 6.6
-    -> Autoregressive matches from scratch what ExpressiveMelody needed 40 steps to reach
-    -> Higher architectural capacity (sequential conditioning vs independent Gaussian)
-    -> But higher refusal rate limits gradient signal (63% vs 56%)
+  AutoregressiveMelodyGenerator v2 (warm start from v1 best, 50 steps):
+    Valid steps: 16/50 (32%)
+    Refusal rate: 68% per step (higher than v1's 63%)
+    Mean Qwen: 4.55, Max: 5.80, Min: 2.40
+    First half: 4.88, Second half: 4.23 (declining)
+    Best reward: -0.525
+
+  Autoregressive v2 sub-scores:
+    MELODY  :  6.3/10 (range 3-8, n=15)
+    RHYTHM  :  6.6/10 (range 5-8, n=14)
+    HARMONY :  3.2/10 (range 1-5, n=12)
+    TEXTURE :  2.4/10 (range 1-4, n=11)
+    OVERALL :  4.1/10 (range 3-5, n=7)
+
+  Comparison across all melody generators:
+    ExpressiveMelody v9 (40 RLAIF steps):     4.86 mean, MELODY 6.7, OVERALL 5.1
+    Autoregressive v1 (random init, 30 steps): 4.78 mean, MELODY 6.7, OVERALL 4.5
+    Autoregressive v2 (warm start, 50 steps):  4.55 mean, MELODY 6.3, OVERALL 4.1
+    -> More training DEGRADES autoregressive quality (v1 > v2)
+    -> ~5.0 Qwen mean is a hard ceiling for monophonic output
+    -> High refusal rate (63-68%) limits gradient signal quality
 
 6. PLATEAU ANALYSIS
 ----------------------------------------
-  v9 first half mean: 4.97, second half mean: 4.74 -> no upward trend
-  Architecture ceiling: ExpressiveMelodyGenerator (Gaussian policy)
-  Autoregressive generator shows comparable scores from random init,
-  confirming architecture matters more than training steps.
-  Further improvement likely requires: lower Qwen refusal rate,
-  longer autoregressive training, or multi-voice generation.
+  All generators plateau at ~4.5-5.0 mean Qwen score for monophonic output.
+  More training steps do not help — v2 is worse than v1.
+  The REINFORCE gradient with 68% refusal rate has too much variance.
+  Further improvement requires fundamentally different approaches:
+  multi-voice generation, lower Qwen refusal rates, or non-REINFORCE methods.
 
 7. KEY METRICS SUMMARY
 ----------------------------------------
@@ -116,9 +130,10 @@ v9 (neutral+retry, 40 steps) | 36/40 | 4.86 | 5.93 | 2.40 | 4.97    | 4.74    | 
     Step validity:                 95% (19/20 steps)
 
   Autoregressive Melody RLAIF:
-    Autoregressive v1 (random init): 4.78 mean, 5.80 max
-    Melody quality:                  6.7/10
-    Rhythm quality:                  6.6/10
-    Overall musicality:              4.5/10
-    Qwen refusal rate:               ~63% per step
-    Step validity:                   37% (11/30 steps)
+    v1 (random init, 30 steps):      4.78 mean, 5.80 max
+    v2 (warm start, 50 steps):       4.55 mean, 5.80 max (degraded)
+    Best melody quality:             6.7/10 (v1)
+    Best rhythm quality:             6.6/10 (v1 & v2)
+    Best overall musicality:         4.5/10 (v1)
+    Qwen refusal rate:               63-68% per step
+    Step validity:                   32-37%
