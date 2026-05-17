@@ -41,6 +41,7 @@ from typing import Callable, List, Optional, Tuple
 import numpy as np
 import torch
 
+from src.generator.autoregressive_melody import AutoregressiveMelodyGenerator
 from src.generator.chord_generator import ChordProgressionGenerator
 from src.generator.melody_generator import ExpressiveMelodyGenerator, MelodyGenerator
 from src.render.instruments import PRESETS
@@ -147,6 +148,27 @@ def _expressive_melody_reward(combined: np.ndarray) -> float:
     return expressive_melody_reward(combined, n_notes=n)
 
 
+def _autoregressive_melody_to_audio(freqs: np.ndarray) -> np.ndarray:
+    """Render autoregressive melody with instrument timbres + drone + reverb."""
+    freqs_q = np.array([snap_to_scale(f) for f in freqs])
+    lead = PRESETS["lead"]
+    pad = PRESETS["pad"]
+    chunks = []
+    for i, f in enumerate(freqs_q):
+        dur = 0.30 + 0.10 * np.sin(i * 0.8)
+        vel = 0.6 + 0.2 * np.sin(i * 0.5 + 1.0)
+        chunks.append(lead.render(float(f), dur, velocity=vel))
+        gap = 0.06 if (i + 1) % 4 == 0 else 0.02
+        chunks.append(np.zeros(int(gap * _SR)))
+    melody = np.concatenate(chunks)
+    root_freq = float(snap_to_scale(np.median(freqs_q)))
+    total_dur = len(melody) / _SR
+    drone = 0.15 * pad.render(root_freq, total_dur, velocity=0.25)
+    min_len = min(len(melody), len(drone))
+    mixed = melody[:min_len] + drone[:min_len]
+    return simple_reverb(mixed, decay=0.3, delay_ms=40.0, n_taps=5)
+
+
 def _progression_to_audio(seqs: np.ndarray) -> np.ndarray:
     chunks = []
     for c in seqs:
@@ -239,6 +261,14 @@ _ADAPTERS = {
         init_weights="results/rlaif/melody_v5_qwen/rlaif_generator_best.pt",
         sample_to_audio=_layered_melody_to_audio,
         physics_reward=_expressive_melody_reward,
+    ),
+    "autoregressive": _Adapter(
+        name="autoregressive",
+        build=lambda: AutoregressiveMelodyGenerator(
+            hidden=128, n_notes=16, init_noise_dim=16),
+        init_weights="",
+        sample_to_audio=_autoregressive_melody_to_audio,
+        physics_reward=melody_reward,
     ),
     "chord_progression": _Adapter(
         name="chord_progression",
@@ -345,7 +375,7 @@ def train(generator: str,
 
     gen = adapter.build()
     src_weights = init_from or adapter.init_weights
-    if Path(src_weights).exists():
+    if src_weights and Path(src_weights).is_file():
         state = torch.load(src_weights, map_location="cpu")
         gen.load_state_dict(state)
         print(f"loaded init weights from {src_weights}", flush=True)
