@@ -1,0 +1,17 @@
+[
+  {
+    "path": "results/audio/phase13_3voice_counterpoint.wav",
+    "score": 0.7772998535461242,
+    "raw": "p(YES)=0.7135  p(NO)=0.2044"
+  },
+  {
+    "path": "results/audio/phase13_4voice_counterpoint.wav",
+    "score": 0.6513548548312998,
+    "raw": "p(YES)=0.5773  p(NO)=0.3090"
+  },
+  {
+    "path": "results/audio/phase1_intervals.wav",
+    "score": 0.5621764958843295,
+    "raw": "p(YES)=0.4780  p(NO)=0.3723"
+  }
+]
