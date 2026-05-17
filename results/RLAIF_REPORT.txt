@@ -117,16 +117,40 @@ v9 (neutral+retry, 40 steps) | 36/40 | 4.86 | 5.93 | 2.40 | 4.97    | 4.74    | 
   After fixing refusal rate (82% valid steps), scores are STILL flat (Q1-Q4: 4.40).
   This rules out refusal-rate-noise as a cause of the plateau.
 
-7. PLATEAU ANALYSIS
+7. COUNTERPOINT RLAIF (2-voice)
+----------------------------------------
+  CounterpointGenerator (latent=24, hidden=192, n_voices=2, n_notes=8):
+
+  Counterpoint v1 (short clips, ~3.5s):
+    Valid steps: 12/40 (30%)
+    Mean Qwen: 3.88, Max: 6.20 (NEW RECORD — exceeds monophonic ceiling!)
+    Best reward: 1.763
+    Sub-scores: MELODY 5.4, RHYTHM 5.2, HARMONY 3.2, TEXTURE 2.5, OVERALL 4.4
+
+  Counterpoint v2 (longer clips, 2x repeat + octave doubling):
+    Valid steps: 19/40 (48%)
+    Mean Qwen: 4.32, Max: 5.80
+    First half: 3.99, Second half: 4.62 (UPWARD TREND — first time!)
+    Best reward: 1.521
+    Sub-scores: MELODY 6.1, RHYTHM 5.9, HARMONY 3.7, TEXTURE 2.2, OVERALL 4.7
+
+  Counterpoint vs monophonic:
+    HARMONY improved: 3.7 vs 3.4 (monophonic) — 2 voices noticed
+    OVERALL improved: 4.7 vs 4.6 (monophonic)
+    TEXTURE not improved: 2.2 vs 2.8 — multi-voice mix not richer enough
+    First upward training trend seen: 3.99→4.62 (v2 second half)
+
+8. PLATEAU ANALYSIS
 ----------------------------------------
   True monophonic melody quality ceiling: ~4.4 Qwen mean.
   Confirmed across: 3 architectures, 5 training runs, 30-50 step durations.
   MELODY/RHYTHM at 6.0-6.7/10 — near ceiling for 16-note sequences.
   HARMONY at 3.3-3.9/10 — structurally limited by monophonic output.
   TEXTURE at 2.4-2.8/10 — structurally limited by single instrument.
-  To exceed ~4.5: need multi-voice generation, proper harmony, richer texture.
+  Counterpoint breaks max score ceiling (6.20 vs 5.93 monophonic)
+  and shows first upward training trend, but mean is similar.
 
-7. KEY METRICS SUMMARY
+9. KEY METRICS SUMMARY
 ----------------------------------------
   Melody RLAIF:
     Pre-RLAIF baseline Qwen score: 1.5-2.1 (original prompt, biased)
@@ -154,3 +178,11 @@ v9 (neutral+retry, 40 steps) | 36/40 | 4.86 | 5.93 | 2.40 | 4.97    | 4.74    | 
     True overall musicality:           4.6/10
     Qwen refusal rate (rich audio):    18% per step
     Qwen refusal rate (thin audio):    63-68% per step
+
+  Counterpoint RLAIF (2-voice):
+    v1 (short clips, 40 steps):        3.88 mean, 6.20 max (new record)
+    v2 (longer clips, 40 steps):       4.32 mean, 5.80 max
+    Best HARMONY:                      3.7/10 (v2, up from monophonic 3.4)
+    Best OVERALL:                      4.7/10 (v2)
+    Upward training trend:             3.99→4.62 (v2, first time seen)
+    Qwen refusal rate:                 48-70% per step

@@ -43,9 +43,11 @@ import torch
 
 from src.generator.autoregressive_melody import AutoregressiveMelodyGenerator
 from src.generator.chord_generator import ChordProgressionGenerator
+from src.generator.counterpoint_generator import CounterpointGenerator
 from src.generator.melody_generator import ExpressiveMelodyGenerator, MelodyGenerator
 from src.render.instruments import PRESETS
 from src.render.synth import SAMPLE_RATE as _SR, render_chord, render_melody, simple_reverb, snap_to_scale
+from src.reward.counterpoint import counterpoint_reward
 from src.reward.psychoacoustic import (
     expressive_melody_reward,
     melody_reward,
@@ -179,6 +181,52 @@ def _autoregressive_melody_to_audio(freqs: np.ndarray) -> np.ndarray:
     return simple_reverb(mixed, decay=0.35, delay_ms=45.0, n_taps=6)
 
 
+def _counterpoint_to_audio(voices: np.ndarray) -> np.ndarray:
+    """Render multi-voice counterpoint with repetition + drone + reverb.
+
+    voices shape: (n_voices, n_notes) — frequencies in Hz.
+    Repeats the pattern twice with slight variation to produce ~8s clips
+    (short clips trigger high Qwen refusal rates).
+    """
+    lead = PRESETS["lead"]
+    pad = PRESETS["pad"]
+    n_voices = voices.shape[0]
+    voice_audios = []
+    for v_idx, voice in enumerate(voices):
+        freqs_q = np.array([snap_to_scale(f) for f in voice])
+        chunks = []
+        for rep in range(2):
+            for i, f in enumerate(freqs_q):
+                dur = 0.40 + 0.08 * np.sin(i * 0.7 + v_idx + rep * 0.3)
+                vel = 0.55 + 0.15 * np.sin(i * 0.5 + v_idx * 1.5 + rep)
+                note = lead.render(float(f), dur, velocity=vel)
+                octave = 0.25 * lead.render(float(f) * 0.5, dur,
+                                            velocity=vel * 0.4)
+                mn = min(len(note), len(octave))
+                note[:mn] += octave[:mn]
+                chunks.append(note)
+                gap = 0.05 if (i + 1) % 4 == 0 else 0.01
+                chunks.append(np.zeros(int(gap * _SR)))
+            chunks.append(np.zeros(int(0.08 * _SR)))
+        voice_audios.append(np.concatenate(chunks))
+    max_len = max(len(a) for a in voice_audios)
+    mixed = np.zeros(max_len)
+    for a in voice_audios:
+        mixed[:len(a)] += a / n_voices
+    all_freqs = voices.flatten()
+    root_freq = float(snap_to_scale(np.median(all_freqs)))
+    total_dur = max_len / _SR
+    drone = 0.15 * pad.render(root_freq, total_dur, velocity=0.25)
+    drone5 = 0.08 * pad.render(root_freq * 1.5, total_dur, velocity=0.15)
+    min_len = min(max_len, len(drone), len(drone5))
+    mixed[:min_len] += drone[:min_len] + drone5[:min_len]
+    return simple_reverb(mixed, decay=0.35, delay_ms=45.0, n_taps=6)
+
+
+def _counterpoint_reward_wrapper(voices: np.ndarray) -> float:
+    return counterpoint_reward(voices)
+
+
 def _progression_to_audio(seqs: np.ndarray) -> np.ndarray:
     chunks = []
     for c in seqs:
@@ -295,6 +343,14 @@ _ADAPTERS = {
         init_weights="results/phase2_progressions/progression_generator.pt",
         sample_to_audio=_progression_to_arpeggio,
         physics_reward=progression_reward,
+    ),
+    "counterpoint": _Adapter(
+        name="counterpoint",
+        build=lambda: CounterpointGenerator(
+            latent_dim=24, hidden=192, n_voices=2, n_notes=8),
+        init_weights="results/phase7_counterpoint/counterpoint_generator.pt",
+        sample_to_audio=_counterpoint_to_audio,
+        physics_reward=_counterpoint_reward_wrapper,
     ),
 }
 
