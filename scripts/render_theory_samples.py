@@ -55,7 +55,8 @@ def main():
         from src.generator.melody_generator import _build_scale_table
         from src.reward.theory_judge import SCALES, ROOTS
         parts = args.scale_key.split("_", 1)
-        root_name, scale_name = parts[0].upper(), parts[1] if len(parts) > 1 else "major"
+        root_name = parts[0][0].upper() + parts[0][1:]
+        scale_name = parts[1] if len(parts) > 1 else "major"
         if root_name in ROOTS and scale_name in SCALES:
             gen._scale_table = _build_scale_table(SCALES[scale_name], ROOTS[root_name])
 
