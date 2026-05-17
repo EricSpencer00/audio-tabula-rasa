@@ -380,6 +380,23 @@ class TestPerNoteReward:
         assert pn.min() >= -0.1
         assert pn.max() <= 1.1
 
+    def test_cadence_rewards_tonic_endings(self):
+        # V-I cadence at phrase boundary should reward notes 2,3 (pre-end, end)
+        vi_cadence = np.array([C4, E4, G4, C4])  # phrase: C-E-G-C (G=V, C=I)
+        random_end = np.array([C4, E4, G4, F4 * 2**(6/12)])  # ends on tritone
+        pn_good = theory_reward_per_note(vi_cadence, root_hz=C4, scale=SCALES["major"])
+        pn_bad = theory_reward_per_note(random_end, root_hz=C4, scale=SCALES["major"])
+        # Last note of good cadence should score higher
+        assert pn_good[-1] > pn_bad[-1]
+
+    def test_cadence_rewards_final_note_tonic(self):
+        # Ending on tonic should score higher than ending on non-tonic
+        ends_tonic = np.array([C4, D4, E4, F4, G4, A4, B4, C5])
+        ends_tritone = np.array([C4, D4, E4, F4, G4, A4, B4, G4 * 2**(6/12)])
+        pn_tonic = theory_reward_per_note(ends_tonic, root_hz=C4, scale=SCALES["major"])
+        pn_tritone = theory_reward_per_note(ends_tritone, root_hz=C4, scale=SCALES["major"])
+        assert pn_tonic[-1] > pn_tritone[-1]
+
 
 class TestUtilities:
     def test_freqs_to_semitones(self):
