@@ -63,12 +63,10 @@ class _Adapter:
 
 
 def _melody_to_audio(freqs: np.ndarray) -> np.ndarray:
-    # MelodyGenerator → 8 frequencies. ~3.0 s of audio.
     return render_melody(freqs, note_duration=0.35, gap=0.03)
 
 
 def _progression_to_audio(seqs: np.ndarray) -> np.ndarray:
-    # ChordProgressionGenerator → (4, 3) frequencies. ~3.2 s of audio.
     chunks = []
     for c in seqs:
         chunks.append(render_chord(c, duration=0.7))
@@ -199,9 +197,13 @@ def train(generator: str,
     best_state = None
     t_start = time.time()
 
+    # Running stats for reward normalization — makes REINFORCE work
+    # even when Qwen scores cluster in a narrow range.
+    reward_running_mean = 0.0
+    reward_running_var = 1.0
+    reward_count = 0
+
     for step in range(n_steps):
-        # Resample with grad enabled so we get log_prob through the
-        # policy at the sampled freqs.
         freqs, log_prob = gen.sample(batch_size)
         freqs_np = freqs.detach().cpu().numpy()
 
@@ -209,19 +211,28 @@ def train(generator: str,
             freqs_np, adapter, j,
         )
 
-        # If the LLM failed to emit a score for a sample, fall back to
-        # the batch mean rather than letting NaN poison the gradient.
         valid_mask = ~np.isnan(qwen_scores)
         if valid_mask.any():
             fill = float(np.nanmean(qwen_scores))
         else:
             fill = 5.0
         qwen_filled = np.where(valid_mask, qwen_scores, fill)
-        norm_q = (qwen_filled - 5.0) / 5.0    # ∈ [-0.8, 1.0]
+        norm_q = (qwen_filled - 5.0) / 5.0
         reward_np = qwen_weight * norm_q + physics_weight * phys_rewards
         rewards = torch.tensor(reward_np, dtype=torch.float32)
 
-        adv = rewards - rewards.mean()
+        # Update running stats and normalize advantage using them.
+        for r in reward_np:
+            reward_count += 1
+            delta = r - reward_running_mean
+            reward_running_mean += delta / reward_count
+            reward_running_var += delta * (r - reward_running_mean)
+
+        if reward_count > 2:
+            std = max(np.sqrt(reward_running_var / reward_count), 0.01)
+            adv = (rewards - reward_running_mean) / std
+        else:
+            adv = rewards - rewards.mean()
 
         loss = -(log_prob * adv).mean()
         opt.zero_grad()

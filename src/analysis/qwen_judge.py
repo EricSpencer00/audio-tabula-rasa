@@ -59,24 +59,40 @@ CONCRETE FIXES:
 - <bullet>
 - <bullet>
 
-SCORE: <integer 1-10, where 1 = unlistenable noise, 5 = recognizably
+Rate each dimension separately (integer 1-10):
+MELODY_SCORE: <1-10, how interesting and varied is the pitch contour?>
+RHYTHM_SCORE: <1-10, how natural and varied is the timing?>
+HARMONY_SCORE: <1-10, how pleasant are the intervals and chords?>
+TEXTURE_SCORE: <1-10, how rich is the overall sound?>
+OVERALL_SCORE: <1-10, where 1 = unlistenable noise, 5 = recognizably
 musical but mechanical, 10 = compelling music>
 """
 
 
-SCORE_RE = re.compile(r"SCORE\s*[:=]\s*(\d+)", re.IGNORECASE)
+_SUB_SCORE_RE = re.compile(
+    r"(?:MELODY|RHYTHM|HARMONY|TEXTURE|OVERALL)_SCORE\s*[:=]\s*(\d+)",
+    re.IGNORECASE,
+)
+SCORE_RE = re.compile(r"OVERALL_SCORE\s*[:=]\s*(\d+)", re.IGNORECASE)
+_LEGACY_SCORE_RE = re.compile(r"SCORE\s*[:=]\s*(\d+)", re.IGNORECASE)
 TARGET_SR = 16_000  # Qwen2.5-Omni expects 16 kHz mono
 
 
-def _parse_score(text: str) -> Optional[int]:
+def _parse_score(text: str) -> Optional[float]:
+    subs = _SUB_SCORE_RE.findall(text)
+    if len(subs) >= 3:
+        vals = [max(1, min(10, int(s))) for s in subs]
+        return round(sum(vals) / len(vals), 2)
     m = SCORE_RE.search(text)
+    if not m:
+        m = _LEGACY_SCORE_RE.search(text)
     if not m:
         return None
     try:
         s = int(m.group(1))
     except ValueError:
         return None
-    return max(1, min(10, s))
+    return float(max(1, min(10, s)))
 
 
 def _to_mono_16k(audio: np.ndarray, sample_rate: int) -> np.ndarray:
@@ -110,7 +126,7 @@ def _load_wav(path: Path) -> Tuple[np.ndarray, int]:
 
 @dataclass
 class JudgeResult:
-    score: Optional[int]
+    score: Optional[float]
     critique: str
     raw: str
 
@@ -322,9 +338,9 @@ def judge_directory(audio_dir: Path,
         "device": device,
         "n_clips": len(results),
         "mean_score": (sum(r["score"] for r in results
-                           if isinstance(r["score"], int))
+                           if isinstance(r["score"], (int, float)))
                        / max(1, sum(1 for r in results
-                                    if isinstance(r["score"], int)))),
+                                    if isinstance(r["score"], (int, float))))),
         "elapsed_sec": round(time.time() - t_start, 1),
         "results": results,
     }
