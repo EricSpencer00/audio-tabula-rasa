@@ -212,7 +212,11 @@ def _counterpoint_to_audio(voices: np.ndarray) -> np.ndarray:
     max_len = max(len(a) for a in voice_audios)
     mixed = np.zeros(max_len)
     for a in voice_audios:
-        mixed[:len(a)] += a / n_voices
+        mixed[:len(a)] += a / max(n_voices, 2)
+    # Normalize to consistent RMS regardless of voice count
+    rms = np.sqrt(np.mean(mixed ** 2))
+    if rms > 1e-6:
+        mixed *= 0.06 / rms
     all_freqs = voices.flatten()
     root_freq = float(snap_to_scale(np.median(all_freqs)))
     total_dur = max_len / _SR
@@ -349,6 +353,22 @@ _ADAPTERS = {
         build=lambda: CounterpointGenerator(
             latent_dim=24, hidden=192, n_voices=2, n_notes=8),
         init_weights="results/phase7_counterpoint/counterpoint_generator.pt",
+        sample_to_audio=_counterpoint_to_audio,
+        physics_reward=_counterpoint_reward_wrapper,
+    ),
+    "counterpoint_3v": _Adapter(
+        name="counterpoint_3v",
+        build=lambda: CounterpointGenerator(
+            latent_dim=24, hidden=192, n_voices=3, n_notes=8),
+        init_weights="results/phase13_3voice_counterpoint/counterpoint_generator.pt",
+        sample_to_audio=_counterpoint_to_audio,
+        physics_reward=_counterpoint_reward_wrapper,
+    ),
+    "counterpoint_4v": _Adapter(
+        name="counterpoint_4v",
+        build=lambda: CounterpointGenerator(
+            latent_dim=24, hidden=192, n_voices=4, n_notes=8),
+        init_weights="results/phase13_4voice_counterpoint/counterpoint_generator.pt",
         sample_to_audio=_counterpoint_to_audio,
         physics_reward=_counterpoint_reward_wrapper,
     ),
