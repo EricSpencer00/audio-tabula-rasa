@@ -536,7 +536,8 @@ def train(generator: str,
           out_dir: str = "results/rlaif/run",
           prompt_style: str = "original",
           max_retries: int = 2,
-          freq_std_clamp: Optional[float] = None):
+          freq_std_clamp: Optional[float] = None,
+          scale_snap: float = 0.0):
     if generator not in _ADAPTERS:
         raise ValueError(f"unknown generator {generator!r}")
     adapter = _ADAPTERS[generator]
@@ -549,6 +550,9 @@ def train(generator: str,
     if freq_std_clamp is not None and hasattr(gen, "_freq_std_clamp"):
         gen._freq_std_clamp = freq_std_clamp
         print(f"freq_std_clamp set to {freq_std_clamp}", flush=True)
+    if scale_snap > 0 and hasattr(gen, "scale_snap"):
+        gen.scale_snap = scale_snap
+        print(f"scale_snap set to {scale_snap}", flush=True)
 
     src_weights = init_from or adapter.init_weights
     if src_weights and Path(src_weights).is_file():
@@ -708,6 +712,9 @@ def main():
     p.add_argument("--freq-std-clamp", type=float, default=None,
                    help="max log-std for freq sampling (default: 1.0; "
                         "try -1.5 for theory training)")
+    p.add_argument("--scale-snap", type=float, default=0.0,
+                   help="soft scale quantization strength 0-1 "
+                        "(0=off, 1=hard snap to C major)")
     args = p.parse_args()
 
     train(
@@ -726,6 +733,7 @@ def main():
         prompt_style=args.prompt_style,
         max_retries=args.max_retries,
         freq_std_clamp=args.freq_std_clamp,
+        scale_snap=args.scale_snap,
     )
 
 
