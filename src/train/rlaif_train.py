@@ -233,12 +233,14 @@ class _StubJudge:
                               "critique": "(stub judge)"})()
 
 
-def _build_judge(name: str, qwen_model: str, qwen_device: str):
+def _build_judge(name: str, qwen_model: str, qwen_device: str,
+                 prompt_style: str = "original"):
     if name == "stub":
         return _StubJudge()
     if name == "qwen":
         from src.analysis.qwen_judge import QwenJudge
-        return QwenJudge(model=qwen_model, device=qwen_device)
+        return QwenJudge(model=qwen_model, device=qwen_device,
+                         prompt_style=prompt_style)
     raise ValueError(f"unknown judge {name!r}")
 
 
@@ -294,7 +296,8 @@ def train(generator: str,
           qwen_model: str = "Qwen/Qwen2.5-Omni-7B",
           qwen_device: str = "mps",
           init_from: Optional[str] = None,
-          out_dir: str = "results/rlaif/run"):
+          out_dir: str = "results/rlaif/run",
+          prompt_style: str = "original"):
     if generator not in _ADAPTERS:
         raise ValueError(f"unknown generator {generator!r}")
     adapter = _ADAPTERS[generator]
@@ -315,8 +318,10 @@ def train(generator: str,
     # Low LR — we're fine-tuning, not restarting.
     opt = torch.optim.Adam(gen.parameters(), lr=lr)
 
-    print(f"building judge: {judge} on {qwen_device}", flush=True)
-    j = _build_judge(judge, qwen_model, qwen_device)
+    print(f"building judge: {judge} on {qwen_device} "
+          f"(prompt={prompt_style})", flush=True)
+    j = _build_judge(judge, qwen_model, qwen_device,
+                     prompt_style=prompt_style)
 
     out_path = Path(out_dir)
     out_path.mkdir(parents=True, exist_ok=True)
@@ -405,6 +410,7 @@ def train(generator: str,
                     "judge": judge,
                     "qwen_model": qwen_model,
                     "qwen_device": qwen_device,
+                    "prompt_style": prompt_style,
                     "batch_size": batch_size,
                     "lr": lr,
                     "qwen_weight": qwen_weight,
@@ -436,6 +442,8 @@ def main():
                    help="path to .pt to initialise the policy from "
                         "(default: the phase-2/3 best checkpoint)")
     p.add_argument("--out-dir", default="results/rlaif/run")
+    p.add_argument("--prompt-style", default="original",
+                   choices=["original", "neutral"])
     args = p.parse_args()
 
     train(
@@ -451,6 +459,7 @@ def main():
         qwen_device=args.qwen_device,
         init_from=args.init_from,
         out_dir=args.out_dir,
+        prompt_style=args.prompt_style,
     )
 
 
