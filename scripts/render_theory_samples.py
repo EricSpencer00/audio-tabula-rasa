@@ -53,12 +53,11 @@ def main():
         gen.scale_snap = args.scale_snap
     if args.scale_key and hasattr(gen, "_scale_table"):
         from src.generator.melody_generator import _build_scale_table
-        from src.reward.theory_judge import SCALES
-        _ROOTS = {"C": -9, "D": -7, "E": -5, "F": -4, "G": -2, "A": 0, "B": 2}
+        from src.reward.theory_judge import SCALES, ROOTS
         parts = args.scale_key.split("_", 1)
         root_name, scale_name = parts[0].upper(), parts[1] if len(parts) > 1 else "major"
-        if root_name in _ROOTS and scale_name in SCALES:
-            gen._scale_table = _build_scale_table(SCALES[scale_name], _ROOTS[root_name])
+        if root_name in ROOTS and scale_name in SCALES:
+            gen._scale_table = _build_scale_table(SCALES[scale_name], ROOTS[root_name])
 
     state = torch.load(args.checkpoint, map_location="cpu")
     gen.load_state_dict(state)

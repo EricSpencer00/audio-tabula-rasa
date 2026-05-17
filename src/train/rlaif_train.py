@@ -557,8 +557,7 @@ def train(generator: str,
         print(f"scale_snap set to {scale_snap}", flush=True)
     if scale_key and hasattr(gen, "_scale_table"):
         from src.generator.melody_generator import _build_scale_table
-        _ROOTS = {"C": -9, "D": -7, "E": -5, "F": -4, "G": -2, "A": 0, "B": 2}
-        from src.reward.theory_judge import SCALES as _SCALES
+        from src.reward.theory_judge import SCALES as _SCALES, ROOTS as _ROOTS
         parts = scale_key.split("_", 1)
         root_name = parts[0].upper()
         scale_name = parts[1] if len(parts) > 1 else "major"

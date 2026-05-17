@@ -24,6 +24,8 @@ SCALES = {
     "blues":            (0, 3, 5, 6, 7, 10),
 }
 
+ROOTS = {"C": -9, "D": -7, "E": -5, "F": -4, "G": -2, "A": 0, "B": 2}
+
 INTERVAL_CONSONANCE = {
     0: 1.0,    # unison
     1: 0.1,    # minor 2nd
