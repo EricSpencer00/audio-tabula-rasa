@@ -397,6 +397,13 @@ class TestPerNoteReward:
         pn_tritone = theory_reward_per_note(ends_tritone, root_hz=C4, scale=SCALES["major"])
         assert pn_tonic[-1] > pn_tritone[-1]
 
+    def test_tension_signal_present(self):
+        # With 8+ notes, tension per-note should contribute nonzero signal
+        pn = theory_reward_per_note(C_MAJOR_SCALE)
+        assert pn.shape == (len(C_MAJOR_SCALE),)
+        assert np.all(np.isfinite(pn))
+        assert pn.max() > 0.0
+
 
 class TestUtilities:
     def test_freqs_to_semitones(self):

@@ -670,6 +670,21 @@ def theory_reward_per_note(freqs: np.ndarray,
                 dynamics_per_note = 1.0 - np.abs(v_norm - ideal_arch)
                 dynamics_per_note = np.clip(dynamics_per_note, 0.0, 1.0)
 
+    # --- Per-note tension-resolution ---
+    tension_per_note = np.zeros(n)
+    if n >= 4:
+        split = max(2, int(n * 0.7))
+        for i in range(len(raw_intervals)):
+            ic = int(round(raw_intervals[i])) % 12
+            cons = INTERVAL_CONSONANCE.get(ic, 0.3)
+            if i < split:
+                tension_per_note[i] += (1.0 - cons) * 0.5
+                tension_per_note[i + 1] += (1.0 - cons) * 0.5
+            else:
+                tension_per_note[i] += cons * 0.5
+                tension_per_note[i + 1] += cons * 0.5
+        tension_per_note = np.clip(tension_per_note, 0.0, 1.0)
+
     # --- Per-note cadence (phrase boundary resolution) ---
     cadence_per_note = np.zeros(n)
     phrase_len = 4
@@ -694,13 +709,14 @@ def theory_reward_per_note(freqs: np.ndarray,
                                float(np.exp(-tonic_dist * 1.5)))
 
     # Combine: key adherence dominates, all others contribute
-    w_total = 5.0 + 2.0 + 1.5 + 1.0 + 0.5 + 1.0
+    w_total = 5.0 + 2.0 + 1.5 + 1.0 + 0.5 + 1.0 + 0.8
     per_note = (5.0 * key_per_note
                 + 2.0 * interval_per_note
                 + 1.5 * step_per_note
                 + 1.0 * rhythm_per_note
                 + 0.5 * dynamics_per_note
-                + 1.0 * cadence_per_note)
+                + 1.0 * cadence_per_note
+                + 0.8 * tension_per_note)
     per_note /= w_total
 
     return per_note.astype(np.float32)
