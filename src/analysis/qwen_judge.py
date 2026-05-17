@@ -312,12 +312,18 @@ class QwenJudge:
     # ------------------------------------------------------------------
 
     def score_audio(self, audio: np.ndarray,
-                    sample_rate: int = 44_100) -> JudgeResult:
+                    sample_rate: int = 44_100,
+                    max_retries: int = 2) -> JudgeResult:
         """Score a mono float audio array in [-1, 1]."""
         a16 = _to_mono_16k(audio, sample_rate)
-        raw = self._generate(a16)
-        return JudgeResult(score=_parse_score(raw),
-                           critique=raw, raw=raw)
+        for attempt in range(1 + max_retries):
+            raw = self._generate(a16)
+            score = _parse_score(raw)
+            if score is not None:
+                return JudgeResult(score=score, critique=raw, raw=raw)
+            if "can't listen" not in raw.lower():
+                return JudgeResult(score=score, critique=raw, raw=raw)
+        return JudgeResult(score=score, critique=raw, raw=raw)
 
     def score_file(self, path: str | Path) -> JudgeResult:
         audio, sr = _load_wav(Path(path))
