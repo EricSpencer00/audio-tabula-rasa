@@ -431,6 +431,7 @@ class _TheoryJudge:
             freqs_flat = data.flatten()
             score = theory_reward(freqs_flat, voices=data)
             breakdown = theory_reward_breakdown(freqs_flat, voices=data)
+            per_note = theory_reward_per_note(freqs_flat)
         elif output_format == "expressive":
             n_notes = len(data) // 3
             f = data[:n_notes]
@@ -634,7 +635,8 @@ def train(generator: str,
         # Per-note credit assignment: use per-note log-probs * per-note
         # advantages when available (theory judge + expressive generator).
         per_note_lp = getattr(gen, "_last_per_note_lp", None)
-        if per_note_rewards is not None and per_note_lp is not None:
+        if (per_note_rewards is not None and per_note_lp is not None
+                and per_note_rewards.shape[-1] == per_note_lp.shape[-1]):
             pn_adv = torch.tensor(per_note_rewards, dtype=torch.float32)
             pn_mean = pn_adv.mean()
             pn_std = max(float(pn_adv.std()), 0.01)
