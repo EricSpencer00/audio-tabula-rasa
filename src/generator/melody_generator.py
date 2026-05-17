@@ -74,7 +74,7 @@ class ExpressiveMelodyGenerator(nn.Module):
     VEL_MIN, VEL_MAX = 0.3, 1.0
 
     def __init__(self, latent_dim: int = 32, hidden: int = 256,
-                 n_notes: int = 16):
+                 n_notes: int = 16, freq_std_clamp: float = 1.0):
         super().__init__()
         self.latent_dim = latent_dim
         self.n_notes = n_notes
@@ -82,6 +82,7 @@ class ExpressiveMelodyGenerator(nn.Module):
         self._log_hi = math.log(self.F_MAX)
         self._log_dur_lo = math.log(self.DUR_MIN)
         self._log_dur_hi = math.log(self.DUR_MAX)
+        self._freq_std_clamp = freq_std_clamp
 
         self.backbone = nn.Sequential(
             nn.Linear(latent_dim, hidden),
@@ -99,7 +100,7 @@ class ExpressiveMelodyGenerator(nn.Module):
         fp = self.freq_head(h)
         freq_mean = (torch.sigmoid(fp[:, :self.n_notes])
                      * (self._log_hi - self._log_lo) + self._log_lo)
-        freq_std = torch.exp(fp[:, self.n_notes:].clamp(-4.0, 1.0))
+        freq_std = torch.exp(fp[:, self.n_notes:].clamp(-4.0, self._freq_std_clamp))
 
         dp = self.dur_head(h)
         dur_mean = (torch.sigmoid(dp[:, :self.n_notes])
@@ -121,10 +122,13 @@ class ExpressiveMelodyGenerator(nn.Module):
         dd = torch.distributions.Normal(dur_mean, dur_std)
         log_durs = dd.rsample().clamp(self._log_dur_lo, self._log_dur_hi)
 
-        log_prob = (fd.log_prob(log_freqs).sum(-1)
-                    + dd.log_prob(log_durs).sum(-1))
+        freq_lp = fd.log_prob(log_freqs)   # (B, N)
+        dur_lp = dd.log_prob(log_durs)     # (B, N)
+        log_prob = freq_lp.sum(-1) + dur_lp.sum(-1)  # (B,)
 
         combined = torch.cat([torch.exp(log_freqs),
                               torch.exp(log_durs),
                               vel], dim=-1)
+        # Stash per-note log-probs for optional per-note credit assignment
+        self._last_per_note_lp = freq_lp + dur_lp  # (B, N)
         return combined, log_prob

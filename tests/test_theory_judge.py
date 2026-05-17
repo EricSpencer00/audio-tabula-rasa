@@ -22,6 +22,7 @@ from src.reward.theory_judge import (
     tension_resolution,
     theory_reward,
     theory_reward_breakdown,
+    theory_reward_per_note,
     voice_leading,
     _detect_key,
     _freqs_to_pitch_classes,
@@ -349,6 +350,35 @@ class TestDetectKey:
         root_hz, name, degrees = _detect_key(pent)
         # Should match either pentatonic or major
         assert name in ("pentatonic_major", "major")
+
+
+class TestPerNoteReward:
+    def test_shape_matches_input(self):
+        pn = theory_reward_per_note(C_MAJOR_SCALE)
+        assert pn.shape == (len(C_MAJOR_SCALE),)
+
+    def test_in_key_notes_score_higher(self):
+        in_key = theory_reward_per_note(C_MAJOR_SCALE)
+        out_key = theory_reward_per_note(CHROMATIC_MESS)
+        assert in_key.mean() > out_key.mean()
+
+    def test_with_durations_and_velocities(self):
+        n = len(C_MAJOR_SCALE)
+        durs = np.full(n, 0.25)
+        vels = np.linspace(0.4, 0.9, n)
+        pn = theory_reward_per_note(C_MAJOR_SCALE, durations=durs, velocities=vels)
+        assert pn.shape == (n,)
+        assert np.all(np.isfinite(pn))
+
+    def test_single_note_returns_zeros(self):
+        pn = theory_reward_per_note(np.array([C4]))
+        assert len(pn) == 1
+        assert pn[0] == 0.0
+
+    def test_values_in_reasonable_range(self):
+        pn = theory_reward_per_note(C_MAJOR_SCALE)
+        assert pn.min() >= -0.1
+        assert pn.max() <= 1.1
 
 
 class TestUtilities:

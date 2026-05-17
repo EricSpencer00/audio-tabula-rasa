@@ -53,7 +53,9 @@ from src.reward.psychoacoustic import (
     melody_reward,
     progression_reward,
 )
-from src.reward.theory_judge import theory_reward, theory_reward_breakdown
+from src.reward.theory_judge import (
+    theory_reward, theory_reward_breakdown, theory_reward_per_note,
+)
 
 
 SAMPLE_RATE = 44_100   # synth.SAMPLE_RATE
@@ -424,26 +426,27 @@ class _TheoryJudge:
 
     def score(self, data: np.ndarray, output_format: str = "freqs") -> "type[object]":
         """Score raw generator output based on the adapter's output_format."""
+        per_note = None
         if output_format == "voices":
-            # Multi-voice counterpoint: shape (V, N)
             freqs_flat = data.flatten()
             score = theory_reward(freqs_flat, voices=data)
             breakdown = theory_reward_breakdown(freqs_flat, voices=data)
         elif output_format == "expressive":
-            # Expressive melody: [freqs | durations | velocities]
             n_notes = len(data) // 3
             f = data[:n_notes]
             d = data[n_notes:2 * n_notes]
             v = data[2 * n_notes:]
             score = theory_reward(f, durations=d, velocities=v)
             breakdown = theory_reward_breakdown(f, durations=d, velocities=v)
+            per_note = theory_reward_per_note(f, durations=d, velocities=v)
         else:
-            # Plain frequency array
             score = theory_reward(data)
             breakdown = theory_reward_breakdown(data)
+            per_note = theory_reward_per_note(data)
 
         critique = " | ".join(f"{k}={val:.2f}" for k, val in breakdown.items())
-        return type("R", (), {"score": score, "critique": critique})()
+        return type("R", (), {"score": score, "critique": critique,
+                              "per_note": per_note})()
 
 
 def _build_judge(name: str, qwen_model: str, qwen_device: str,
@@ -483,20 +486,24 @@ def _score_batch(audios: List[np.ndarray], adapter: _Adapter,
 
 def _render_and_score(freqs_np: np.ndarray, adapter: _Adapter,
                       judge, max_retries: int = 2,
-                      ) -> Tuple[np.ndarray, np.ndarray, List[str]]:
+                      ) -> Tuple[np.ndarray, np.ndarray, List[str],
+                                 Optional[np.ndarray]]:
     n = len(freqs_np)
     phys_rewards = np.zeros(n, dtype=np.float32)
     critiques: List[str] = []
 
     if getattr(judge, "is_theory", False):
-        # Theory judge: score raw freqs, no audio rendering needed.
         theory_scores = np.zeros(n, dtype=np.float32)
+        per_note_list = []
         for i, f in enumerate(freqs_np):
             r = judge.score(f, output_format=adapter.output_format)
             theory_scores[i] = float(r.score)
             critiques.append(r.critique[:800])
             phys_rewards[i] = float(adapter.physics_reward(f))
-        return theory_scores, phys_rewards, critiques
+            if r.per_note is not None:
+                per_note_list.append(r.per_note)
+        per_note_all = np.stack(per_note_list) if per_note_list else None
+        return theory_scores, phys_rewards, critiques, per_note_all
 
     # Qwen/stub judge: render audio first, then score.
     audios = [adapter.sample_to_audio(f).astype(np.float32) for f in freqs_np]
@@ -511,7 +518,7 @@ def _render_and_score(freqs_np: np.ndarray, adapter: _Adapter,
         except Exception as e:    # noqa: BLE001
             critiques.append(f"(judge failed: {e!r})")
         phys_rewards[i] = float(adapter.physics_reward(f))
-    return qwen_scores, phys_rewards, critiques
+    return qwen_scores, phys_rewards, critiques, None
 
 
 def train(generator: str,
@@ -528,7 +535,8 @@ def train(generator: str,
           init_from: Optional[str] = None,
           out_dir: str = "results/rlaif/run",
           prompt_style: str = "original",
-          max_retries: int = 2):
+          max_retries: int = 2,
+          freq_std_clamp: Optional[float] = None):
     if generator not in _ADAPTERS:
         raise ValueError(f"unknown generator {generator!r}")
     adapter = _ADAPTERS[generator]
@@ -537,6 +545,11 @@ def train(generator: str,
     np.random.seed(seed)
 
     gen = adapter.build()
+
+    if freq_std_clamp is not None and hasattr(gen, "_freq_std_clamp"):
+        gen._freq_std_clamp = freq_std_clamp
+        print(f"freq_std_clamp set to {freq_std_clamp}", flush=True)
+
     src_weights = init_from or adapter.init_weights
     if src_weights and Path(src_weights).is_file():
         state = torch.load(src_weights, map_location="cpu")
@@ -573,15 +586,12 @@ def train(generator: str,
         freqs, log_prob = gen.sample(batch_size)
         freqs_np = freqs.detach().cpu().numpy()
 
-        judge_scores, phys_rewards, critiques = _render_and_score(
-            freqs_np, adapter, j, max_retries=max_retries,
-        )
+        judge_scores, phys_rewards, critiques, per_note_rewards = \
+            _render_and_score(freqs_np, adapter, j, max_retries=max_retries)
 
         if is_theory:
-            # Theory judge: scores are direct reward (no NaN, no 1-10 scale)
             reward_np = judge_scores + physics_weight * phys_rewards
         else:
-            # Qwen/stub: normalize 1-10 scale, handle NaN refusals
             valid_mask = ~np.isnan(judge_scores)
             if valid_mask.any():
                 fill = float(np.nanmean(judge_scores))
@@ -593,7 +603,6 @@ def train(generator: str,
 
         rewards = torch.tensor(reward_np, dtype=torch.float32)
 
-        # Update running stats and normalize advantage using them.
         for r in reward_np:
             reward_count += 1
             delta = r - reward_running_mean
@@ -606,7 +615,19 @@ def train(generator: str,
         else:
             adv = rewards - rewards.mean()
 
-        loss = -(log_prob * adv).mean()
+        # Per-note credit assignment: use per-note log-probs * per-note
+        # advantages when available (theory judge + expressive generator).
+        per_note_lp = getattr(gen, "_last_per_note_lp", None)
+        if per_note_rewards is not None and per_note_lp is not None:
+            pn_adv = torch.tensor(per_note_rewards, dtype=torch.float32)
+            pn_mean = pn_adv.mean()
+            pn_std = max(float(pn_adv.std()), 0.01)
+            pn_adv = (pn_adv - pn_mean) / pn_std
+            per_note_loss = -(per_note_lp * pn_adv).sum(-1).mean()
+            scalar_loss = -(log_prob * adv).mean()
+            loss = 0.3 * scalar_loss + 0.7 * per_note_loss
+        else:
+            loss = -(log_prob * adv).mean()
         opt.zero_grad()
         loss.backward()
         torch.nn.utils.clip_grad_norm_(gen.parameters(), max_norm=1.0)
@@ -684,6 +705,9 @@ def main():
                    choices=["original", "neutral"])
     p.add_argument("--max-retries", type=int, default=2,
                    help="Qwen retries per sample on refusal (default 2)")
+    p.add_argument("--freq-std-clamp", type=float, default=None,
+                   help="max log-std for freq sampling (default: 1.0; "
+                        "try -1.5 for theory training)")
     args = p.parse_args()
 
     train(
@@ -701,6 +725,7 @@ def main():
         out_dir=args.out_dir,
         prompt_style=args.prompt_style,
         max_retries=args.max_retries,
+        freq_std_clamp=args.freq_std_clamp,
     )
 
 

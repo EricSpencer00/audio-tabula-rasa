@@ -593,6 +593,95 @@ def theory_reward(freqs: np.ndarray,
     return float(score)
 
 
+def theory_reward_per_note(freqs: np.ndarray,
+                           durations: Optional[np.ndarray] = None,
+                           velocities: Optional[np.ndarray] = None,
+                           root_hz: Optional[float] = None,
+                           scale: Optional[Tuple[int, ...]] = None,
+                           ) -> np.ndarray:
+    """Per-note reward for fine-grained REINFORCE credit assignment.
+
+    Returns shape (N,) combining local pitch, rhythm, and dynamics signals.
+    Key adherence is heavily weighted since it's the primary quality driver.
+    """
+    f = np.asarray(freqs, dtype=np.float64)
+    n = len(f)
+    if n < 2:
+        return np.zeros(n, dtype=np.float64)
+
+    if root_hz is None or scale is None:
+        root_hz, _, scale = _detect_key(f)
+
+    # --- Per-note key adherence (dominant signal) ---
+    semitones = _freqs_to_semitones(f, ref_hz=root_hz)
+    pcs = semitones % 12.0
+    deg_arr = np.array(scale, dtype=np.float64)
+    key_per_note = np.array([
+        float(np.exp(-min(abs(pc - d) if abs(pc - d) <= 6 else 12 - abs(pc - d)
+                         for d in deg_arr) * 3.0))
+        for pc in pcs
+    ])
+
+    # --- Per-note interval consonance ---
+    all_semitones = _freqs_to_semitones(f)
+    raw_intervals = np.abs(np.diff(all_semitones))
+    interval_classes = np.round(raw_intervals) % 12
+    consonance = np.array([
+        INTERVAL_CONSONANCE.get(int(ic), 0.3)
+        for ic in interval_classes
+    ])
+    interval_per_note = np.zeros(n)
+    interval_per_note[:-1] += consonance * 0.5
+    interval_per_note[1:] += consonance * 0.5
+
+    # --- Per-note stepwise motion ---
+    step_per_note = np.zeros(n)
+    for i in range(len(raw_intervals)):
+        if raw_intervals[i] <= 2.5:
+            step_per_note[i] += 0.5
+            step_per_note[i + 1] += 0.5
+        elif raw_intervals[i] > 7.0:
+            step_per_note[i] -= 0.15
+            step_per_note[i + 1] -= 0.15
+    step_per_note = np.clip(step_per_note, 0.0, 1.0)
+
+    # --- Per-note rhythm (grid alignment) ---
+    rhythm_per_note = np.zeros(n)
+    if durations is not None:
+        d = np.asarray(durations, dtype=np.float64)
+        if len(d) == n:
+            median_d = float(np.median(d))
+            if median_d > 1e-6:
+                ratios = d / median_d
+                grid_targets = np.array([0.5, 0.75, 1.0, 1.5, 2.0])
+                for i_n in range(n):
+                    dist = min(abs(ratios[i_n] - g) for g in grid_targets)
+                    rhythm_per_note[i_n] = float(np.exp(-dist * 4.0))
+
+    # --- Per-note dynamics (arch shape) ---
+    dynamics_per_note = np.zeros(n)
+    if velocities is not None:
+        v = np.asarray(velocities, dtype=np.float64)
+        if len(v) == n:
+            ideal_arch = np.sin(np.linspace(0, np.pi, n))
+            v_range = v.max() - v.min()
+            if v_range > 1e-6:
+                v_norm = (v - v.min()) / v_range
+                dynamics_per_note = 1.0 - np.abs(v_norm - ideal_arch)
+                dynamics_per_note = np.clip(dynamics_per_note, 0.0, 1.0)
+
+    # Combine: key adherence dominates, all others contribute
+    w_total = 5.0 + 2.0 + 1.5 + 1.0 + 0.5
+    per_note = (5.0 * key_per_note
+                + 2.0 * interval_per_note
+                + 1.5 * step_per_note
+                + 1.0 * rhythm_per_note
+                + 0.5 * dynamics_per_note)
+    per_note /= w_total
+
+    return per_note.astype(np.float32)
+
+
 def theory_reward_breakdown(freqs: np.ndarray,
                             durations: Optional[np.ndarray] = None,
                             velocities: Optional[np.ndarray] = None,
