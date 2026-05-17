@@ -14,26 +14,37 @@ import torch
 import torch.nn as nn
 
 
-# C major scale tones as semitones relative to A4 = 440 Hz
-# Covers 110 Hz (A2) to 880 Hz (A5): 3 octaves
-_SCALE_SEMITONES_C_MAJOR = []
-for octave_offset in range(-24, 25):  # wide range
-    for degree in (0, 2, 4, 5, 7, 9, 11):  # C major intervals from C
-        st = degree + octave_offset * 12 - 9  # offset from A4
-        hz = 440.0 * 2.0 ** (st / 12.0)
-        if 100.0 <= hz <= 900.0:
-            _SCALE_SEMITONES_C_MAJOR.append(math.log(hz))
-_SCALE_LOG_HZ = torch.tensor(sorted(set(_SCALE_SEMITONES_C_MAJOR)),
-                              dtype=torch.float32)
+def _build_scale_table(degrees: tuple = (0, 2, 4, 5, 7, 9, 11),
+                       root_semitone: int = -9,
+                       lo: float = 100.0, hi: float = 900.0) -> torch.Tensor:
+    """Build a lookup table of log-Hz scale tones across the usable range.
+
+    Args:
+        degrees: semitone offsets within one octave (default: C major)
+        root_semitone: semitones from A4 to the root (C=-9, D=-7, etc.)
+        lo, hi: frequency bounds in Hz
+    """
+    tones = []
+    for octave_offset in range(-3, 4):
+        for d in degrees:
+            st = d + octave_offset * 12 + root_semitone
+            hz = 440.0 * 2.0 ** (st / 12.0)
+            if lo <= hz <= hi:
+                tones.append(math.log(hz))
+    return torch.tensor(sorted(set(tones)), dtype=torch.float32)
 
 
-def _snap_to_scale(log_freqs: torch.Tensor) -> torch.Tensor:
-    """Snap log-frequencies to nearest C major scale tone (hard quantize)."""
-    scale = _SCALE_LOG_HZ.to(log_freqs.device)  # (S,)
-    # distances: (B, N, S)
+_SCALE_LOG_HZ = _build_scale_table()  # default: C major
+
+
+def _snap_to_scale(log_freqs: torch.Tensor,
+                   scale_table: torch.Tensor = None) -> torch.Tensor:
+    """Snap log-frequencies to nearest scale tone (hard quantize)."""
+    scale = (scale_table if scale_table is not None
+             else _SCALE_LOG_HZ).to(log_freqs.device)
     dists = (log_freqs.unsqueeze(-1) - scale.unsqueeze(0).unsqueeze(0)).abs()
-    nearest_idx = dists.argmin(dim=-1)  # (B, N)
-    return scale[nearest_idx]  # (B, N)
+    nearest_idx = dists.argmin(dim=-1)
+    return scale[nearest_idx]
 
 
 class MelodyGenerator(nn.Module):
@@ -98,7 +109,9 @@ class ExpressiveMelodyGenerator(nn.Module):
 
     def __init__(self, latent_dim: int = 32, hidden: int = 256,
                  n_notes: int = 16, freq_std_clamp: float = 1.0,
-                 scale_snap: float = 0.0):
+                 scale_snap: float = 0.0,
+                 scale_degrees: tuple = (0, 2, 4, 5, 7, 9, 11),
+                 scale_root: int = -9):
         super().__init__()
         self.latent_dim = latent_dim
         self.n_notes = n_notes
@@ -108,6 +121,7 @@ class ExpressiveMelodyGenerator(nn.Module):
         self._log_dur_hi = math.log(self.DUR_MAX)
         self._freq_std_clamp = freq_std_clamp
         self.scale_snap = scale_snap
+        self._scale_table = _build_scale_table(scale_degrees, scale_root)
 
         self.backbone = nn.Sequential(
             nn.Linear(latent_dim, hidden),
@@ -145,7 +159,7 @@ class ExpressiveMelodyGenerator(nn.Module):
         log_freqs = fd.rsample().clamp(self._log_lo, self._log_hi)
 
         if self.scale_snap > 0:
-            snapped = _snap_to_scale(log_freqs)
+            snapped = _snap_to_scale(log_freqs, self._scale_table)
             log_freqs = (1 - self.scale_snap) * log_freqs + self.scale_snap * snapped
 
         dd = torch.distributions.Normal(dur_mean, dur_std)

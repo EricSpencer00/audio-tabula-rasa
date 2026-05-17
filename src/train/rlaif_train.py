@@ -537,7 +537,8 @@ def train(generator: str,
           prompt_style: str = "original",
           max_retries: int = 2,
           freq_std_clamp: Optional[float] = None,
-          scale_snap: float = 0.0):
+          scale_snap: float = 0.0,
+          scale_key: Optional[str] = None):
     if generator not in _ADAPTERS:
         raise ValueError(f"unknown generator {generator!r}")
     adapter = _ADAPTERS[generator]
@@ -553,6 +554,17 @@ def train(generator: str,
     if scale_snap > 0 and hasattr(gen, "scale_snap"):
         gen.scale_snap = scale_snap
         print(f"scale_snap set to {scale_snap}", flush=True)
+    if scale_key and hasattr(gen, "_scale_table"):
+        from src.generator.melody_generator import _build_scale_table
+        _ROOTS = {"C": -9, "D": -7, "E": -5, "F": -4, "G": -2, "A": 0, "B": 2}
+        from src.reward.theory_judge import SCALES as _SCALES
+        parts = scale_key.split("_", 1)
+        root_name = parts[0].upper()
+        scale_name = parts[1] if len(parts) > 1 else "major"
+        if root_name in _ROOTS and scale_name in _SCALES:
+            gen._scale_table = _build_scale_table(
+                _SCALES[scale_name], _ROOTS[root_name])
+            print(f"scale set to {root_name} {scale_name}", flush=True)
 
     src_weights = init_from or adapter.init_weights
     if src_weights and Path(src_weights).is_file():
@@ -714,7 +726,10 @@ def main():
                         "try -1.5 for theory training)")
     p.add_argument("--scale-snap", type=float, default=0.0,
                    help="soft scale quantization strength 0-1 "
-                        "(0=off, 1=hard snap to C major)")
+                        "(0=off, 1=hard snap)")
+    p.add_argument("--scale-key", type=str, default=None,
+                   help="scale for snap, e.g. 'C_major', 'A_natural_minor', "
+                        "'D_pentatonic_major' (default: C major)")
     args = p.parse_args()
 
     train(
@@ -734,6 +749,7 @@ def main():
         max_retries=args.max_retries,
         freq_std_clamp=args.freq_std_clamp,
         scale_snap=args.scale_snap,
+        scale_key=args.scale_key,
     )
 
 

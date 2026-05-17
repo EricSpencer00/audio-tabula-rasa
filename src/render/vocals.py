@@ -30,12 +30,15 @@ def _load_bark():
     global _bark_model
     if _bark_model is not None:
         return _bark_model
-    from bark import SAMPLE_RATE as BARK_SR
-    from bark.generation import (
-        load_codec_model,
-        preload_models,
-    )
-    preload_models()
+    import torch
+    _orig_load = torch.load
+    torch.load = lambda *a, **kw: _orig_load(
+        *a, **{**kw, "weights_only": False})
+    try:
+        from bark.generation import preload_models
+        preload_models()
+    finally:
+        torch.load = _orig_load
     _bark_model = True
     return _bark_model
 
