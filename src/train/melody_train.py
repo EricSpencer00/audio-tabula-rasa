@@ -52,12 +52,13 @@ def train_melodies(n_steps=3000, batch_size=64, lr=3e-4, log_every=50,
                    seed=0, n_notes=8,
                    tonal_weight=5.0, contour_weight=0.05,
                    diversity_weight=1.5, min_unique=4,
+                   latent_dim=16, hidden=128,
                    ent_start=0.01, ent_end=-0.02,
                    out_dir="results/phase3_melodies"):
     torch.manual_seed(seed)
     np.random.seed(seed)
 
-    gen = MelodyGenerator(latent_dim=16, hidden=128, n_notes=n_notes)
+    gen = MelodyGenerator(latent_dim=latent_dim, hidden=hidden, n_notes=n_notes)
     opt = torch.optim.Adam(gen.parameters(), lr=lr)
 
     out_path = Path(out_dir)
@@ -144,6 +145,8 @@ if __name__ == "__main__":
     parser.add_argument("--lr", type=float, default=3e-4)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--n-notes", type=int, default=8)
+    parser.add_argument("--latent-dim", type=int, default=16)
+    parser.add_argument("--hidden", type=int, default=128)
     parser.add_argument("--tonal-weight", type=float, default=5.0)
     parser.add_argument("--contour-weight", type=float, default=0.05)
     parser.add_argument("--diversity-weight", type=float, default=1.5)
@@ -156,6 +159,8 @@ if __name__ == "__main__":
         lr=args.lr,
         seed=args.seed,
         n_notes=args.n_notes,
+        latent_dim=args.latent_dim,
+        hidden=args.hidden,
         tonal_weight=args.tonal_weight,
         contour_weight=args.contour_weight,
         diversity_weight=args.diversity_weight,

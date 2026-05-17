@@ -82,6 +82,13 @@ _ADAPTERS = {
         sample_to_audio=_melody_to_audio,
         physics_reward=melody_reward,
     ),
+    "melody_v2": _Adapter(
+        name="melody_v2",
+        build=lambda: MelodyGenerator(latent_dim=32, hidden=256, n_notes=16),
+        init_weights="results/rlaif/melody_v2/melody_generator.pt",
+        sample_to_audio=_melody_to_audio,
+        physics_reward=melody_reward,
+    ),
     "chord_progression": _Adapter(
         name="chord_progression",
         build=lambda: ChordProgressionGenerator(
