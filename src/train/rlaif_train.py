@@ -53,6 +53,7 @@ from src.reward.psychoacoustic import (
     melody_reward,
     progression_reward,
 )
+from src.reward.theory_judge import theory_reward, theory_reward_breakdown
 
 
 SAMPLE_RATE = 44_100   # synth.SAMPLE_RATE
@@ -68,6 +69,7 @@ class _Adapter:
     init_weights: str
     sample_to_audio: Callable[[np.ndarray], np.ndarray]
     physics_reward: Callable[[np.ndarray], float]
+    output_format: str = "freqs"  # "freqs", "expressive", "voices"
 
 
 def _melody_to_audio(freqs: np.ndarray) -> np.ndarray:
@@ -231,6 +233,17 @@ def _counterpoint_reward_wrapper(voices: np.ndarray) -> float:
     return counterpoint_reward(voices)
 
 
+def _vocal_melody_to_audio(combined: np.ndarray) -> np.ndarray:
+    """Render expressive melody with TTS vocals mixed in."""
+    from src.render.vocals import render_melody_with_vocals
+    n = len(combined) // 3
+    freqs, durs, vels = combined[:n], combined[n:2*n], combined[2*n:]
+    return render_melody_with_vocals(
+        freqs, durs, vels,
+        instrumental_renderer=_layered_melody_to_audio,
+    )
+
+
 def _progression_to_audio(seqs: np.ndarray) -> np.ndarray:
     chunks = []
     for c in seqs:
@@ -291,6 +304,7 @@ _ADAPTERS = {
         init_weights="results/rlaif/melody_v3/melody_generator.pt",
         sample_to_audio=_expressive_melody_to_audio,
         physics_reward=_expressive_melody_reward,
+        output_format="expressive",
     ),
     "melody_v4": _Adapter(
         name="melody_v4",
@@ -299,6 +313,7 @@ _ADAPTERS = {
         init_weights="results/rlaif/melody_v3_stepwise3/rlaif_generator_best.pt",
         sample_to_audio=_quantized_melody_to_audio,
         physics_reward=_expressive_melody_reward,
+        output_format="expressive",
     ),
     "melody_v5": _Adapter(
         name="melody_v5",
@@ -307,6 +322,7 @@ _ADAPTERS = {
         init_weights="results/rlaif/melody_v3_stepwise3/rlaif_generator_best.pt",
         sample_to_audio=_instrument_melody_to_audio,
         physics_reward=_expressive_melody_reward,
+        output_format="expressive",
     ),
     "melody_v6": _Adapter(
         name="melody_v6",
@@ -315,6 +331,7 @@ _ADAPTERS = {
         init_weights="results/rlaif/melody_v5_qwen/rlaif_generator_best.pt",
         sample_to_audio=_reverb_instrument_melody_to_audio,
         physics_reward=_expressive_melody_reward,
+        output_format="expressive",
     ),
     "melody_v7": _Adapter(
         name="melody_v7",
@@ -323,6 +340,7 @@ _ADAPTERS = {
         init_weights="results/rlaif/melody_v5_qwen/rlaif_generator_best.pt",
         sample_to_audio=_layered_melody_to_audio,
         physics_reward=_expressive_melody_reward,
+        output_format="expressive",
     ),
     "autoregressive": _Adapter(
         name="autoregressive",
@@ -355,6 +373,7 @@ _ADAPTERS = {
         init_weights="results/phase7_counterpoint/counterpoint_generator.pt",
         sample_to_audio=_counterpoint_to_audio,
         physics_reward=_counterpoint_reward_wrapper,
+        output_format="voices",
     ),
     "counterpoint_3v": _Adapter(
         name="counterpoint_3v",
@@ -363,6 +382,7 @@ _ADAPTERS = {
         init_weights="results/phase13_3voice_counterpoint/counterpoint_generator.pt",
         sample_to_audio=_counterpoint_to_audio,
         physics_reward=_counterpoint_reward_wrapper,
+        output_format="voices",
     ),
     "counterpoint_4v": _Adapter(
         name="counterpoint_4v",
@@ -371,6 +391,16 @@ _ADAPTERS = {
         init_weights="results/phase13_4voice_counterpoint/counterpoint_generator.pt",
         sample_to_audio=_counterpoint_to_audio,
         physics_reward=_counterpoint_reward_wrapper,
+        output_format="voices",
+    ),
+    "melody_v8_vocal": _Adapter(
+        name="melody_v8_vocal",
+        build=lambda: ExpressiveMelodyGenerator(
+            latent_dim=32, hidden=256, n_notes=16),
+        init_weights="results/rlaif/melody_v5_qwen/rlaif_generator_best.pt",
+        sample_to_audio=_vocal_melody_to_audio,
+        physics_reward=_expressive_melody_reward,
+        output_format="expressive",
     ),
 }
 
@@ -387,10 +417,41 @@ class _StubJudge:
                               "critique": "(stub judge)"})()
 
 
+class _TheoryJudge:
+    """Rule-based music theory judge — no model, no GPU, no refusals."""
+
+    is_theory = True
+
+    def score(self, data: np.ndarray, output_format: str = "freqs") -> "type[object]":
+        """Score raw generator output based on the adapter's output_format."""
+        if output_format == "voices":
+            # Multi-voice counterpoint: shape (V, N)
+            freqs_flat = data.flatten()
+            score = theory_reward(freqs_flat, voices=data)
+            breakdown = theory_reward_breakdown(freqs_flat, voices=data)
+        elif output_format == "expressive":
+            # Expressive melody: [freqs | durations | velocities]
+            n_notes = len(data) // 3
+            f = data[:n_notes]
+            d = data[n_notes:2 * n_notes]
+            v = data[2 * n_notes:]
+            score = theory_reward(f, durations=d, velocities=v)
+            breakdown = theory_reward_breakdown(f, durations=d, velocities=v)
+        else:
+            # Plain frequency array
+            score = theory_reward(data)
+            breakdown = theory_reward_breakdown(data)
+
+        critique = " | ".join(f"{k}={val:.2f}" for k, val in breakdown.items())
+        return type("R", (), {"score": score, "critique": critique})()
+
+
 def _build_judge(name: str, qwen_model: str, qwen_device: str,
                  prompt_style: str = "original"):
     if name == "stub":
         return _StubJudge()
+    if name == "theory":
+        return _TheoryJudge()
     if name == "qwen":
         from src.analysis.qwen_judge import QwenJudge
         return QwenJudge(model=qwen_model, device=qwen_device,
@@ -423,10 +484,23 @@ def _score_batch(audios: List[np.ndarray], adapter: _Adapter,
 def _render_and_score(freqs_np: np.ndarray, adapter: _Adapter,
                       judge, max_retries: int = 2,
                       ) -> Tuple[np.ndarray, np.ndarray, List[str]]:
-    audios = [adapter.sample_to_audio(f).astype(np.float32) for f in freqs_np]
-    qwen_scores = np.full(len(audios), np.nan, dtype=np.float32)
-    phys_rewards = np.zeros(len(audios), dtype=np.float32)
+    n = len(freqs_np)
+    phys_rewards = np.zeros(n, dtype=np.float32)
     critiques: List[str] = []
+
+    if getattr(judge, "is_theory", False):
+        # Theory judge: score raw freqs, no audio rendering needed.
+        theory_scores = np.zeros(n, dtype=np.float32)
+        for i, f in enumerate(freqs_np):
+            r = judge.score(f, output_format=adapter.output_format)
+            theory_scores[i] = float(r.score)
+            critiques.append(r.critique[:800])
+            phys_rewards[i] = float(adapter.physics_reward(f))
+        return theory_scores, phys_rewards, critiques
+
+    # Qwen/stub judge: render audio first, then score.
+    audios = [adapter.sample_to_audio(f).astype(np.float32) for f in freqs_np]
+    qwen_scores = np.full(n, np.nan, dtype=np.float32)
     for i, (a, f) in enumerate(zip(audios, freqs_np)):
         try:
             r = judge.score_audio(a, sample_rate=SAMPLE_RATE,
@@ -493,22 +567,30 @@ def train(generator: str,
     reward_running_var = 1.0
     reward_count = 0
 
+    is_theory = getattr(j, "is_theory", False)
+
     for step in range(n_steps):
         freqs, log_prob = gen.sample(batch_size)
         freqs_np = freqs.detach().cpu().numpy()
 
-        qwen_scores, phys_rewards, critiques = _render_and_score(
+        judge_scores, phys_rewards, critiques = _render_and_score(
             freqs_np, adapter, j, max_retries=max_retries,
         )
 
-        valid_mask = ~np.isnan(qwen_scores)
-        if valid_mask.any():
-            fill = float(np.nanmean(qwen_scores))
+        if is_theory:
+            # Theory judge: scores are direct reward (no NaN, no 1-10 scale)
+            reward_np = judge_scores + physics_weight * phys_rewards
         else:
-            fill = 5.0
-        qwen_filled = np.where(valid_mask, qwen_scores, fill)
-        norm_q = (qwen_filled - 5.0) / 5.0
-        reward_np = qwen_weight * norm_q + physics_weight * phys_rewards
+            # Qwen/stub: normalize 1-10 scale, handle NaN refusals
+            valid_mask = ~np.isnan(judge_scores)
+            if valid_mask.any():
+                fill = float(np.nanmean(judge_scores))
+            else:
+                fill = 5.0
+            qwen_filled = np.where(valid_mask, judge_scores, fill)
+            norm_q = (qwen_filled - 5.0) / 5.0
+            reward_np = qwen_weight * norm_q + physics_weight * phys_rewards
+
         rewards = torch.tensor(reward_np, dtype=torch.float32)
 
         # Update running stats and normalize advantage using them.
@@ -530,24 +612,23 @@ def train(generator: str,
         torch.nn.utils.clip_grad_norm_(gen.parameters(), max_norm=1.0)
         opt.step()
 
-        mean_qwen = float(np.nanmean(qwen_scores)) \
-            if valid_mask.any() else float("nan")
+        mean_judge = float(judge_scores.mean())
         mean_phys = float(phys_rewards.mean())
         mean_total = float(rewards.mean())
         elapsed = time.time() - t_start
         entry = {
             "step": step,
-            "mean_qwen": mean_qwen,
+            "mean_judge": mean_judge,
             "mean_physics": mean_phys,
             "mean_reward": mean_total,
             "loss": float(loss.item()),
             "elapsed_sec": round(elapsed, 1),
             "critiques": critiques,
-            "qwen_scores": [None if np.isnan(s) else float(s)
-                            for s in qwen_scores.tolist()],
+            "judge_scores": [float(s) for s in judge_scores.tolist()],
         }
         history.append(entry)
-        print(f"[{step:3d}/{n_steps}] qwen={mean_qwen:.2f} "
+        label = "theory" if is_theory else "qwen"
+        print(f"[{step:3d}/{n_steps}] {label}={mean_judge:.2f} "
               f"phys={mean_phys:+.3f} reward={mean_total:+.3f} "
               f"loss={loss.item():+.3f}  ({elapsed:.0f}s)", flush=True)
 
@@ -585,7 +666,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--generator", required=True,
                    choices=list(_ADAPTERS.keys()))
-    p.add_argument("--judge", default="qwen", choices=["qwen", "stub"])
+    p.add_argument("--judge", default="qwen", choices=["qwen", "theory", "stub"])
     p.add_argument("--steps", type=int, default=200)
     p.add_argument("--batch-size", type=int, default=4)
     p.add_argument("--lr", type=float, default=3e-5)
