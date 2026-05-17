@@ -134,11 +134,19 @@ v9 (neutral+retry, 40 steps) | 36/40 | 4.86 | 5.93 | 2.40 | 4.97    | 4.74    | 
     Best reward: 1.521
     Sub-scores: MELODY 6.1, RHYTHM 5.9, HARMONY 3.7, TEXTURE 2.2, OVERALL 4.7
 
+  Counterpoint v3 (warm start from v2, seed=7, 60 steps):
+    Valid steps: 37/60 (62%) — best counterpoint validity
+    Mean Qwen: 4.45, Max: 6.40 (ALL-TIME RECORD), Min: 2.40
+    Thirds: 4.63→4.45→4.28 (slight decline)
+    Best reward: 1.742
+    Sub-scores: MELODY 6.0, RHYTHM 5.8, HARMONY 3.5, TEXTURE 2.5, OVERALL 4.2
+
   Counterpoint vs monophonic:
-    HARMONY improved: 3.7 vs 3.4 (monophonic) — 2 voices noticed
-    OVERALL improved: 4.7 vs 4.6 (monophonic)
-    TEXTURE not improved: 2.2 vs 2.8 — multi-voice mix not richer enough
-    First upward training trend seen: 3.99→4.62 (v2 second half)
+    Counterpoint v3 mean: 4.45 > Autoregressive v3 mean: 4.39
+    Counterpoint v3 max: 6.40 > Any monophonic max: 5.93
+    HARMONY: 3.5 vs 3.4 (slight improvement)
+    TEXTURE: 2.5 vs 2.8 (not improved — multi-voice mix not richer enough)
+    2-voice counterpoint breaks the monophonic ceiling on both mean and max
 
 8. PLATEAU ANALYSIS
 ----------------------------------------
@@ -180,9 +188,10 @@ v9 (neutral+retry, 40 steps) | 36/40 | 4.86 | 5.93 | 2.40 | 4.97    | 4.74    | 
     Qwen refusal rate (thin audio):    63-68% per step
 
   Counterpoint RLAIF (2-voice):
-    v1 (short clips, 40 steps):        3.88 mean, 6.20 max (new record)
+    v1 (short clips, 40 steps):        3.88 mean, 6.20 max
     v2 (longer clips, 40 steps):       4.32 mean, 5.80 max
-    Best HARMONY:                      3.7/10 (v2, up from monophonic 3.4)
+    v3 (extended, seed=7, 60 steps):   4.45 mean, 6.40 max (ALL-TIME RECORD)
+    Best HARMONY:                      3.7/10 (v2)
     Best OVERALL:                      4.7/10 (v2)
-    Upward training trend:             3.99→4.62 (v2, first time seen)
-    Qwen refusal rate:                 48-70% per step
+    Counterpoint v3 beats monophonic:  4.45 > 4.39 (auto v3 true quality)
+    Qwen refusal rate:                 38-70% per step
