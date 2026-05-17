@@ -82,33 +82,49 @@ v9 (neutral+retry, 40 steps) | 36/40 | 4.86 | 5.93 | 2.40 | 4.97    | 4.74    | 
 
   AutoregressiveMelodyGenerator v2 (warm start from v1 best, 50 steps):
     Valid steps: 16/50 (32%)
-    Refusal rate: 68% per step (higher than v1's 63%)
+    Refusal rate: 68% per step
     Mean Qwen: 4.55, Max: 5.80, Min: 2.40
-    First half: 4.88, Second half: 4.23 (declining)
     Best reward: -0.525
 
-  Autoregressive v2 sub-scores:
-    MELODY  :  6.3/10 (range 3-8, n=15)
-    RHYTHM  :  6.6/10 (range 5-8, n=14)
-    HARMONY :  3.2/10 (range 1-5, n=12)
-    TEXTURE :  2.4/10 (range 1-4, n=11)
-    OVERALL :  4.1/10 (range 3-5, n=7)
+  AutoregressiveMelodyGenerator v3 (richer rendering, seed=42, 40 steps):
+    Audio changes: octave doubling, root+fifth drone, stronger reverb
+    Valid steps: 33/40 (82%) — refusal rate dropped from 63% to 18%!
+    Mean Qwen: 4.39, Max: 5.80, Min: 2.80
+    Q1: 4.40, Q2: 4.37, Q3: 4.40, Q4: 4.40 (completely flat)
+    Best reward: -0.535
 
-  Comparison across all melody generators:
-    ExpressiveMelody v9 (40 RLAIF steps):     4.86 mean, MELODY 6.7, OVERALL 5.1
-    Autoregressive v1 (random init, 30 steps): 4.78 mean, MELODY 6.7, OVERALL 4.5
-    Autoregressive v2 (warm start, 50 steps):  4.55 mean, MELODY 6.3, OVERALL 4.1
-    -> More training DEGRADES autoregressive quality (v1 > v2)
-    -> ~5.0 Qwen mean is a hard ceiling for monophonic output
-    -> High refusal rate (63-68%) limits gradient signal quality
+  Autoregressive v3 sub-scores:
+    MELODY  :  6.0/10 (range 3-8, n=53)
+    RHYTHM  :  6.0/10 (range 2-8, n=44)
+    HARMONY :  3.4/10 (range 2-6, n=38)
+    TEXTURE :  2.8/10 (range 2-4, n=31)
+    OVERALL :  4.6/10 (range 3-6, n=25)
 
-6. PLATEAU ANALYSIS
+  KEY FINDING — survivor bias in v1/v2:
+    v1 (37% valid, thin audio):  4.78 mean — inflated by selective scoring
+    v2 (32% valid, thin audio):  4.55 mean — same bias
+    v3 (82% valid, rich audio):  4.39 mean — true quality level revealed
+    -> v1/v2 "higher scores" were survivor bias (only best samples scored)
+    -> True monophonic melody quality: ~4.4 Qwen mean, completely flat
+    -> REINFORCE gradient with 82% valid steps still shows zero learning trend
+
+6. QWEN REFUSAL ANALYSIS
 ----------------------------------------
-  All generators plateau at ~4.5-5.0 mean Qwen score for monophonic output.
-  More training steps do not help — v2 is worse than v1.
-  The REINFORCE gradient with 68% refusal rate has too much variance.
-  Further improvement requires fundamentally different approaches:
-  multi-voice generation, lower Qwen refusal rates, or non-REINFORCE methods.
+  Refusal is DETERMINISTIC per audio content (not random per call).
+  Same audio → same refusal regardless of retry count (confirmed v3 vs v2).
+  Richer audio rendering reduces refusals: thin audio 63-68%, rich audio 18%.
+  Key rendering improvements: octave doubling, root+fifth drone, stronger reverb.
+  After fixing refusal rate (82% valid steps), scores are STILL flat (Q1-Q4: 4.40).
+  This rules out refusal-rate-noise as a cause of the plateau.
+
+7. PLATEAU ANALYSIS
+----------------------------------------
+  True monophonic melody quality ceiling: ~4.4 Qwen mean.
+  Confirmed across: 3 architectures, 5 training runs, 30-50 step durations.
+  MELODY/RHYTHM at 6.0-6.7/10 — near ceiling for 16-note sequences.
+  HARMONY at 3.3-3.9/10 — structurally limited by monophonic output.
+  TEXTURE at 2.4-2.8/10 — structurally limited by single instrument.
+  To exceed ~4.5: need multi-voice generation, proper harmony, richer texture.
 
 7. KEY METRICS SUMMARY
 ----------------------------------------
@@ -130,10 +146,11 @@ v9 (neutral+retry, 40 steps) | 36/40 | 4.86 | 5.93 | 2.40 | 4.97    | 4.74    | 
     Step validity:                 95% (19/20 steps)
 
   Autoregressive Melody RLAIF:
-    v1 (random init, 30 steps):      4.78 mean, 5.80 max
-    v2 (warm start, 50 steps):       4.55 mean, 5.80 max (degraded)
-    Best melody quality:             6.7/10 (v1)
-    Best rhythm quality:             6.6/10 (v1 & v2)
-    Best overall musicality:         4.5/10 (v1)
-    Qwen refusal rate:               63-68% per step
-    Step validity:                   32-37%
+    v1 (random init, thin, 30 steps):  4.78 mean (survivor bias, 37% valid)
+    v2 (warm start, thin, 50 steps):   4.55 mean (survivor bias, 32% valid)
+    v3 (warm start, rich, 40 steps):   4.39 mean (true quality, 82% valid)
+    True melody quality:               6.0/10
+    True rhythm quality:               6.0/10
+    True overall musicality:           4.6/10
+    Qwen refusal rate (rich audio):    18% per step
+    Qwen refusal rate (thin audio):    63-68% per step

@@ -149,24 +149,34 @@ def _expressive_melody_reward(combined: np.ndarray) -> float:
 
 
 def _autoregressive_melody_to_audio(freqs: np.ndarray) -> np.ndarray:
-    """Render autoregressive melody with instrument timbres + drone + reverb."""
+    """Render autoregressive melody with octave doubling + drone + reverb.
+
+    Richer rendering reduces Qwen refusal rate (deterministic per audio
+    content — thinner clips are refused more often).
+    """
     freqs_q = np.array([snap_to_scale(f) for f in freqs])
     lead = PRESETS["lead"]
     pad = PRESETS["pad"]
     chunks = []
     for i, f in enumerate(freqs_q):
-        dur = 0.30 + 0.10 * np.sin(i * 0.8)
+        dur = 0.35 + 0.10 * np.sin(i * 0.8)
         vel = 0.6 + 0.2 * np.sin(i * 0.5 + 1.0)
-        chunks.append(lead.render(float(f), dur, velocity=vel))
+        note = lead.render(float(f), dur, velocity=vel)
+        octave = 0.3 * lead.render(float(f) * 0.5, dur, velocity=vel * 0.5)
+        min_n = min(len(note), len(octave))
+        note[:min_n] += octave[:min_n]
+        chunks.append(note)
         gap = 0.06 if (i + 1) % 4 == 0 else 0.02
         chunks.append(np.zeros(int(gap * _SR)))
     melody = np.concatenate(chunks)
     root_freq = float(snap_to_scale(np.median(freqs_q)))
+    fifth_freq = root_freq * 1.5
     total_dur = len(melody) / _SR
-    drone = 0.15 * pad.render(root_freq, total_dur, velocity=0.25)
-    min_len = min(len(melody), len(drone))
-    mixed = melody[:min_len] + drone[:min_len]
-    return simple_reverb(mixed, decay=0.3, delay_ms=40.0, n_taps=5)
+    drone = 0.18 * pad.render(root_freq, total_dur, velocity=0.3)
+    drone5 = 0.10 * pad.render(fifth_freq, total_dur, velocity=0.2)
+    min_len = min(len(melody), len(drone), len(drone5))
+    mixed = melody[:min_len] + drone[:min_len] + drone5[:min_len]
+    return simple_reverb(mixed, decay=0.35, delay_ms=45.0, n_taps=6)
 
 
 def _progression_to_audio(seqs: np.ndarray) -> np.ndarray:
@@ -335,14 +345,16 @@ def _score_batch(audios: List[np.ndarray], adapter: _Adapter,
 
 
 def _render_and_score(freqs_np: np.ndarray, adapter: _Adapter,
-                      judge) -> Tuple[np.ndarray, np.ndarray, List[str]]:
+                      judge, max_retries: int = 2,
+                      ) -> Tuple[np.ndarray, np.ndarray, List[str]]:
     audios = [adapter.sample_to_audio(f).astype(np.float32) for f in freqs_np]
     qwen_scores = np.full(len(audios), np.nan, dtype=np.float32)
     phys_rewards = np.zeros(len(audios), dtype=np.float32)
     critiques: List[str] = []
     for i, (a, f) in enumerate(zip(audios, freqs_np)):
         try:
-            r = judge.score_audio(a, sample_rate=SAMPLE_RATE)
+            r = judge.score_audio(a, sample_rate=SAMPLE_RATE,
+                                  max_retries=max_retries)
             qwen_scores[i] = float(r.score) if r.score is not None \
                 else np.nan
             critiques.append(r.critique[:800])
@@ -365,7 +377,8 @@ def train(generator: str,
           qwen_device: str = "mps",
           init_from: Optional[str] = None,
           out_dir: str = "results/rlaif/run",
-          prompt_style: str = "original"):
+          prompt_style: str = "original",
+          max_retries: int = 2):
     if generator not in _ADAPTERS:
         raise ValueError(f"unknown generator {generator!r}")
     adapter = _ADAPTERS[generator]
@@ -409,7 +422,7 @@ def train(generator: str,
         freqs_np = freqs.detach().cpu().numpy()
 
         qwen_scores, phys_rewards, critiques = _render_and_score(
-            freqs_np, adapter, j,
+            freqs_np, adapter, j, max_retries=max_retries,
         )
 
         valid_mask = ~np.isnan(qwen_scores)
@@ -512,6 +525,8 @@ def main():
     p.add_argument("--out-dir", default="results/rlaif/run")
     p.add_argument("--prompt-style", default="original",
                    choices=["original", "neutral"])
+    p.add_argument("--max-retries", type=int, default=2,
+                   help="Qwen retries per sample on refusal (default 2)")
     args = p.parse_args()
 
     train(
@@ -528,6 +543,7 @@ def main():
         init_from=args.init_from,
         out_dir=args.out_dir,
         prompt_style=args.prompt_style,
+        max_retries=args.max_retries,
     )
 
 
