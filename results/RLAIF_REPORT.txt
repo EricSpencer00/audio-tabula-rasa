@@ -42,12 +42,25 @@ v9 (neutral+retry, 40 steps) | 36/40 | 4.86 | 5.93 | 2.40 | 4.97    | 4.74    | 
   Delta: ~2.7 points average score suppression from original prompt
   Cause: 'experimental tabula-rasa model' and 'WHAT FEELS ROBOTIC' prime negative
 
-4. CHORD PROGRESSION RLAIF (BLOCKED)
+4. CHORD PROGRESSION RLAIF
 ----------------------------------------
   Physics-only REINFORCE: 100 steps, mean physics=-4.04
   No improvement: 1st half -4.04 -> 2nd half -4.04
-  Qwen RLAIF: blocked by model.generate() hang on polyphonic audio (MPS)
-  Root cause: Qwen2.5-Omni-7B hangs indefinitely on polyphonic clips on MPS
+
+  Chord Arpeggio v1 (Qwen RLAIF, 20 steps):
+    Workaround: render chords as arpeggiated melody + pad drone + reverb (~8s clips)
+    Block chords cause Qwen to hang or refuse 100% on MPS
+    Valid steps: 19/20 (95%)
+    Mean Qwen: 3.28, Max: 4.20, Min: 2.27
+    First half: 3.49, Second half: 3.09 (no improvement trend)
+    Best reward: -1.145
+
+  Chord arpeggio sub-scores:
+    MELODY  :  4.1/10 (range 2-7, n=52)
+    RHYTHM  :  4.9/10 (range 2-8, n=50)
+    HARMONY :  2.4/10 (range 1-4, n=34)
+    TEXTURE :  1.9/10 (range 1-4, n=15)
+    OVERALL :  3.6/10 (range 2-5, n=13)
 
 5. PLATEAU ANALYSIS
 ----------------------------------------
@@ -58,11 +71,19 @@ v9 (neutral+retry, 40 steps) | 36/40 | 4.86 | 5.93 | 2.40 | 4.97    | 4.74    | 
 
 6. KEY METRICS SUMMARY
 ----------------------------------------
-  Pre-RLAIF baseline Qwen score: 1.5-2.1 (original prompt, biased)
-  v8 RLAIF (neutral prompt):     4.28 mean, 5.80 max
-  v9 RLAIF (neutral + retry):    4.86 mean, 5.93 max
-  Melody quality:                6.7/10
-  Rhythm quality:                6.6/10
-  Overall musicality:            5.1/10
-  Qwen refusal rate:             ~56% per call (neutral prompt)
-  Step validity (with retry):    90% (36/40 steps)
+  Melody RLAIF:
+    Pre-RLAIF baseline Qwen score: 1.5-2.1 (original prompt, biased)
+    v8 RLAIF (neutral prompt):     4.28 mean, 5.80 max
+    v9 RLAIF (neutral + retry):    4.86 mean, 5.93 max
+    Melody quality:                6.7/10
+    Rhythm quality:                6.6/10
+    Overall musicality:            5.1/10
+    Qwen refusal rate:             ~56% per call (neutral prompt)
+    Step validity (with retry):    90% (36/40 steps)
+
+  Chord Arpeggio RLAIF:
+    Chord arpeggio v1 (neutral):   3.28 mean, 4.20 max
+    Melody quality:                4.1/10
+    Rhythm quality:                4.9/10
+    Overall musicality:            3.6/10
+    Step validity:                 95% (19/20 steps)

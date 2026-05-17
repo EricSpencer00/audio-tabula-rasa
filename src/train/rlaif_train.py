@@ -155,6 +155,36 @@ def _progression_to_audio(seqs: np.ndarray) -> np.ndarray:
     return np.concatenate(chunks)
 
 
+def _progression_to_arpeggio(seqs: np.ndarray) -> np.ndarray:
+    """Render chord progression as arpeggiated melody with pad drone + reverb.
+
+    Block chords cause high Qwen refusal rates on MPS. This renders each
+    chord as an ascending arpeggio pattern (3 reps per chord) over a
+    sustained pad drone, producing ~8s clips similar to melody training.
+    """
+    inst = PRESETS["lead"]
+    pad = PRESETS["pad"]
+
+    chunks = []
+    for chord in seqs:
+        sorted_freqs = np.sort(chord)
+        for _rep in range(3):
+            for freq in sorted_freqs:
+                chunks.append(inst.render(float(freq), 0.20, velocity=0.7))
+                chunks.append(np.zeros(int(0.02 * _SR)))
+        chunks.append(np.zeros(int(0.06 * _SR)))
+
+    melody = np.concatenate(chunks)
+    total_dur = len(melody) / _SR
+
+    root_freq = float(np.median(seqs))
+    drone = 0.15 * pad.render(root_freq, total_dur, velocity=0.25)
+    min_len = min(len(melody), len(drone))
+    mixed = melody[:min_len] + drone[:min_len]
+
+    return simple_reverb(mixed, decay=0.3, delay_ms=40.0, n_taps=4)
+
+
 _ADAPTERS = {
     "melody": _Adapter(
         name="melody",
@@ -216,6 +246,14 @@ _ADAPTERS = {
             latent_dim=16, hidden=128, n_chords=4, n_voices=3),
         init_weights="results/phase2_progressions/progression_generator.pt",
         sample_to_audio=_progression_to_audio,
+        physics_reward=progression_reward,
+    ),
+    "chord_arpeggio": _Adapter(
+        name="chord_arpeggio",
+        build=lambda: ChordProgressionGenerator(
+            latent_dim=16, hidden=128, n_chords=4, n_voices=3),
+        init_weights="results/phase2_progressions/progression_generator.pt",
+        sample_to_audio=_progression_to_arpeggio,
         physics_reward=progression_reward,
     ),
 }
