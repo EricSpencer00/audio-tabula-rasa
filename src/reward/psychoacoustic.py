@@ -349,6 +349,57 @@ def melody_reward(freqs, n_harmonics: int = 6,
     )
 
 
+def stepwise_motion_reward(freqs, ideal_semitones: float = 2.5,
+                           sigma: float = 2.0) -> float:
+    """Reward for stepwise melodic motion (seconds and thirds).
+
+    Real melodies are dominated by small intervals — seconds (1-2
+    semitones) and thirds (3-4 semitones). Leaps (>5 semitones) are
+    used sparingly for dramatic effect. This reward gives a Gaussian
+    bonus centered at ``ideal_semitones`` with spread ``sigma``, so
+    intervals near a minor third score highest and very large jumps
+    (octave+) score near zero.
+
+    Returns mean per-step reward in [0, 1].
+    """
+    f = np.asarray(freqs, dtype=np.float64)
+    if len(f) < 2:
+        return 0.0
+    semitones = np.abs(np.log2(f[1:] / f[:-1])) * 12.0
+    bonus = np.exp(-((semitones - ideal_semitones) ** 2) / (2 * sigma ** 2))
+    return float(bonus.mean())
+
+
+def rhythm_variety_reward(durations) -> float:
+    """Reward rhythmic variety: coefficient of variation of note durations,
+    capped so the generator doesn't produce absurdly uneven sequences."""
+    d = np.asarray(durations, dtype=np.float64)
+    if len(d) < 2:
+        return 0.0
+    mu = d.mean()
+    if mu < 1e-6:
+        return 0.0
+    cv = float(d.std() / mu)
+    return min(cv, 0.6)
+
+
+def expressive_melody_reward(combined, n_notes: int = 16,
+                             rhythm_weight: float = 2.0,
+                             stepwise_weight: float = 8.0,
+                             **melody_kw) -> float:
+    """Reward for an expressive melody (freqs + durations + velocities).
+
+    ``combined`` is shape ``(3*n_notes,)`` laid out as
+    ``[freqs | durations | velocities]``.
+    """
+    freqs = combined[:n_notes]
+    durs = combined[n_notes:2 * n_notes]
+    mr = melody_reward(freqs, **melody_kw)
+    rr = rhythm_variety_reward(durs)
+    sr = stepwise_motion_reward(freqs)
+    return mr + rhythm_weight * rr + stepwise_weight * sr
+
+
 _TRIAD_TEMPLATES = {
     "major_4_5_6":      (4.0, 5.0, 6.0),
     "minor_10_12_15":   (10.0, 12.0, 15.0),

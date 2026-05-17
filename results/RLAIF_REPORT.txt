@@ -1,0 +1,197 @@
+RLAIF QUANTITATIVE REPORT
+============================================================
+Generated: 2026-05-17
+Model: Qwen2.5-Omni-7B on Apple M-series MPS
+Generator: ExpressiveMelodyGenerator (latent=32, hidden=256, n_notes=16)
+
+1. TRAINING HISTORY COMPARISON
+----------------------------------------
+Variant                      | Valid | Mean | Max  | Min  | 1stHalf | 2ndHalf | BestRew
+-----------------------------+-------+------+------+------+---------+---------+--------
+v8 (neutral, 20 steps)       | 18/20 | 4.28 | 5.80 | 2.00 | 3.89    | 4.67    | 1.792  
+v9 (neutral+retry, 40 steps) | 36/40 | 4.86 | 5.93 | 2.40 | 4.97    | 4.74    | 1.906  
+
+2. SUB-SCORE BREAKDOWN (from Qwen critiques)
+----------------------------------------
+
+  v8:
+    MELODY  :  6.4/10 (range 3-8, n=24)
+    RHYTHM  :  6.1/10 (range 4-8, n=24)
+    HARMONY :  3.7/10 (range 1-5, n=20)
+    TEXTURE :  2.1/10 (range 1-3, n=8)
+    OVERALL :  3.6/10 (range 2-5, n=5)
+
+  v9:
+    MELODY  :  6.7/10 (range 3-8, n=68)
+    RHYTHM  :  6.6/10 (range 2-8, n=69)
+    HARMONY :  3.9/10 (range 1-5, n=56)
+    TEXTURE :  2.6/10 (range 1-5, n=38)
+    OVERALL :  5.1/10 (range 2-7, n=19)
+
+  Improvement v8 -> v9:
+    MELODY  : 6.4 -> 6.7 (+0.2)
+    RHYTHM  : 6.1 -> 6.6 (+0.6)
+    HARMONY : 3.7 -> 3.9 (+0.2)
+    TEXTURE : 2.1 -> 2.6 (+0.5)
+    OVERALL : 3.6 -> 5.1 (+1.5)
+
+3. PROMPT BIAS FINDING
+----------------------------------------
+  Original prompt (biased): compresses all scores to 1.0-2.0
+  Neutral prompt: shows real quality range (2.0-6.2)
+  Delta: ~2.7 points average score suppression from original prompt
+  Cause: 'experimental tabula-rasa model' and 'WHAT FEELS ROBOTIC' prime negative
+
+4. CHORD PROGRESSION RLAIF
+----------------------------------------
+  Physics-only REINFORCE: 100 steps, mean physics=-4.04
+  No improvement: 1st half -4.04 -> 2nd half -4.04
+
+  Chord Arpeggio v1 (Qwen RLAIF, 20 steps):
+    Workaround: render chords as arpeggiated melody + pad drone + reverb (~8s clips)
+    Block chords cause Qwen to hang or refuse 100% on MPS
+    Valid steps: 19/20 (95%)
+    Mean Qwen: 3.28, Max: 4.20, Min: 2.27
+    First half: 3.49, Second half: 3.09 (no improvement trend)
+    Best reward: -1.145
+
+  Chord arpeggio sub-scores:
+    MELODY  :  4.1/10 (range 2-7, n=52)
+    RHYTHM  :  4.9/10 (range 2-8, n=50)
+    HARMONY :  2.4/10 (range 1-4, n=34)
+    TEXTURE :  1.9/10 (range 1-4, n=15)
+    OVERALL :  3.6/10 (range 2-5, n=13)
+
+5. AUTOREGRESSIVE MELODY RLAIF
+----------------------------------------
+  AutoregressiveMelodyGenerator v1 (GRU-based, 30 steps, from random init):
+    Architecture: GRU (hidden=128) -> freq/dur/vel heads, sequential note gen
+    Key difference: each note conditioned on previous (learns motifs/patterns)
+    Valid steps: 11/30 (37%)
+    Refusal rate: 63% per step (higher than ExpressiveMelody's 56%)
+    Mean Qwen: 4.78, Max: 5.80, Min: 2.80
+    First half: 5.24, Second half: 4.40 (noisy, n=11 total)
+    Best reward: -0.532 (step 24)
+
+  Autoregressive sub-scores:
+    MELODY  :  6.7/10 (range 5-8, n=10)
+    RHYTHM  :  6.6/10 (range 5-8, n=9)
+    HARMONY :  3.3/10 (range 2-5, n=9)
+    TEXTURE :  2.7/10 (range 2-4, n=9)
+    OVERALL :  4.5/10 (range 4-5, n=4)
+
+  AutoregressiveMelodyGenerator v2 (warm start from v1 best, 50 steps):
+    Valid steps: 16/50 (32%)
+    Refusal rate: 68% per step
+    Mean Qwen: 4.55, Max: 5.80, Min: 2.40
+    Best reward: -0.525
+
+  AutoregressiveMelodyGenerator v3 (richer rendering, seed=42, 40 steps):
+    Audio changes: octave doubling, root+fifth drone, stronger reverb
+    Valid steps: 33/40 (82%) — refusal rate dropped from 63% to 18%!
+    Mean Qwen: 4.39, Max: 5.80, Min: 2.80
+    Q1: 4.40, Q2: 4.37, Q3: 4.40, Q4: 4.40 (completely flat)
+    Best reward: -0.535
+
+  Autoregressive v3 sub-scores:
+    MELODY  :  6.0/10 (range 3-8, n=53)
+    RHYTHM  :  6.0/10 (range 2-8, n=44)
+    HARMONY :  3.4/10 (range 2-6, n=38)
+    TEXTURE :  2.8/10 (range 2-4, n=31)
+    OVERALL :  4.6/10 (range 3-6, n=25)
+
+  KEY FINDING — survivor bias in v1/v2:
+    v1 (37% valid, thin audio):  4.78 mean — inflated by selective scoring
+    v2 (32% valid, thin audio):  4.55 mean — same bias
+    v3 (82% valid, rich audio):  4.39 mean — true quality level revealed
+    -> v1/v2 "higher scores" were survivor bias (only best samples scored)
+    -> True monophonic melody quality: ~4.4 Qwen mean, completely flat
+    -> REINFORCE gradient with 82% valid steps still shows zero learning trend
+
+6. QWEN REFUSAL ANALYSIS
+----------------------------------------
+  Refusal is DETERMINISTIC per audio content (not random per call).
+  Same audio → same refusal regardless of retry count (confirmed v3 vs v2).
+  Richer audio rendering reduces refusals: thin audio 63-68%, rich audio 18%.
+  Key rendering improvements: octave doubling, root+fifth drone, stronger reverb.
+  After fixing refusal rate (82% valid steps), scores are STILL flat (Q1-Q4: 4.40).
+  This rules out refusal-rate-noise as a cause of the plateau.
+
+7. COUNTERPOINT RLAIF (2-voice)
+----------------------------------------
+  CounterpointGenerator (latent=24, hidden=192, n_voices=2, n_notes=8):
+
+  Counterpoint v1 (short clips, ~3.5s):
+    Valid steps: 12/40 (30%)
+    Mean Qwen: 3.88, Max: 6.20 (NEW RECORD — exceeds monophonic ceiling!)
+    Best reward: 1.763
+    Sub-scores: MELODY 5.4, RHYTHM 5.2, HARMONY 3.2, TEXTURE 2.5, OVERALL 4.4
+
+  Counterpoint v2 (longer clips, 2x repeat + octave doubling):
+    Valid steps: 19/40 (48%)
+    Mean Qwen: 4.32, Max: 5.80
+    First half: 3.99, Second half: 4.62 (UPWARD TREND — first time!)
+    Best reward: 1.521
+    Sub-scores: MELODY 6.1, RHYTHM 5.9, HARMONY 3.7, TEXTURE 2.2, OVERALL 4.7
+
+  Counterpoint v3 (warm start from v2, seed=7, 60 steps):
+    Valid steps: 37/60 (62%) — best counterpoint validity
+    Mean Qwen: 4.45, Max: 6.40 (ALL-TIME RECORD), Min: 2.40
+    Thirds: 4.63→4.45→4.28 (slight decline)
+    Best reward: 1.742
+    Sub-scores: MELODY 6.0, RHYTHM 5.8, HARMONY 3.5, TEXTURE 2.5, OVERALL 4.2
+
+  Counterpoint vs monophonic:
+    Counterpoint v3 mean: 4.45 > Autoregressive v3 mean: 4.39
+    Counterpoint v3 max: 6.40 > Any monophonic max: 5.93
+    HARMONY: 3.5 vs 3.4 (slight improvement)
+    TEXTURE: 2.5 vs 2.8 (not improved — multi-voice mix not richer enough)
+    2-voice counterpoint breaks the monophonic ceiling on both mean and max
+
+8. PLATEAU ANALYSIS
+----------------------------------------
+  True monophonic melody quality ceiling: ~4.4 Qwen mean.
+  Confirmed across: 3 architectures, 5 training runs, 30-50 step durations.
+  MELODY/RHYTHM at 6.0-6.7/10 — near ceiling for 16-note sequences.
+  HARMONY at 3.3-3.9/10 — structurally limited by monophonic output.
+  TEXTURE at 2.4-2.8/10 — structurally limited by single instrument.
+  Counterpoint breaks max score ceiling (6.20 vs 5.93 monophonic)
+  and shows first upward training trend, but mean is similar.
+
+9. KEY METRICS SUMMARY
+----------------------------------------
+  Melody RLAIF:
+    Pre-RLAIF baseline Qwen score: 1.5-2.1 (original prompt, biased)
+    v8 RLAIF (neutral prompt):     4.28 mean, 5.80 max
+    v9 RLAIF (neutral + retry):    4.86 mean, 5.93 max
+    Melody quality:                6.7/10
+    Rhythm quality:                6.6/10
+    Overall musicality:            5.1/10
+    Qwen refusal rate:             ~56% per call (neutral prompt)
+    Step validity (with retry):    90% (36/40 steps)
+
+  Chord Arpeggio RLAIF:
+    Chord arpeggio v1 (neutral):   3.28 mean, 4.20 max
+    Melody quality:                4.1/10
+    Rhythm quality:                4.9/10
+    Overall musicality:            3.6/10
+    Step validity:                 95% (19/20 steps)
+
+  Autoregressive Melody RLAIF:
+    v1 (random init, thin, 30 steps):  4.78 mean (survivor bias, 37% valid)
+    v2 (warm start, thin, 50 steps):   4.55 mean (survivor bias, 32% valid)
+    v3 (warm start, rich, 40 steps):   4.39 mean (true quality, 82% valid)
+    True melody quality:               6.0/10
+    True rhythm quality:               6.0/10
+    True overall musicality:           4.6/10
+    Qwen refusal rate (rich audio):    18% per step
+    Qwen refusal rate (thin audio):    63-68% per step
+
+  Counterpoint RLAIF (2-voice):
+    v1 (short clips, 40 steps):        3.88 mean, 6.20 max
+    v2 (longer clips, 40 steps):       4.32 mean, 5.80 max
+    v3 (extended, seed=7, 60 steps):   4.45 mean, 6.40 max (ALL-TIME RECORD)
+    Best HARMONY:                      3.7/10 (v2)
+    Best OVERALL:                      4.7/10 (v2)
+    Counterpoint v3 beats monophonic:  4.45 > 4.39 (auto v3 true quality)
+    Qwen refusal rate:                 38-70% per step

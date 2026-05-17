@@ -1,0 +1,2814 @@
+{
+  "generator": "chord_progression",
+  "judge": "stub",
+  "qwen_model": "Qwen/Qwen2.5-Omni-7B",
+  "qwen_device": "mps",
+  "prompt_style": "original",
+  "batch_size": 8,
+  "lr": 3e-05,
+  "qwen_weight": 1.0,
+  "physics_weight": 0.3,
+  "best_reward": -0.8938181400299072,
+  "history": [
+    {
+      "step": 0,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.130518436431885,
+      "mean_reward": -1.2391555309295654,
+      "loss": 7.632998466491699,
+      "elapsed_sec": 0.2,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 1,
+      "mean_qwen": 5.0,
+      "mean_physics": -5.132806301116943,
+      "mean_reward": -1.539841890335083,
+      "loss": 19.06346893310547,
+      "elapsed_sec": 0.3,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 2,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.055909156799316,
+      "mean_reward": -1.2167727947235107,
+      "loss": 9.849849700927734,
+      "elapsed_sec": 0.5,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 3,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.501042366027832,
+      "mean_reward": -1.3503128290176392,
+      "loss": 18.353633880615234,
+      "elapsed_sec": 0.7,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 4,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.9501147270202637,
+      "mean_reward": -1.1850345134735107,
+      "loss": 24.977441787719727,
+      "elapsed_sec": 0.8,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 5,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.1673519611358643,
+      "mean_reward": -0.9502055644989014,
+      "loss": 18.372684478759766,
+      "elapsed_sec": 1.0,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 6,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.7461166381835938,
+      "mean_reward": -1.1238350868225098,
+      "loss": 13.10791015625,
+      "elapsed_sec": 1.2,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 7,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.6780810356140137,
+      "mean_reward": -1.103424310684204,
+      "loss": 17.699771881103516,
+      "elapsed_sec": 1.3,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 8,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.5717709064483643,
+      "mean_reward": -1.0715312957763672,
+      "loss": 11.531556129455566,
+      "elapsed_sec": 1.5,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 9,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.138815402984619,
+      "mean_reward": -1.2416447401046753,
+      "loss": 23.12177276611328,
+      "elapsed_sec": 1.6,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 10,
+      "mean_qwen": 5.0,
+      "mean_physics": -5.269349098205566,
+      "mean_reward": -1.5808048248291016,
+      "loss": 7.651742935180664,
+      "elapsed_sec": 1.8,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 11,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.212274551391602,
+      "mean_reward": -1.2636826038360596,
+      "loss": -1.3461174964904785,
+      "elapsed_sec": 2.0,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 12,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.8126347064971924,
+      "mean_reward": -1.143790364265442,
+      "loss": 10.054296493530273,
+      "elapsed_sec": 2.1,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 13,
+      "mean_qwen": 5.0,
+      "mean_physics": -2.979393720626831,
+      "mean_reward": -0.8938181400299072,
+      "loss": 22.656898498535156,
+      "elapsed_sec": 2.3,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 14,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.462181091308594,
+      "mean_reward": -1.3386542797088623,
+      "loss": 9.845403671264648,
+      "elapsed_sec": 2.4,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 15,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.263897895812988,
+      "mean_reward": -1.2791693210601807,
+      "loss": 8.802265167236328,
+      "elapsed_sec": 2.6,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 16,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.512418508529663,
+      "mean_reward": -1.0537256002426147,
+      "loss": 15.097480773925781,
+      "elapsed_sec": 2.8,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 17,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.383061408996582,
+      "mean_reward": -1.3149185180664062,
+      "loss": -4.395541667938232,
+      "elapsed_sec": 2.9,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 18,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.252475261688232,
+      "mean_reward": -1.2757426500320435,
+      "loss": -0.9312028884887695,
+      "elapsed_sec": 3.1,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 19,
+      "mean_qwen": 5.0,
+      "mean_physics": -5.109155654907227,
+      "mean_reward": -1.53274667263031,
+      "loss": -14.872987747192383,
+      "elapsed_sec": 3.3,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 20,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.740983009338379,
+      "mean_reward": -1.4222949743270874,
+      "loss": -2.0775418281555176,
+      "elapsed_sec": 3.4,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 21,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.969539165496826,
+      "mean_reward": -1.4908618927001953,
+      "loss": -13.82825756072998,
+      "elapsed_sec": 3.6,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 22,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.5211381912231445,
+      "mean_reward": -1.056341528892517,
+      "loss": 19.634456634521484,
+      "elapsed_sec": 3.7,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 23,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.9099016189575195,
+      "mean_reward": -1.1729705333709717,
+      "loss": 5.460477828979492,
+      "elapsed_sec": 3.9,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 24,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.96201753616333,
+      "mean_reward": -1.1886053085327148,
+      "loss": 21.202842712402344,
+      "elapsed_sec": 4.1,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 25,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.7247366905212402,
+      "mean_reward": -1.11742103099823,
+      "loss": 18.823686599731445,
+      "elapsed_sec": 4.2,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 26,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.010328769683838,
+      "mean_reward": -1.2030986547470093,
+      "loss": 14.144612312316895,
+      "elapsed_sec": 4.4,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 27,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.2753825187683105,
+      "mean_reward": -1.2826147079467773,
+      "loss": -0.78830885887146,
+      "elapsed_sec": 4.5,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 28,
+      "mean_qwen": 5.0,
+      "mean_physics": -5.126287460327148,
+      "mean_reward": -1.537886142730713,
+      "loss": 11.136247634887695,
+      "elapsed_sec": 4.7,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 29,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.3485121726989746,
+      "mean_reward": -1.0045537948608398,
+      "loss": 14.150026321411133,
+      "elapsed_sec": 4.9,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 30,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.6830077171325684,
+      "mean_reward": -1.1049023866653442,
+      "loss": 17.427270889282227,
+      "elapsed_sec": 5.0,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 31,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.121747970581055,
+      "mean_reward": -1.2365243434906006,
+      "loss": 3.990574359893799,
+      "elapsed_sec": 5.2,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 32,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.096199989318848,
+      "mean_reward": -1.2288601398468018,
+      "loss": 20.759023666381836,
+      "elapsed_sec": 5.3,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 33,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.2395405769348145,
+      "mean_reward": -0.9718623161315918,
+      "loss": 24.312057495117188,
+      "elapsed_sec": 5.5,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 34,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.307208299636841,
+      "mean_reward": -0.9921625256538391,
+      "loss": 21.201122283935547,
+      "elapsed_sec": 5.7,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 35,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.548650026321411,
+      "mean_reward": -1.064595103263855,
+      "loss": 20.33597183227539,
+      "elapsed_sec": 5.8,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 36,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.6880946159362793,
+      "mean_reward": -1.1064285039901733,
+      "loss": 7.354927062988281,
+      "elapsed_sec": 6.0,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 37,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.714603900909424,
+      "mean_reward": -1.114381194114685,
+      "loss": 12.404603958129883,
+      "elapsed_sec": 6.2,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 38,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.180176258087158,
+      "mean_reward": -1.254052996635437,
+      "loss": -1.4934239387512207,
+      "elapsed_sec": 6.3,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 39,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.655226707458496,
+      "mean_reward": -1.3965680599212646,
+      "loss": -9.172844886779785,
+      "elapsed_sec": 6.5,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 40,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.3007850646972656,
+      "mean_reward": -0.9902356266975403,
+      "loss": 21.026941299438477,
+      "elapsed_sec": 6.6,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 41,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.190562725067139,
+      "mean_reward": -1.2571690082550049,
+      "loss": 14.336999893188477,
+      "elapsed_sec": 6.8,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 42,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.5137736797332764,
+      "mean_reward": -1.054132103919983,
+      "loss": 14.588651657104492,
+      "elapsed_sec": 7.0,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 43,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.6463096141815186,
+      "mean_reward": -1.0938929319381714,
+      "loss": 19.663021087646484,
+      "elapsed_sec": 7.1,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 44,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.4310927391052246,
+      "mean_reward": -1.0293278694152832,
+      "loss": 26.82404327392578,
+      "elapsed_sec": 7.3,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 45,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.112060546875,
+      "mean_reward": -1.233618140220642,
+      "loss": 10.553646087646484,
+      "elapsed_sec": 7.5,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 46,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.218628883361816,
+      "mean_reward": -1.2655887603759766,
+      "loss": 1.6969537734985352,
+      "elapsed_sec": 7.6,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 47,
+      "mean_qwen": 5.0,
+      "mean_physics": -5.251147270202637,
+      "mean_reward": -1.5753443241119385,
+      "loss": -8.292315483093262,
+      "elapsed_sec": 7.8,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 48,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.751437664031982,
+      "mean_reward": -1.4254313707351685,
+      "loss": 7.4492340087890625,
+      "elapsed_sec": 7.9,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 49,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.5686726570129395,
+      "mean_reward": -1.0706018209457397,
+      "loss": 24.548015594482422,
+      "elapsed_sec": 8.1,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 50,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.1159753799438477,
+      "mean_reward": -0.934792697429657,
+      "loss": 26.238479614257812,
+      "elapsed_sec": 8.3,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 51,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.264898300170898,
+      "mean_reward": -1.2794697284698486,
+      "loss": 17.94083023071289,
+      "elapsed_sec": 8.4,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 52,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.1637120246887207,
+      "mean_reward": -0.9491136074066162,
+      "loss": 22.078548431396484,
+      "elapsed_sec": 8.6,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 53,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.347713470458984,
+      "mean_reward": -1.304314136505127,
+      "loss": 6.570165634155273,
+      "elapsed_sec": 8.7,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 54,
+      "mean_qwen": 5.0,
+      "mean_physics": -5.4562273025512695,
+      "mean_reward": -1.6368681192398071,
+      "loss": 3.970266342163086,
+      "elapsed_sec": 8.9,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 55,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.8531625270843506,
+      "mean_reward": -1.1559488773345947,
+      "loss": 7.042953014373779,
+      "elapsed_sec": 9.1,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 56,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.366612672805786,
+      "mean_reward": -1.0099838972091675,
+      "loss": 11.835474967956543,
+      "elapsed_sec": 9.2,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 57,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.5830941200256348,
+      "mean_reward": -1.0749282836914062,
+      "loss": 6.644939422607422,
+      "elapsed_sec": 9.4,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 58,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.664073944091797,
+      "mean_reward": -1.099222183227539,
+      "loss": 11.765634536743164,
+      "elapsed_sec": 9.6,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 59,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.32273530960083,
+      "mean_reward": -0.9968206286430359,
+      "loss": 18.81778907775879,
+      "elapsed_sec": 9.7,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 60,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.5726585388183594,
+      "mean_reward": -1.0717976093292236,
+      "loss": 10.113447189331055,
+      "elapsed_sec": 9.9,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 61,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.5817618370056152,
+      "mean_reward": -1.0745285749435425,
+      "loss": 10.382583618164062,
+      "elapsed_sec": 10.0,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 62,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.454789161682129,
+      "mean_reward": -1.3364367485046387,
+      "loss": -6.915961742401123,
+      "elapsed_sec": 10.2,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 63,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.167105674743652,
+      "mean_reward": -1.2501318454742432,
+      "loss": -5.83934211730957,
+      "elapsed_sec": 10.4,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 64,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.84538197517395,
+      "mean_reward": -1.1536147594451904,
+      "loss": 5.622901916503906,
+      "elapsed_sec": 10.5,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 65,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.9696686267852783,
+      "mean_reward": -1.1909005641937256,
+      "loss": -5.769968509674072,
+      "elapsed_sec": 10.7,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 66,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.891770362854004,
+      "mean_reward": -1.1675312519073486,
+      "loss": 3.341142177581787,
+      "elapsed_sec": 10.8,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 67,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.2878217697143555,
+      "mean_reward": -1.286346673965454,
+      "loss": 8.966899871826172,
+      "elapsed_sec": 11.0,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 68,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.323341369628906,
+      "mean_reward": -1.2970024347305298,
+      "loss": -10.029012680053711,
+      "elapsed_sec": 11.2,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 69,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.215765953063965,
+      "mean_reward": -0.9647298455238342,
+      "loss": 15.50705623626709,
+      "elapsed_sec": 11.3,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 70,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.3981728553771973,
+      "mean_reward": -1.0194518566131592,
+      "loss": 9.820075035095215,
+      "elapsed_sec": 11.5,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 71,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.2762451171875,
+      "mean_reward": -1.2828736305236816,
+      "loss": -0.17838144302368164,
+      "elapsed_sec": 11.7,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 72,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.659818649291992,
+      "mean_reward": -1.0979456901550293,
+      "loss": 9.377046585083008,
+      "elapsed_sec": 11.8,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 73,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.548602104187012,
+      "mean_reward": -1.3645806312561035,
+      "loss": -8.866541862487793,
+      "elapsed_sec": 12.0,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 74,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.539953231811523,
+      "mean_reward": -1.3619859218597412,
+      "loss": -10.598902702331543,
+      "elapsed_sec": 12.1,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 75,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.935891151428223,
+      "mean_reward": -1.4807674884796143,
+      "loss": -9.182589530944824,
+      "elapsed_sec": 12.3,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 76,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.897050380706787,
+      "mean_reward": -1.469115138053894,
+      "loss": -16.274784088134766,
+      "elapsed_sec": 12.5,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 77,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.180446624755859,
+      "mean_reward": -1.254133939743042,
+      "loss": 13.612489700317383,
+      "elapsed_sec": 12.6,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 78,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.7344865798950195,
+      "mean_reward": -1.4203460216522217,
+      "loss": -18.865543365478516,
+      "elapsed_sec": 12.8,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 79,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.3426475524902344,
+      "mean_reward": -1.0027942657470703,
+      "loss": 13.447332382202148,
+      "elapsed_sec": 12.9,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 80,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.1766419410705566,
+      "mean_reward": -0.9529925584793091,
+      "loss": 22.61862564086914,
+      "elapsed_sec": 13.1,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 81,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.010345220565796,
+      "mean_reward": -0.9031035900115967,
+      "loss": 13.751322746276855,
+      "elapsed_sec": 13.3,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 82,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.9550859928131104,
+      "mean_reward": -1.186525821685791,
+      "loss": 0.1014699935913086,
+      "elapsed_sec": 13.4,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 83,
+      "mean_qwen": 5.0,
+      "mean_physics": -5.1508049964904785,
+      "mean_reward": -1.5452415943145752,
+      "loss": 7.60489559173584,
+      "elapsed_sec": 13.6,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 84,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.591907024383545,
+      "mean_reward": -1.0775721073150635,
+      "loss": 11.463138580322266,
+      "elapsed_sec": 13.8,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 85,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.4908952713012695,
+      "mean_reward": -1.0472687482833862,
+      "loss": 7.024247646331787,
+      "elapsed_sec": 13.9,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 86,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.626984119415283,
+      "mean_reward": -1.0880951881408691,
+      "loss": 10.306058883666992,
+      "elapsed_sec": 14.1,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 87,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.8580641746520996,
+      "mean_reward": -1.157419204711914,
+      "loss": -5.632134437561035,
+      "elapsed_sec": 14.2,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 88,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.550658226013184,
+      "mean_reward": -1.3651974201202393,
+      "loss": -5.636361122131348,
+      "elapsed_sec": 14.4,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 89,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.695857524871826,
+      "mean_reward": -1.1087572574615479,
+      "loss": 13.518702507019043,
+      "elapsed_sec": 14.6,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 90,
+      "mean_qwen": 5.0,
+      "mean_physics": -5.105883598327637,
+      "mean_reward": -1.5317649841308594,
+      "loss": -23.269901275634766,
+      "elapsed_sec": 14.7,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 91,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.663830757141113,
+      "mean_reward": -1.3991491794586182,
+      "loss": -12.837810516357422,
+      "elapsed_sec": 14.9,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 92,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.3229007720947266,
+      "mean_reward": -0.996870219707489,
+      "loss": 14.709245681762695,
+      "elapsed_sec": 15.1,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 93,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.272802352905273,
+      "mean_reward": -1.2818406820297241,
+      "loss": -6.7573981285095215,
+      "elapsed_sec": 15.2,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 94,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.864025592803955,
+      "mean_reward": -1.4592077732086182,
+      "loss": 18.671232223510742,
+      "elapsed_sec": 15.4,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 95,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.182948112487793,
+      "mean_reward": -1.2548846006393433,
+      "loss": -5.66119909286499,
+      "elapsed_sec": 15.5,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 96,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.98691987991333,
+      "mean_reward": -1.4960761070251465,
+      "loss": -3.753352642059326,
+      "elapsed_sec": 15.7,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 97,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.428445816040039,
+      "mean_reward": -1.3285338878631592,
+      "loss": 15.843502044677734,
+      "elapsed_sec": 15.9,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 98,
+      "mean_qwen": 5.0,
+      "mean_physics": -3.6714272499084473,
+      "mean_reward": -1.1014281511306763,
+      "loss": 18.703393936157227,
+      "elapsed_sec": 16.0,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    },
+    {
+      "step": 99,
+      "mean_qwen": 5.0,
+      "mean_physics": -4.365052223205566,
+      "mean_reward": -1.3095157146453857,
+      "loss": 10.809928894042969,
+      "elapsed_sec": 16.2,
+      "critiques": [
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)",
+        "(stub judge)"
+      ],
+      "qwen_scores": [
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0,
+        5.0
+      ]
+    }
+  ]
+}

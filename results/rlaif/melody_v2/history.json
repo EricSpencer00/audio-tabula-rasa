@@ -1,0 +1,490 @@
+[
+  {
+    "step": 0,
+    "mean_reward": -3.4035377502441406,
+    "mean_tonal_salience": 0.5017397716569338,
+    "mean_dissonance": 1.218963566992474,
+    "mean_contour": 89.17795702148052,
+    "mean_pitch_classes": 7.4453125
+  },
+  {
+    "step": 50,
+    "mean_reward": -0.46507811546325684,
+    "mean_tonal_salience": 0.46326398001991154,
+    "mean_dissonance": 1.5467622117127453,
+    "mean_contour": 24.22396650164169,
+    "mean_pitch_classes": 8.3671875
+  },
+  {
+    "step": 100,
+    "mean_reward": 0.49040502309799194,
+    "mean_tonal_salience": 0.5087042418029198,
+    "mean_dissonance": 1.928764341430274,
+    "mean_contour": 1.7839110100569053,
+    "mean_pitch_classes": 8.3828125
+  },
+  {
+    "step": 150,
+    "mean_reward": 0.4881022572517395,
+    "mean_tonal_salience": 0.5185954368776484,
+    "mean_dissonance": 1.9470281621022167,
+    "mean_contour": 1.9850601944256865,
+    "mean_pitch_classes": 8.171875
+  },
+  {
+    "step": 200,
+    "mean_reward": 0.5166077613830566,
+    "mean_tonal_salience": 0.5265882358792426,
+    "mean_dissonance": 2.0329955590119066,
+    "mean_contour": 1.1980080072703232,
+    "mean_pitch_classes": 8.25
+  },
+  {
+    "step": 250,
+    "mean_reward": 0.542155921459198,
+    "mean_tonal_salience": 0.5375636397877795,
+    "mean_dissonance": 2.0904872816351228,
+    "mean_contour": 0.400374601143181,
+    "mean_pitch_classes": 8.1875
+  },
+  {
+    "step": 300,
+    "mean_reward": 0.39630991220474243,
+    "mean_tonal_salience": 0.5449430371938246,
+    "mean_dissonance": 2.0776091110961397,
+    "mean_contour": 0.7971730562873318,
+    "mean_pitch_classes": 8.1484375
+  },
+  {
+    "step": 350,
+    "mean_reward": 0.35710152983665466,
+    "mean_tonal_salience": 0.5307490992755626,
+    "mean_dissonance": 2.1306270035317656,
+    "mean_contour": 0.9765894526959004,
+    "mean_pitch_classes": 7.984375
+  },
+  {
+    "step": 400,
+    "mean_reward": 0.09809324890375137,
+    "mean_tonal_salience": 0.5401950999472607,
+    "mean_dissonance": 2.0197325651684146,
+    "mean_contour": 6.975493899557349,
+    "mean_pitch_classes": 7.625
+  },
+  {
+    "step": 450,
+    "mean_reward": -0.45382440090179443,
+    "mean_tonal_salience": 0.547562062893693,
+    "mean_dissonance": 2.118103291931585,
+    "mean_contour": 8.111252880219556,
+    "mean_pitch_classes": 7.609375
+  },
+  {
+    "step": 500,
+    "mean_reward": -0.5270100831985474,
+    "mean_tonal_salience": 0.5679984331558809,
+    "mean_dissonance": 1.9604882768155867,
+    "mean_contour": 20.16152931936178,
+    "mean_pitch_classes": 7.2109375
+  },
+  {
+    "step": 550,
+    "mean_reward": -0.9281456470489502,
+    "mean_tonal_salience": 0.5657272083322832,
+    "mean_dissonance": 1.903550242888174,
+    "mean_contour": 22.76775363540835,
+    "mean_pitch_classes": 7.46875
+  },
+  {
+    "step": 600,
+    "mean_reward": -0.4633615016937256,
+    "mean_tonal_salience": 0.5518691304627965,
+    "mean_dissonance": 1.8583966778804966,
+    "mean_contour": 16.973710543065433,
+    "mean_pitch_classes": 8.2421875
+  },
+  {
+    "step": 650,
+    "mean_reward": -0.30307307839393616,
+    "mean_tonal_salience": 0.5537711224428026,
+    "mean_dissonance": 1.7466941214080203,
+    "mean_contour": 15.723441353957629,
+    "mean_pitch_classes": 7.96875
+  },
+  {
+    "step": 700,
+    "mean_reward": -0.1954762488603592,
+    "mean_tonal_salience": 0.5416687353805176,
+    "mean_dissonance": 1.7140271088708237,
+    "mean_contour": 15.592731603810783,
+    "mean_pitch_classes": 8.4765625
+  },
+  {
+    "step": 750,
+    "mean_reward": -0.7682355642318726,
+    "mean_tonal_salience": 0.5450445641545865,
+    "mean_dissonance": 1.5514425176799957,
+    "mean_contour": 28.293443383846643,
+    "mean_pitch_classes": 7.9375
+  },
+  {
+    "step": 800,
+    "mean_reward": -1.361193299293518,
+    "mean_tonal_salience": 0.5361674483709762,
+    "mean_dissonance": 1.5578967392203615,
+    "mean_contour": 32.80767495753418,
+    "mean_pitch_classes": 7.921875
+  },
+  {
+    "step": 850,
+    "mean_reward": -3.2187793254852295,
+    "mean_tonal_salience": 0.555671440632501,
+    "mean_dissonance": 1.4986243362681622,
+    "mean_contour": 50.82962377037758,
+    "mean_pitch_classes": 7.28125
+  },
+  {
+    "step": 900,
+    "mean_reward": -3.136638879776001,
+    "mean_tonal_salience": 0.533509674658538,
+    "mean_dissonance": 1.4935357638284408,
+    "mean_contour": 60.66615554804606,
+    "mean_pitch_classes": 7.0234375
+  },
+  {
+    "step": 950,
+    "mean_reward": -3.1180789470672607,
+    "mean_tonal_salience": 0.5174379117941845,
+    "mean_dissonance": 1.5118137174581623,
+    "mean_contour": 56.447223204417824,
+    "mean_pitch_classes": 7.34375
+  },
+  {
+    "step": 1000,
+    "mean_reward": -5.424140453338623,
+    "mean_tonal_salience": 0.5478923608880519,
+    "mean_dissonance": 1.428440764038215,
+    "mean_contour": 88.76573011549935,
+    "mean_pitch_classes": 6.8984375
+  },
+  {
+    "step": 1050,
+    "mean_reward": -5.5404372215271,
+    "mean_tonal_salience": 0.5492029723822766,
+    "mean_dissonance": 1.4667980471834003,
+    "mean_contour": 95.611821668367,
+    "mean_pitch_classes": 6.546875
+  },
+  {
+    "step": 1100,
+    "mean_reward": -5.393035888671875,
+    "mean_tonal_salience": 0.5532871026278672,
+    "mean_dissonance": 1.4041827691280133,
+    "mean_contour": 86.82450839974621,
+    "mean_pitch_classes": 6.5703125
+  },
+  {
+    "step": 1150,
+    "mean_reward": -3.8411202430725098,
+    "mean_tonal_salience": 0.530547272804496,
+    "mean_dissonance": 1.4950319890370358,
+    "mean_contour": 69.50773931157437,
+    "mean_pitch_classes": 6.5078125
+  },
+  {
+    "step": 1200,
+    "mean_reward": -6.128951072692871,
+    "mean_tonal_salience": 0.5743165869544504,
+    "mean_dissonance": 1.3436468145943188,
+    "mean_contour": 101.80961734266867,
+    "mean_pitch_classes": 5.921875
+  },
+  {
+    "step": 1250,
+    "mean_reward": -6.916013240814209,
+    "mean_tonal_salience": 0.5916675439051952,
+    "mean_dissonance": 1.1871286194306871,
+    "mean_contour": 115.85382293277107,
+    "mean_pitch_classes": 6.1484375
+  },
+  {
+    "step": 1300,
+    "mean_reward": -6.317365646362305,
+    "mean_tonal_salience": 0.5489734937975779,
+    "mean_dissonance": 1.3740352131076188,
+    "mean_contour": 105.0139625202936,
+    "mean_pitch_classes": 6.609375
+  },
+  {
+    "step": 1350,
+    "mean_reward": -4.770549297332764,
+    "mean_tonal_salience": 0.5355896194269635,
+    "mean_dissonance": 1.3769595010137001,
+    "mean_contour": 76.89950874673674,
+    "mean_pitch_classes": 6.71875
+  },
+  {
+    "step": 1400,
+    "mean_reward": -5.407382965087891,
+    "mean_tonal_salience": 0.5457798802075955,
+    "mean_dissonance": 1.3118087743321158,
+    "mean_contour": 92.42697757487139,
+    "mean_pitch_classes": 6.8984375
+  },
+  {
+    "step": 1450,
+    "mean_reward": -6.467411041259766,
+    "mean_tonal_salience": 0.5641640950635851,
+    "mean_dissonance": 1.2800823793577387,
+    "mean_contour": 108.83485244156549,
+    "mean_pitch_classes": 6.5234375
+  },
+  {
+    "step": 1500,
+    "mean_reward": -5.711254119873047,
+    "mean_tonal_salience": 0.5503003674249207,
+    "mean_dissonance": 1.2566149979429384,
+    "mean_contour": 96.07594636243061,
+    "mean_pitch_classes": 6.5625
+  },
+  {
+    "step": 1550,
+    "mean_reward": -6.781718730926514,
+    "mean_tonal_salience": 0.5684899497460557,
+    "mean_dissonance": 1.219036728169458,
+    "mean_contour": 101.30576548457276,
+    "mean_pitch_classes": 6.3203125
+  },
+  {
+    "step": 1600,
+    "mean_reward": -5.484889984130859,
+    "mean_tonal_salience": 0.5482959048544669,
+    "mean_dissonance": 1.2357560486426262,
+    "mean_contour": 91.29663768759022,
+    "mean_pitch_classes": 6.6953125
+  },
+  {
+    "step": 1650,
+    "mean_reward": -5.423636436462402,
+    "mean_tonal_salience": 0.5704268239422114,
+    "mean_dissonance": 1.1149373058024858,
+    "mean_contour": 105.01354531790638,
+    "mean_pitch_classes": 6.5546875
+  },
+  {
+    "step": 1700,
+    "mean_reward": -5.625533580780029,
+    "mean_tonal_salience": 0.5525894130758313,
+    "mean_dissonance": 1.1876496789828763,
+    "mean_contour": 97.14161621676205,
+    "mean_pitch_classes": 6.6171875
+  },
+  {
+    "step": 1750,
+    "mean_reward": -7.886398792266846,
+    "mean_tonal_salience": 0.5962263391899276,
+    "mean_dissonance": 1.177739195555494,
+    "mean_contour": 125.12394946041567,
+    "mean_pitch_classes": 6.2734375
+  },
+  {
+    "step": 1800,
+    "mean_reward": -6.235622406005859,
+    "mean_tonal_salience": 0.5584487425235871,
+    "mean_dissonance": 1.288981274920395,
+    "mean_contour": 106.96520781606591,
+    "mean_pitch_classes": 6.71875
+  },
+  {
+    "step": 1850,
+    "mean_reward": -5.978290557861328,
+    "mean_tonal_salience": 0.5719627460397851,
+    "mean_dissonance": 1.189875446544087,
+    "mean_contour": 108.66770239656205,
+    "mean_pitch_classes": 6.4609375
+  },
+  {
+    "step": 1900,
+    "mean_reward": -5.638713836669922,
+    "mean_tonal_salience": 0.5514064358279819,
+    "mean_dissonance": 1.2820111878999068,
+    "mean_contour": 106.88407296014653,
+    "mean_pitch_classes": 6.4296875
+  },
+  {
+    "step": 1950,
+    "mean_reward": -6.364511013031006,
+    "mean_tonal_salience": 0.5642769899263542,
+    "mean_dissonance": 1.1632775659813324,
+    "mean_contour": 118.26486734162583,
+    "mean_pitch_classes": 6.7890625
+  },
+  {
+    "step": 2000,
+    "mean_reward": -5.916545391082764,
+    "mean_tonal_salience": 0.5679065283967122,
+    "mean_dissonance": 1.2040466701429207,
+    "mean_contour": 110.72813043717774,
+    "mean_pitch_classes": 6.265625
+  },
+  {
+    "step": 2050,
+    "mean_reward": -5.96658182144165,
+    "mean_tonal_salience": 0.5381456476524582,
+    "mean_dissonance": 1.2293773890664585,
+    "mean_contour": 104.49616071704423,
+    "mean_pitch_classes": 6.59375
+  },
+  {
+    "step": 2100,
+    "mean_reward": -5.682608127593994,
+    "mean_tonal_salience": 0.5523823314928811,
+    "mean_dissonance": 1.100451071477513,
+    "mean_contour": 108.91262677630084,
+    "mean_pitch_classes": 6.8828125
+  },
+  {
+    "step": 2150,
+    "mean_reward": -6.547760963439941,
+    "mean_tonal_salience": 0.5658373402220593,
+    "mean_dissonance": 1.0928923335547873,
+    "mean_contour": 119.50922032184606,
+    "mean_pitch_classes": 6.453125
+  },
+  {
+    "step": 2200,
+    "mean_reward": -7.5699005126953125,
+    "mean_tonal_salience": 0.603537952410474,
+    "mean_dissonance": 1.0496444008771837,
+    "mean_contour": 121.38391468467964,
+    "mean_pitch_classes": 6.0390625
+  },
+  {
+    "step": 2250,
+    "mean_reward": -5.00692081451416,
+    "mean_tonal_salience": 0.5598587867358931,
+    "mean_dissonance": 1.1180263994291546,
+    "mean_contour": 92.74813419746064,
+    "mean_pitch_classes": 6.5234375
+  },
+  {
+    "step": 2300,
+    "mean_reward": -8.085617065429688,
+    "mean_tonal_salience": 0.5836030932023208,
+    "mean_dissonance": 1.0987991994892634,
+    "mean_contour": 125.20603845696743,
+    "mean_pitch_classes": 6.296875
+  },
+  {
+    "step": 2350,
+    "mean_reward": -4.738372802734375,
+    "mean_tonal_salience": 0.5563104438128232,
+    "mean_dissonance": 1.2815336187098105,
+    "mean_contour": 95.23657642841194,
+    "mean_pitch_classes": 6.4140625
+  },
+  {
+    "step": 2400,
+    "mean_reward": -4.428983688354492,
+    "mean_tonal_salience": 0.5389564247470359,
+    "mean_dissonance": 1.3816386057061598,
+    "mean_contour": 82.26442797532239,
+    "mean_pitch_classes": 6.4140625
+  },
+  {
+    "step": 2450,
+    "mean_reward": -4.474138259887695,
+    "mean_tonal_salience": 0.530801390088879,
+    "mean_dissonance": 1.2350921455097965,
+    "mean_contour": 95.361060887498,
+    "mean_pitch_classes": 6.8984375
+  },
+  {
+    "step": 2500,
+    "mean_reward": -5.804745674133301,
+    "mean_tonal_salience": 0.5353879702874013,
+    "mean_dissonance": 1.356775611253459,
+    "mean_contour": 101.01381853162641,
+    "mean_pitch_classes": 6.671875
+  },
+  {
+    "step": 2550,
+    "mean_reward": -5.7422919273376465,
+    "mean_tonal_salience": 0.5418162806108919,
+    "mean_dissonance": 1.2759691562603162,
+    "mean_contour": 98.27370713208698,
+    "mean_pitch_classes": 6.375
+  },
+  {
+    "step": 2600,
+    "mean_reward": -5.198575496673584,
+    "mean_tonal_salience": 0.5510183115786216,
+    "mean_dissonance": 1.1925006003744123,
+    "mean_contour": 97.0202060335745,
+    "mean_pitch_classes": 6.1640625
+  },
+  {
+    "step": 2650,
+    "mean_reward": -5.816211700439453,
+    "mean_tonal_salience": 0.5524116354237719,
+    "mean_dissonance": 1.1957152191487177,
+    "mean_contour": 106.86985002516202,
+    "mean_pitch_classes": 6.140625
+  },
+  {
+    "step": 2700,
+    "mean_reward": -6.003954887390137,
+    "mean_tonal_salience": 0.5635038213780723,
+    "mean_dissonance": 1.1855397316328666,
+    "mean_contour": 116.85931350252623,
+    "mean_pitch_classes": 6.3359375
+  },
+  {
+    "step": 2750,
+    "mean_reward": -5.907312393188477,
+    "mean_tonal_salience": 0.5770969015938243,
+    "mean_dissonance": 1.1828284126492745,
+    "mean_contour": 114.23061809053489,
+    "mean_pitch_classes": 6.0390625
+  },
+  {
+    "step": 2800,
+    "mean_reward": -5.045395851135254,
+    "mean_tonal_salience": 0.5569379162708472,
+    "mean_dissonance": 1.2915763101156084,
+    "mean_contour": 98.19206276294216,
+    "mean_pitch_classes": 6.2890625
+  },
+  {
+    "step": 2850,
+    "mean_reward": -5.102617263793945,
+    "mean_tonal_salience": 0.5641775202275849,
+    "mean_dissonance": 1.237731839635612,
+    "mean_contour": 94.80921350154166,
+    "mean_pitch_classes": 6.046875
+  },
+  {
+    "step": 2900,
+    "mean_reward": -6.834928512573242,
+    "mean_tonal_salience": 0.5997028815290318,
+    "mean_dissonance": 1.0623700252062527,
+    "mean_contour": 110.03083875132057,
+    "mean_pitch_classes": 5.75
+  },
+  {
+    "step": 2950,
+    "mean_reward": -6.7672319412231445,
+    "mean_tonal_salience": 0.5962496970648361,
+    "mean_dissonance": 1.1409839357736753,
+    "mean_contour": 121.75929743807085,
+    "mean_pitch_classes": 5.75
+  },
+  {
+    "step": 2999,
+    "mean_reward": -5.627942085266113,
+    "mean_tonal_salience": 0.582707325657184,
+    "mean_dissonance": 1.1807466147178247,
+    "mean_contour": 98.4646464737749,
+    "mean_pitch_classes": 5.7890625
+  }
+]
