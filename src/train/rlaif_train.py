@@ -236,14 +236,20 @@ def _counterpoint_reward_wrapper(voices: np.ndarray) -> float:
 
 
 def _vocal_melody_to_audio(combined: np.ndarray) -> np.ndarray:
-    """Render expressive melody with TTS vocals mixed in."""
-    from src.render.vocals import render_melody_with_vocals
-    n = len(combined) // 3
-    freqs, durs, vels = combined[:n], combined[n:2*n], combined[2*n:]
-    return render_melody_with_vocals(
-        freqs, durs, vels,
-        instrumental_renderer=_layered_melody_to_audio,
-    )
+    """Render expressive melody with TTS vocals mixed in.
+
+    Falls back to instrumental-only if Bark is not installed.
+    """
+    try:
+        from src.render.vocals import render_melody_with_vocals
+        n = len(combined) // 3
+        freqs, durs, vels = combined[:n], combined[n:2*n], combined[2*n:]
+        return render_melody_with_vocals(
+            freqs, durs, vels,
+            instrumental_renderer=_layered_melody_to_audio,
+        )
+    except ImportError:
+        return _layered_melody_to_audio(combined)
 
 
 def _progression_to_audio(seqs: np.ndarray) -> np.ndarray:
