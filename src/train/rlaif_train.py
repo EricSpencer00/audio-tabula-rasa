@@ -724,13 +724,13 @@ def main():
                    help="Qwen retries per sample on refusal (default 2)")
     p.add_argument("--freq-std-clamp", type=float, default=None,
                    help="max log-std for freq sampling (default: 1.0; "
-                        "try -1.5 for theory training)")
+                        "try -2.0 for theory training)")
     p.add_argument("--scale-snap", type=float, default=0.0,
-                   help="soft scale quantization strength 0-1 "
-                        "(0=off, 1=hard snap)")
+                   help="scale snap strength 0-1 "
+                        "(0=off, 1=hard snap to nearest scale tone)")
     p.add_argument("--scale-key", type=str, default=None,
                    help="scale for snap, e.g. 'C_major', 'A_natural_minor', "
-                        "'D_pentatonic_major' (default: C major)")
+                        "'Bb_blues', 'F#_harmonic_minor' (default: C major)")
     args = p.parse_args()
 
     train(
