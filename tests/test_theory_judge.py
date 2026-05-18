@@ -12,6 +12,7 @@ import pytest
 
 from src.reward.theory_judge import (
     DEFAULT_WEIGHTS,
+    ROOTS,
     SCALES,
     cadence_detection,
     dynamic_shaping,
@@ -415,3 +416,29 @@ class TestUtilities:
         # Same pitch class — either both near 0 or differ by 12
         diff = abs(pcs[0] - pcs[1])
         assert diff < 0.01 or abs(diff - 12.0) < 0.01
+
+    def test_roots_covers_all_naturals(self):
+        for note in ["C", "D", "E", "F", "G", "A", "B"]:
+            assert note in ROOTS
+
+    def test_roots_covers_sharps_flats(self):
+        for note in ["C#", "Db", "D#", "Eb", "F#", "Gb", "G#", "Ab", "A#", "Bb"]:
+            assert note in ROOTS
+
+    def test_roots_enharmonic_equivalence(self):
+        # Enharmonic pairs should map to the same semitone
+        assert ROOTS["C#"] == ROOTS["Db"]
+        assert ROOTS["D#"] == ROOTS["Eb"]
+        assert ROOTS["F#"] == ROOTS["Gb"]
+        assert ROOTS["G#"] == ROOTS["Ab"]
+        assert ROOTS["A#"] == ROOTS["Bb"]
+
+    def test_scales_key_parsing(self):
+        """Verify the scale_key parsing pattern used in training/render."""
+        for key_str in ["C_major", "A_natural_minor", "Bb_blues",
+                        "F#_harmonic_minor", "Eb_dorian"]:
+            parts = key_str.split("_", 1)
+            root = parts[0][0].upper() + parts[0][1:]
+            scale = parts[1] if len(parts) > 1 else "major"
+            assert root in ROOTS, f"root {root!r} from {key_str!r} not in ROOTS"
+            assert scale in SCALES, f"scale {scale!r} from {key_str!r} not in SCALES"
